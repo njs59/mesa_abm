@@ -1,0 +1,52 @@
+{
+  "condition": "invasive",
+  "sweep": "speed_adhesion",
+  "metric": "rmse_weighted",
+  "weights": {
+    "S0": 1.0,
+    "S1": 2.0,
+    "S2": 1.0
+  },
+  "top": [
+    {
+      "tag": "invasive_v10_adh1",
+      "rmse_weighted": 76.03589666236307
+    },
+    {
+      "tag": "invasive_v10_adh0.9",
+      "rmse_weighted": 76.45492964404824
+    },
+    {
+      "tag": "invasive_v10_adh0.7",
+      "rmse_weighted": 76.97400038453671
+    },
+    {
+      "tag": "invasive_v10_adh0.5",
+      "rmse_weighted": 78.85598484496616
+    },
+    {
+      "tag": "invasive_v7_adh0.9",
+      "rmse_weighted": 98.33084803758348
+    },
+    {
+      "tag": "invasive_v7_adh1",
+      "rmse_weighted": 99.08593795226703
+    },
+    {
+      "tag": "invasive_v7_adh0.7",
+      "rmse_weighted": 102.13505898647382
+    },
+    {
+      "tag": "invasive_v7_adh0.5",
+      "rmse_weighted": 105.4192872202617
+    },
+    {
+      "tag": "invasive_v5_adh1",
+      "rmse_weighted": 117.46214932405385
+    },
+    {
+      "tag": "invasive_v5_adh0.9",
+      "rmse_weighted": 124.87414149167793
+    }
+  ]
+}
