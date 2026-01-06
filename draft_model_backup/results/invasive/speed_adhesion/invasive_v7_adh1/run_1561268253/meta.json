@@ -1,0 +1,61 @@
+{
+  "timestamp": "2026-01-01T19:37:54.878039Z",
+  "condition": "invasive",
+  "steps": 144,
+  "dt_minutes": 30.0,
+  "dt_hours_per_step": 0.5,
+  "seed": 1561268253,
+  "sweep": "speed_adhesion",
+  "tag": "invasive_v7_adh1",
+  "params": {
+    "space": {
+      "width": 1344.0,
+      "height": 1025.0,
+      "torus": true
+    },
+    "time": {
+      "dt": 1.0,
+      "steps": 300
+    },
+    "physics": {
+      "cell_volume": 1954.0,
+      "density": 1.0
+    },
+    "phenotypes": {
+      "proliferative": {
+        "speed_base": 1.0,
+        "speed_size_exp": 0.0,
+        "prolif_rate": 0.005,
+        "adhesion": 0.6,
+        "fragment_rate": 0.0005,
+        "frag_size_exp": 0.0,
+        "color": [
+          0.7265625,
+          0.11328125,
+          0.7265625
+        ]
+      },
+      "invasive": {
+        "speed_base": 7.0,
+        "speed_size_exp": 0.0,
+        "prolif_rate": 0.002,
+        "adhesion": 1.0,
+        "fragment_rate": 0.0,
+        "frag_size_exp": 0.0,
+        "color": [
+          0.2734375,
+          0.6171875,
+          0.171875
+        ]
+      }
+    },
+    "merge": {
+      "prob_contact_merge": 0.9
+    },
+    "init": {
+      "n_clusters": 1000,
+      "size": 1,
+      "phenotype": "invasive"
+    }
+  }
+}
