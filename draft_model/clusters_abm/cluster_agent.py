@@ -41,25 +41,106 @@ class ClusterAgent(Agent):
         self.model.space.move_agent(self, (x, y))
         # Do NOT overwrite self.pos: ContinuousSpace maintains the wrapped position.
 
+        
     def _try_merge(self):
         if self.pos is None:
             return
+
+        # Parameters
         merge_prob = self.model.params["merge"]["prob_contact_merge"]
+        ph_self = self.model.params["phenotypes"][self.phenotype]
+
+        # Neighbour query within a reasonable radius bucket
         neighbors = self.model.get_neighbors(self, 2 * self.radius)
-        pos_self = np.array(self.pos, dtype=float)
+        pos_self = np.asarray(self.pos, dtype=float)
+
+        # Gather all contacted neighbours with their squared distances and adhesion averages
+        contacts = []  # list of (d2, other, adh_avg)
         for other in neighbors:
             if other is self or not other.alive or other.pos is None:
                 continue
-            pos_other = np.array(other.pos, dtype=float)
-            d = np.linalg.norm(pos_other - pos_self)
-            if d <= (self.radius + other.radius):
-                adh = 0.5 * (
-                    self.model.params["phenotypes"][self.phenotype]["adhesion"]
-                    + self.model.params["phenotypes"][other.phenotype]["adhesion"]
-                )
-                if self.model.random.random() < merge_prob * adh:
-                    self._merge_with(other)
-                    break  # merge once per step
+            pos_other = np.asarray(other.pos, dtype=float)
+
+            # Squared distance; compare to squared sum of radii
+            d2 = np.sum((pos_other - pos_self) ** 2)
+            r_sum = self.radius + other.radius
+            if d2 <= r_sum * r_sum:
+                ph_other = self.model.params["phenotypes"][other.phenotype]
+                adh_avg = 0.5 * (ph_self["adhesion"] + ph_other["adhesion"])
+                contacts.append((d2, other, adh_avg))
+
+        if not contacts:
+            return
+
+        # ---- Active path: closest neighbour with RANDOM tie-breaking ----
+        # Find the minimum squared distance among contacts
+        d2_min = min(d2 for d2, _, _ in contacts)
+
+        # Small tolerance to treat numerically-equal distances as ties
+        # If your domain coordinates are very large, you can relax this (e.g., 1e-9)
+        tol = 1e-12
+
+        # All neighbours whose distance is tied with the minimum (within tol)
+        tied = [(other, adh_avg) for d2, other, adh_avg in contacts if abs(d2 - d2_min) <= tol]
+
+        # Randomly pick ONE neighbour among exact-distance ties (reproducible via model.random)
+        target, adh_avg = self.model.random.choice(tied)
+
+        # Bernoulli merge trial; at most one merge per step
+        if self.model.random.random() < merge_prob * adh_avg:
+            self._merge_with(target)
+            return  # one merge per step
+
+        # ----------------------------------------------------------------
+        # OPTIONAL (commented): probabilistic selection among ALL contacts
+        # ----------------------------------------------------------------
+        # Enable this block if you prefer a single stochastic pick among all contacted neighbours
+        # weighted by adhesion and inverse distance (rather than pure closest-distance with tie-break).
+        #
+        # Idea: score_i ∝ (adh_i ** alpha) / ((d2_i + eps) ** beta)
+        # where alpha, beta ≥ 0, eps is a small stabiliser.
+        # Example: alpha = 1.0, beta = 1.0 (adhesion upweights; closer neighbours upweight)
+        #
+        # alpha = 1.0
+        # beta = 1.0
+        # eps = 1e-12
+        #
+        # # Compute unnormalised scores
+        # scores = []
+        # for d2, other, adh in contacts:
+        #     # If you prefer plain distance (not squared), you could use sqrt(d2) here,
+        #     # but keeping d2 avoids an extra sqrt and is consistent with the contact test.
+        #     s = (adh ** alpha) / ((d2 + eps) ** beta)
+        #     scores.append(s)
+        #
+        # total = sum(scores)
+        # if total <= 0.0:
+        #     # Degenerate case: fall back to uniform random pick among contacts
+        #     idx = self.model.random.randrange(len(contacts))
+        #     target = contacts[idx][1]
+        #     adh_avg = contacts[idx][2]
+        # else:
+        #     # Convert to cumulative probabilities and sample using model RNG (reproducible)
+        #     cum = []
+        #     acc = 0.0
+        #     for s in scores:
+        #         acc += s / total
+        #         cum.append(acc)
+        #     u = self.model.random.random()
+        #     # find first index where cum[idx] >= u
+        #     idx = 0
+        #     while idx < len(cum) and cum[idx] < u:
+        #         idx += 1
+        #     if idx >= len(cum):
+        #         idx = len(cum) - 1
+        #     target = contacts[idx][1]
+        #     adh_avg = contacts[idx][2]
+        #
+        # # Now attempt merge with the probabilistically selected target
+        # if self.model.random.random() < merge_prob * adh_avg:
+        #     self._merge_with(target)
+        #     return  # one merge per step
+
 
     def _merge_with(self, other):
         p_self = np.array(self.pos, dtype=float)
