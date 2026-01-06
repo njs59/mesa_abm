@@ -1,0 +1,32 @@
+{
+  "condition": "invasive",
+  "sweep": "proliferation",
+  "metric": "rmse_weighted",
+  "weights": {
+    "S0": 1.0,
+    "S1": 2.0,
+    "S2": 1.0
+  },
+  "top": [
+    {
+      "tag": "invasive_p0.01",
+      "rmse_weighted": 159.8651060139712
+    },
+    {
+      "tag": "invasive_p0.007",
+      "rmse_weighted": 169.20316270088412
+    },
+    {
+      "tag": "invasive_p0.005",
+      "rmse_weighted": 175.57438721876397
+    },
+    {
+      "tag": "invasive_p0.003",
+      "rmse_weighted": 180.3220675369917
+    },
+    {
+      "tag": "invasive_p0.001",
+      "rmse_weighted": 186.2508756278432
+    }
+  ]
+}
