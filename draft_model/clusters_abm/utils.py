@@ -32,6 +32,20 @@ DEFAULTS = {
             "color": (70 / 256, 158 / 256, 44 / 256),
         },
     },
+
+    "movement": {
+        "mode": "constant",  # "constant" or "distribution"
+        "direction": "isotropic",  # "isotropic" or "persistent"
+        # Only used if mode == "distribution":
+        "distribution": "lognorm",  # "lognorm"|"gamma"|"weibull"|"rayleigh"|"expon"|"invgauss"
+        "dist_params": {
+            # For lognorm: s (shape, >0) and scale (>0); loc is fixed to 0
+            "s": 0.6,
+            "scale": 2.0
+        },
+        # Small angular noise when direction="persistent" (radians, std dev for normal)
+        "heading_sigma": 0.25
+    },
     "merge": {"prob_contact_merge": 0.9},
     # Initial condition controls
     "init": {
