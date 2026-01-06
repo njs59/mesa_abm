@@ -1,0 +1,6 @@
+
+[project]
+name = "new_sweep"
+version = "0.0.1"
+description = "ABM sweep and plotting utilities for thesis"
+requires-python = ">=3.9"
