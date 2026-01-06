@@ -1,0 +1,5 @@
+solara
+mesa
+numpy
+matplotlib
+pandas
