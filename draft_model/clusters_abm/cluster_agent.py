@@ -27,19 +27,134 @@ class ClusterAgent(Agent):
         self._maybe_proliferate()
         self._maybe_fragment()
 
+
     def _move(self):
-        ph = self.model.params["phenotypes"][self.phenotype]
-        speed = ph["speed_base"]  # size-independent
+        """
+        Update agent position by moving with either:
+        - constant step magnitude = speed_base * dt  (mode="constant"),
+        - or sampled step magnitude from a configured distribution (mode="distribution").
+
+        Direction handling:
+        - "isotropic": draw a new random angle each step (default; your current behaviour),
+        - "persistent": keep previous heading, with small Gaussian angular jitter.
+        """
+        # Guard: require a valid position
         if self.pos is None:
             return
-        pos_curr = np.array(self.pos, dtype=float)
-        theta = self.model.random.uniform(-np.pi, np.pi)
-        self.vel = speed * np.array([np.cos(theta), np.sin(theta)], dtype=float)
-        new_pos = pos_curr + self.vel * self.model.dt
+
+        ph = self.model.params["phenotypes"][self.phenotype]
+        speed_base = float(ph["speed_base"])
+        dt = float(self.model.dt)
+
+        mv = self.model.params.get("movement", {})
+        mode = mv.get("mode", "constant")
+        direction_mode = mv.get("direction", "isotropic")
+
+        # --- 1) Choose step magnitude ---
+        if mode == "constant":
+            # Your current behaviour: fixed magnitude
+            step_mag = speed_base * dt
+
+        elif mode == "distribution":
+            # Draw step magnitude in *model distance units per step* directly.
+            # This avoids mixing dt twice. Interpret dist_params as per distribution docs.
+            # If you prefer magnitude-per-unit-time, multiply by dt here.
+
+            dist_name = str(mv.get("distribution", "lognorm")).lower()
+            dp = mv.get("dist_params", {})  # dict of parameters; see notes above
+
+            # Draw from supported families using stdlib RNG (reproducible with model.seed)
+            # NOTE: We clamp negative draws to a tiny positive epsilon.
+            eps = 1e-12
+
+            if dist_name == "lognorm":
+                # SciPy-like: lognorm(s, loc=0, scale) ⇒ we emulate by normal draw on log-space
+                # Let ln X ~ N(mu, sigma^2). If only s and scale are given, we set:
+                s = float(dp.get("s", 0.6))      # sigma
+                scale = float(dp.get("scale", 2.0))  # exp(mu)
+                # Draw Z ~ N(0, s^2), then X = scale * exp(Z)
+                z = self.model.random.normalvariate(0.0, s)
+                step_mag = max(scale * np.exp(z), eps)
+
+            elif dist_name == "gamma":
+                # Gamma(a, scale): shape a > 0, scale > 0
+                a = float(dp.get("a", 2.0))
+                sc = float(dp.get("scale", 1.0))
+                # Use numpy's gamma via deterministic seed path if available,
+                # else approximate with stdlib: we fallback to numpy here safely.
+                step_mag = max(np.random.default_rng().gamma(shape=a, scale=sc), eps)
+
+            elif dist_name == "weibull":
+                # Weibull_min(c, scale): c > 0
+                c = float(dp.get("c", 1.5))
+                sc = float(dp.get("scale", 2.0))
+                # Draw U ~ Uniform(0,1); X = sc * (-ln(1-U))^(1/c)
+                U = self.model.random.random()
+                step_mag = max(sc * (-np.log(max(1.0 - U, eps))) ** (1.0 / c), eps)
+
+            elif dist_name == "rayleigh":
+                # Rayleigh(scale): scale > 0
+                sc = float(dp.get("scale", 2.0))
+                # If Z ~ N(0, sc^2) in each component and speed = sqrt(Zx^2 + Zy^2), Rayleigh applies
+                # Draw via inverse CDF: X = sc * sqrt(-2 ln(1-U))
+                U = self.model.random.random()
+                step_mag = max(sc * np.sqrt(-2.0 * np.log(max(1.0 - U, eps))), eps)
+
+            elif dist_name == "expon":
+                # Exponential(scale): scale > 0
+                sc = float(dp.get("scale", 1.0))
+                U = self.model.random.random()
+                step_mag = max(-sc * np.log(max(1.0 - U, eps)), eps)
+
+            elif dist_name == "invgauss":
+                # Inverse-Gaussian (Wald): parameters mu (>0), scale (>0)
+                mu = float(dp.get("mu", 1.0))
+                sc = float(dp.get("scale", 1.0))
+                # Draw via numpy for numerical stability
+                step_mag = max(np.random.default_rng().wald(mean=mu, scale=sc), eps)
+
+            else:
+                # Fallback: constant
+                step_mag = speed_base * dt
+
+        else:
+            # Unknown mode -> fallback to constant
+            step_mag = speed_base * dt
+
+        # --- 2) Choose direction ---
+        pos_curr = np.asarray(self.pos, dtype=float)
+
+        if direction_mode == "isotropic":
+            # Draw a fresh heading uniformly
+            theta = self.model.random.uniform(-np.pi, np.pi)
+
+        elif direction_mode == "persistent":
+            # Maintain previous heading with small Gaussian jitter
+            # Keep track of self._theta (create if missing)
+            theta_prev = getattr(self, "_theta", None)
+            if theta_prev is None:
+                theta_prev = self.model.random.uniform(-np.pi, np.pi)
+            sigma = float(mv.get("heading_sigma", 0.25))
+            theta = float(theta_prev + self.model.random.normalvariate(0.0, sigma))
+            # Store back for next step
+            self._theta = theta
+
+        else:
+            # Fallback to isotropic
+            theta = self.model.random.uniform(-np.pi, np.pi)
+
+        # Direction unit vector and velocity
+        dir_vec = np.array([np.cos(theta), np.sin(theta)], dtype=float)
+        # Your self.vel remains a 'per-step' vector consistent with previous usage
+        # If you prefer 'per-unit-time' velocity, divide by dt accordingly.
+        self.vel = (step_mag / max(dt, 1e-12)) * dir_vec  # velocity magnitude = step_mag / dt
+
+        # Advance position
+        new_pos = pos_curr + dir_vec * step_mag
         x, y = float(new_pos[0]), float(new_pos[1])
-        # Move; torus wrapping handled internally by ContinuousSpace
+
+        # Apply move (ContinuousSpace handles wrapping if torus=True)
         self.model.space.move_agent(self, (x, y))
-        # Do NOT overwrite self.pos: ContinuousSpace maintains the wrapped position.
 
         
     def _try_merge(self):

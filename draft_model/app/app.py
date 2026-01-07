@@ -62,37 +62,67 @@ def Runner():
 # ---------------------------------------------------------------
 # Parameter controls
 # ---------------------------------------------------------------
+
 @solara.component
 def ParamControls():
     p = params_r.value
-
     # Seed & sim rate
     seed, set_seed = solara.use_state(42)
 
-    # Space
+    # ---- Space ----
     W, set_W = solara.use_state(int(p["space"]["width"]))
     H, set_H = solara.use_state(int(p["space"]["height"]))
     torus, set_torus = solara.use_state(bool(p["space"]["torus"]))
 
-    # Time
+    # ---- Time ----
     dt, set_dt = solara.use_state(float(p["time"]["dt"]))
 
-    # Merge
+    # ---- Merge ----
     merge_prob, set_merge_prob = solara.use_state(float(p["merge"]["prob_contact_merge"]))
 
-    # Proliferative phenotype
+    # ---- Proliferative phenotype ----
     prolif_speed, set_prolif_speed = solara.use_state(float(p["phenotypes"]["proliferative"]["speed_base"]))
     prolif_rate, set_prolif_rate = solara.use_state(float(p["phenotypes"]["proliferative"]["prolif_rate"]))
     prolif_adh, set_prolif_adh = solara.use_state(float(p["phenotypes"]["proliferative"]["adhesion"]))
     prolif_frag, set_prolif_frag = solara.use_state(float(p["phenotypes"]["proliferative"]["fragment_rate"]))
 
-    # Invasive phenotype
+    # ---- Invasive phenotype ----
     inv_speed, set_inv_speed = solara.use_state(float(p["phenotypes"]["invasive"]["speed_base"]))
     inv_rate, set_inv_rate = solara.use_state(float(p["phenotypes"]["invasive"]["prolif_rate"]))
     inv_adh, set_inv_adh = solara.use_state(float(p["phenotypes"]["invasive"]["adhesion"]))
     inv_frag, set_inv_frag = solara.use_state(float(p["phenotypes"]["invasive"]["fragment_rate"]))
 
-    # Initial conditions
+    # ---- Movement options (NEW) ----
+    mv_defaults = p.get("movement", {})
+    mode_default = str(mv_defaults.get("mode", "constant"))
+    dir_default = str(mv_defaults.get("direction", "isotropic"))
+    dist_default = str(mv_defaults.get("distribution", "lognorm"))
+    dp_defaults = mv_defaults.get("dist_params", {}) or {}
+
+    mode, set_mode = solara.use_state(mode_default)                    # "constant" or "distribution"
+    direction, set_direction = solara.use_state(dir_default)           # "isotropic" or "keep"
+    dist_name, set_dist_name = solara.use_state(dist_default)          # distribution name
+    heading_sigma, set_heading_sigma = solara.use_state(float(mv_defaults.get("heading_sigma", 0.25)))
+
+    # Parameter states per distribution (kept across switches)
+    # lognorm: s, scale
+    ln_s, set_ln_s = solara.use_state(float(dp_defaults.get("s", 0.6)))
+    ln_scale, set_ln_scale = solara.use_state(float(dp_defaults.get("scale", 2.0)))
+    # gamma: a, scale
+    ga_a, set_ga_a = solara.use_state(float(dp_defaults.get("a", 2.0)))
+    ga_scale, set_ga_scale = solara.use_state(float(dp_defaults.get("scale", 1.0)))
+    # weibull: c, scale
+    wb_c, set_wb_c = solara.use_state(float(dp_defaults.get("c", 1.5)))
+    wb_scale, set_wb_scale = solara.use_state(float(dp_defaults.get("scale", 2.0)))
+    # rayleigh: scale
+    ry_scale, set_ry_scale = solara.use_state(float(dp_defaults.get("scale", 2.0)))
+    # expon: scale
+    ex_scale, set_ex_scale = solara.use_state(float(dp_defaults.get("scale", 1.0)))
+    # invgauss: mu, scale
+    ig_mu, set_ig_mu = solara.use_state(float(dp_defaults.get("mu", 1.0)))
+    ig_scale, set_ig_scale = solara.use_state(float(dp_defaults.get("scale", 1.0)))
+
+    # ---- Initial conditions ----
     n_prolif, set_n_prolif = solara.use_state(300)
     n_invasive, set_n_invasive = solara.use_state(200)
     size_prolif, set_size_prolif = solara.use_state(1)
@@ -100,34 +130,66 @@ def ParamControls():
 
     def apply_params():
         newp = copy.deepcopy(DEFAULTS)
+        # Space
         newp["space"]["width"] = float(W)
         newp["space"]["height"] = float(H)
         newp["space"]["torus"] = bool(torus)
+        # Time
         newp["time"]["dt"] = float(dt)
+        # Merge
         newp["merge"]["prob_contact_merge"] = float(merge_prob)
-
+        # Phenotypes
         newp["phenotypes"]["proliferative"]["speed_base"] = float(prolif_speed)
         newp["phenotypes"]["proliferative"]["prolif_rate"] = float(prolif_rate)
         newp["phenotypes"]["proliferative"]["adhesion"] = float(prolif_adh)
         newp["phenotypes"]["proliferative"]["fragment_rate"] = float(prolif_frag)
-
         newp["phenotypes"]["invasive"]["speed_base"] = float(inv_speed)
         newp["phenotypes"]["invasive"]["prolif_rate"] = float(inv_rate)
         newp["phenotypes"]["invasive"]["adhesion"] = float(inv_adh)
         newp["phenotypes"]["invasive"]["fragment_rate"] = float(inv_frag)
 
-        params_r.value = newp
+        # Movement (NEW)
+        mv_dict = {
+            "mode": str(mode),                    # "constant" or "distribution"
+            "direction": str(direction),          # "isotropic" or "keep"
+            "heading_sigma": float(heading_sigma)
+        }
+        if mode == "distribution":
+            mv_dict["distribution"] = str(dist_name)
+            # Write parameters according to chosen distribution
+            if dist_name == "lognorm":
+                mv_dict["dist_params"] = {"s": float(ln_s), "scale": float(ln_scale)}
+            elif dist_name == "gamma":
+                mv_dict["dist_params"] = {"a": float(ga_a), "scale": float(ga_scale)}
+            elif dist_name == "weibull":
+                mv_dict["dist_params"] = {"c": float(wb_c), "scale": float(wb_scale)}
+            elif dist_name == "rayleigh":
+                mv_dict["dist_params"] = {"scale": float(ry_scale)}
+            elif dist_name == "expon":
+                mv_dict["dist_params"] = {"scale": float(ex_scale)}
+            elif dist_name == "invgauss":
+                mv_dict["dist_params"] = {"mu": float(ig_mu), "scale": float(ig_scale)}
+            else:
+                # Fallback: keep any typed values but avoid missing keys
+                mv_dict["dist_params"] = dp_defaults
+        else:
+            # constant mode: no dist_params needed, but keep a small empty dict for clarity
+            mv_dict["distribution"] = str(dist_name)
+            mv_dict["dist_params"] = {}
 
+        newp["movement"] = mv_dict
+
+        params_r.value = newp
         init_clusters = (
             [{"size": int(size_prolif), "phenotype": "proliferative"} for _ in range(int(n_prolif))]
             + [{"size": int(size_invasive), "phenotype": "invasive"} for _ in range(int(n_invasive))]
         )
         model_r.value = make_model(seed=seed, params=newp, init_clusters=init_clusters)
-
         running_r.value = False
         step_r.value = 0
         version_r.value += 1
 
+    # ----------------- UI -----------------
     with solara.Card("Model parameters"):
         # Space
         solara.Markdown("**Space**")
@@ -144,7 +206,7 @@ def ParamControls():
         solara.Markdown("**Merge**")
         solara.SliderFloat("prob_contact_merge", value=merge_prob, min=0.0, max=1.0, step=0.01, on_value=set_merge_prob)
 
-        # Proliferative
+        # Proliferative phenotype
         solara.Markdown("**Proliferative phenotype**")
         with solara.Row():
             solara.SliderFloat("speed_base", value=prolif_speed, min=0.0, max=20.0, step=0.1, on_value=set_prolif_speed)
@@ -153,7 +215,7 @@ def ParamControls():
             solara.SliderFloat("adhesion", value=prolif_adh, min=0.0, max=1.0, step=0.01, on_value=set_prolif_adh)
             solara.SliderFloat("fragment_rate", value=prolif_frag, min=0.0, max=0.05, step=0.0005, on_value=set_prolif_frag)
 
-        # Invasive
+        # Invasive phenotype
         solara.Markdown("**Invasive phenotype**")
         with solara.Row():
             solara.SliderFloat("speed_base", value=inv_speed, min=0.0, max=20.0, step=0.1, on_value=set_inv_speed)
@@ -161,6 +223,39 @@ def ParamControls():
         with solara.Row():
             solara.SliderFloat("adhesion", value=inv_adh, min=0.0, max=1.0, step=0.01, on_value=set_inv_adh)
             solara.SliderFloat("fragment_rate", value=inv_frag, min=0.0, max=0.05, step=0.0005, on_value=set_inv_frag)
+
+        # Movement (NEW)
+        solara.Markdown("**Movement**")
+        with solara.Row():
+            solara.Select("Mode", value=mode, values=["constant", "distribution"], on_value=set_mode)
+            solara.Select("Direction", value=direction, values=["isotropic", "persistent"], on_value=set_direction)
+            solara.SliderFloat("heading_sigma (rad)", value=heading_sigma, min=0.0, max=1.0, step=0.01, on_value=set_heading_sigma)
+
+        if mode == "distribution":
+            solara.Markdown("*Distribution parameters*")
+            solara.Select("Distribution", value=dist_name,
+                          values=["lognorm", "gamma", "weibull", "rayleigh", "expon", "invgauss"],
+                          on_value=set_dist_name)
+            if dist_name == "lognorm":
+                with solara.Row():
+                    solara.SliderFloat("lognorm: s (shape)", value=ln_s, min=0.01, max=50.0, step=0.01, on_value=set_ln_s)
+                    solara.SliderFloat("lognorm: scale", value=ln_scale, min=0.01, max=50.0, step=0.01, on_value=set_ln_scale)
+            elif dist_name == "gamma":
+                with solara.Row():
+                    solara.SliderFloat("gamma: a (shape)", value=ga_a, min=0.01, max=10.0, step=0.01, on_value=set_ga_a)
+                    solara.SliderFloat("gamma: scale", value=ga_scale, min=0.01, max=50.0, step=0.01, on_value=set_ga_scale)
+            elif dist_name == "weibull":
+                with solara.Row():
+                    solara.SliderFloat("weibull: c (shape)", value=wb_c, min=0.01, max=10.0, step=0.01, on_value=set_wb_c)
+                    solara.SliderFloat("weibull: scale", value=wb_scale, min=0.01, max=50.0, step=0.01, on_value=set_wb_scale)
+            elif dist_name == "rayleigh":
+                solara.SliderFloat("rayleigh: scale", value=ry_scale, min=0.01, max=50.0, step=0.01, on_value=set_ry_scale)
+            elif dist_name == "expon":
+                solara.SliderFloat("expon: scale", value=ex_scale, min=0.01, max=50.0, step=0.01, on_value=set_ex_scale)
+            elif dist_name == "invgauss":
+                with solara.Row():
+                    solara.SliderFloat("invgauss: mu", value=ig_mu, min=0.01, max=50.0, step=0.01, on_value=set_ig_mu)
+                    solara.SliderFloat("invgauss: scale", value=ig_scale, min=0.01, max=50.0, step=0.01, on_value=set_ig_scale)
 
         # Initial condition
         solara.Markdown("**Initial clusters**")
@@ -171,7 +266,7 @@ def ParamControls():
             solara.SliderInt("Invasive: count", value=n_invasive, min=0, max=1000, on_value=set_n_invasive)
             solara.SliderInt("Invasive: base size", value=size_invasive, min=1, max=100, on_value=set_size_invasive)
 
-        # Seed & rate
+        # Simulation setup
         solara.Markdown("**Simulation setup**")
         with solara.Row():
             solara.InputInt("Random seed", value=seed, on_value=set_seed)
@@ -180,7 +275,7 @@ def ParamControls():
                 value=steps_per_second_r.value, min=1, max=120,
                 on_value=lambda v: steps_per_second_r.set(v),
             )
-            solara.Button("Apply parameters & Reset", color="primary", on_click=apply_params, icon_name="mdi-restart")
+        solara.Button("Apply parameters & Reset", color="primary", on_click=apply_params, icon_name="mdi-restart")
 
 
 # ---------------------------------------------------------------
