@@ -211,7 +211,7 @@ def plot_fit_vs_data(obs_csv: str,
     if not all(c in obs_df.columns for c in ("S0", "S1", "S2")):
         raise ValueError("Observed CSV must contain S0,S1,S2")
     obs = obs_df[["S0", "S1", "S2"]].to_numpy(dtype=float)
-    obs_seg = obs[start_step:, :]         # (T_obs, 3)
+    obs_seg = obs[:, :]         # (T_obs, 3)
     T_obs = obs_seg.shape[0]
 
     # 2) Extract final-population sum stats & weights
