@@ -49,7 +49,7 @@ DEFAULTS = {
     "merge": {"prob_contact_merge": 0.9},
     # Initial condition controls
     "init": {
-        "n_clusters": 1000,  # agents at t=0
+        "n_clusters": 800,  # agents at t=0
         "size": 1,           # each singleton
         "phenotype": "proliferative",  # "proliferative" or "invasive"
     },
