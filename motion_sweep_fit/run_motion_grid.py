@@ -1,8 +1,12 @@
 
 #!/usr/bin/env python3
 import argparse
+import os
 import time
+import platform
+import importlib
 from pathlib import Path
+
 import numpy as np
 import pandas as pd
 import pyabc
@@ -10,11 +14,29 @@ from pyabc import ABCSMC, Distribution, RV
 from pyabc.populationstrategy import ConstantPopulationSize
 from pyabc.sampler import MulticoreEvalParallelSampler
 from scipy.stats import wasserstein_distance
+from tqdm.auto import tqdm
 
 from clusters_abm.clusters_model import ClustersModel
 from clusters_abm.utils import DEFAULTS
 
-# --- IQR-scaled Wasserstein distance ---
+# ------------------------ Utilities ------------------------
+
+def parse_kv_pairs(pairs):
+    out = {}
+    for p in pairs or []:
+        if '=' in p:
+            k, v = p.split('=', 1)
+            out[k.strip()] = v.strip()
+    return out
+
+def lib_version(name):
+    try:
+        m = importlib.import_module(name)
+        return getattr(m, '__version__', 'unknown')
+    except Exception:
+        return 'missing'
+
+# ------------------------ Distance ------------------------
 
 def make_wasserstein_distance_scaled(obs_mat: np.ndarray):
     obs_S0, obs_S1, obs_S2 = obs_mat[:,0], obs_mat[:,1], obs_mat[:,2]
@@ -32,7 +54,7 @@ def make_wasserstein_distance_scaled(obs_mat: np.ndarray):
         return float(d0+d1+d2)
     return pyabc.distance.FunctionDistance(distance)
 
-# --- Summary stats and simulation ---
+# ------------------------ Simulation ------------------------
 
 def compute_summary_from_model(model):
     ids, pos, radii, sizes, speeds = model._log_alive_snapshot()
@@ -50,7 +72,7 @@ def simulate_timeseries(params: dict, steps: int, seed: int) -> np.ndarray:
         out[t,:] = compute_summary_from_model(model)
     return out
 
-# --- Mapping ---
+# ------------------------ Mapping ------------------------
 
 def _set_nested(base: dict, dotted: str, value):
     keys = dotted.split('.')
@@ -126,7 +148,7 @@ def make_params_from_particle(defaults: dict, particle: dict, motion: str, speed
     params['init']['n_clusters'] = int(max(1, round(fixed_n_clusters)))
     return params
 
-# --- Model closure ---
+# ------------------------ Model closure ------------------------
 
 def make_pyabc_model(obs: np.ndarray, start_step: int, defaults: dict, rng: np.random.Generator, motion: str, speed_dist: str, fixed_n_clusters: int):
     T_obs = obs.shape[0]
@@ -139,7 +161,7 @@ def make_pyabc_model(obs: np.ndarray, start_step: int, defaults: dict, rng: np.r
         return {'S0': seg[:,0], 'S1': seg[:,1], 'S2': seg[:,2]}
     return model
 
-# --- Priors ---
+# ------------------------ Priors ------------------------
 
 def build_prior(motion: str, speed_dist: str) -> Distribution:
     priors = dict(
@@ -173,9 +195,9 @@ def build_prior(motion: str, speed_dist: str) -> Distribution:
         ))
     return Distribution(**priors)
 
-# --- Posterior predictive coverage ---
+# ---------------- Posterior predictive coverage ----------------
 
-def posterior_predictive_coverage(history: pyabc.History, obs: np.ndarray, defaults: dict, start_step: int, motion: str, speed_dist: str, fixed_n_clusters: int, n_sims: int = 50, seed: int = 0):
+def posterior_predictive_coverage(history: pyabc.History, obs: np.ndarray, defaults: dict, start_step: int, motion: str, speed_dist: str, fixed_n_clusters: int, n_sims: int = 50, seed: int = 0, show_progress: bool = True):
     rng = np.random.default_rng(seed)
     T = obs.shape[0]
     df, w = history.get_distribution(m=0, t=history.max_t)
@@ -186,7 +208,11 @@ def posterior_predictive_coverage(history: pyabc.History, obs: np.ndarray, defau
     idx = np.arange(len(df))
     draws = rng.choice(idx, size=min(n_sims, len(df)), replace=False, p=w)
     sims = np.zeros((len(draws), T, 3), dtype=float)
-    for j, i in enumerate(draws):
+    iterator = range(len(draws))
+    if show_progress:
+        iterator = tqdm(iterator, desc='Posterior predictive sims', leave=False)
+    for j in iterator:
+        i = draws[j]
         particle = {k: float(df.iloc[i][k]) for k in df.columns}
         params = make_params_from_particle(defaults, particle, motion=motion, speed_dist=speed_dist, fixed_n_clusters=fixed_n_clusters)
         seg = simulate_timeseries(params, steps=start_step+T, seed=int(rng.integers(0, 2**31 - 1)))[start_step:start_step+T,:]
@@ -199,14 +225,22 @@ def posterior_predictive_coverage(history: pyabc.History, obs: np.ndarray, defau
         cover.append(float(np.mean(within)))
     return tuple(cover)
 
-# --- Runner ---
+# ------------------------ Runner ------------------------
 
 def run_all(args):
+    print('\n=== Motion Grid Runner ===')
+    print(f"Dataset: {args.dataset}")
+    print(f"Obs CSV: {args.obs_csv}")
+    print(f"start_step={args.start_step}, popsize={args.popsize}, max_pops={args.max_pops}, min_eps={args.min_eps}")
+    print(f"Seeds: {args.seeds}")
     obs_df = pd.read_csv(args.obs_csv)
     obs = obs_df[['S0','S1','S2']].to_numpy(dtype=float)
     # fixed_n_clusters = args.init_cells_fixed if args.init_cells_fixed > 0 else int(max(1, round(obs[0,0])))
     fixed_n_clusters = 800
+    print(f"Fixed init n_clusters: {fixed_n_clusters}\n")
+
     results_dir = Path(args.results_dir); results_dir.mkdir(parents=True, exist_ok=True)
+
     variants = [
         ('isotropic', 'constant'),
         ('isotropic', 'lognorm'),
@@ -217,23 +251,33 @@ def run_all(args):
         ('persistent','gamma'),
         ('persistent','weibull'),
     ]
+
     rows = []
-    for motion, speed_dist in variants:
-        for seed in args.seeds:
+
+    # Outer progress bar over variants
+    for motion, speed_dist in tqdm(variants, desc='Variants', position=0):
+        # Inner progress bar over seeds for each variant
+        for seed in tqdm(args.seeds, desc=f'{motion}/{speed_dist} seeds', position=1, leave=False):
             rng = np.random.default_rng(seed)
             model_func = make_pyabc_model(obs, args.start_step, DEFAULTS, rng, motion=motion, speed_dist=speed_dist, fixed_n_clusters=fixed_n_clusters)
             dist_func = make_wasserstein_distance_scaled(obs)
             prior = build_prior(motion, speed_dist)
             db_path = results_dir / f"{args.dataset}_{motion}_{speed_dist}_s{seed}.db"
             db_uri = f"sqlite:///{db_path.resolve()}"
-            sampler = MulticoreEvalParallelSampler()
+
+            print(f"\n--- Running: dataset={args.dataset}, motion={motion}, speed={speed_dist}, seed={seed} ---")
+            print(f"DB: {db_path.name}")
+
+            sampler = MulticoreEvalParallelSampler()  # pyabc prints per-population INFO lines
             pop_strategy = ConstantPopulationSize(args.popsize)
             abc = ABCSMC(models=model_func, parameter_priors=prior, distance_function=dist_func,
                          population_size=pop_strategy, sampler=sampler)
             history = abc.new(db_uri, {'S0': obs[:,0], 'S1': obs[:,1], 'S2': obs[:,2]})
-            t0 = time.time()
+
+            t0 = time.perf_counter()
             history = abc.run(minimum_epsilon=args.min_eps, max_nr_populations=args.max_pops)
-            dt_sec = time.time() - t0
+            dt_sec = time.perf_counter() - t0
+
             try:
                 pops = history.get_all_populations()
                 final_eps = float(pops.iloc[-1]['epsilon'])
@@ -241,8 +285,13 @@ def run_all(args):
             except Exception:
                 final_eps = float(args.min_eps)
                 n_pops = int(getattr(history, 'n_populations', args.max_pops))
-            cov_S0, cov_S1, cov_S2 = posterior_predictive_coverage(history, obs, DEFAULTS, args.start_step, motion, speed_dist, fixed_n_clusters, n_sims=args.pp_samples, seed=seed)
-            rows.append(dict(
+
+            print(f"Finished ABC: final_eps={final_eps:.3f}, n_populations={n_pops}, runtime={dt_sec:.1f}s")
+
+            cov_S0, cov_S1, cov_S2 = posterior_predictive_coverage(history, obs, DEFAULTS, args.start_step, motion, speed_dist, fixed_n_clusters, n_sims=args.pp_samples, seed=seed, show_progress=True)
+            print(f"Coverage: S0={cov_S0:.2f}, S1={cov_S1:.2f}, S2={cov_S2:.2f}")
+
+            row = dict(
                 dataset=args.dataset,
                 motion=motion,
                 speed_dist=speed_dist,
@@ -254,13 +303,36 @@ def run_all(args):
                 coverage_S1=round(cov_S1,3),
                 coverage_S2=round(cov_S2,3),
                 db=str(db_path.name),
-            ))
-            print(f"Done {args.dataset} {motion}/{speed_dist} seed={seed}: eps={final_eps:.3f}, coverage S0/S1/S2={cov_S0:.2f}/{cov_S1:.2f}/{cov_S2:.2f}")
+                start_step=args.start_step,
+                popsize=args.popsize,
+                max_pops=args.max_pops,
+                min_eps=args.min_eps,
+                pp_samples=args.pp_samples,
+                init_cells=fixed_n_clusters,
+                obs_rows=obs.shape[0],
+            )
+
+            # Optional environment tags
+            env_tags = {
+                'run_host': platform.node(),
+                'run_user': os.environ.get('USER') or os.environ.get('USERNAME') or 'unknown',
+                'pyabc_version': lib_version('pyabc'),
+                'mesa_version': lib_version('mesa'),
+                'numpy_version': lib_version('numpy'),
+                'pandas_version': lib_version('pandas'),
+                'scipy_version': lib_version('scipy'),
+            }
+            row.update(env_tags)
+
+            rows.append(row)
+
     summary = pd.DataFrame(rows)
-    summary.to_csv(results_dir / 'summary.csv', index=False)
+    out_csv = results_dir / 'summary.csv'
+    summary.to_csv(out_csv, index=False)
+    print(f"\nSaved summary: {out_csv}")
 
 if __name__ == '__main__':
-    ap = argparse.ArgumentParser(description='Run motion-type × speed-distribution grid with IQR-scaled W1 distance')
+    ap = argparse.ArgumentParser(description='Run motion-type × speed-distribution grid with IQR-scaled W1 distance (with progress bars)')
     ap.add_argument('--obs_csv', type=str, required=True, help='Path to observed CSV with columns S0,S1,S2')
     ap.add_argument('--dataset', type=str, default='INV', help='Short name for dataset in output filenames')
     ap.add_argument('--results_dir', type=str, default='motiongrid_pkg/results', help='Output directory')

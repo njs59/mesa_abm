@@ -1,0 +1,9 @@
+dataset,motion,speed_dist,seed,final_eps,n_populations,runtime_sec,coverage_S0,coverage_S1,coverage_S2,db,start_step,popsize,max_pops,min_eps,pp_samples,init_cells,obs_rows,run_host,run_user,pyabc_version,mesa_version,numpy_version,pandas_version,scipy_version
+PRO,isotropic,constant,42,5.333178751271091,9,2244.05,0.0,0.975,0.65,PRO_isotropic_constant_s42.db,105,200,8,0.5,50,800,40,Ludwigs-Laptop.local,nathan,0.12.16,3.3.1,2.3.5,2.3.3,1.16.3
+PRO,isotropic,lognorm,42,0.9002444543115379,9,959.81,0.975,1.0,1.0,PRO_isotropic_lognorm_s42.db,105,200,8,0.5,50,800,40,Ludwigs-Laptop.local,nathan,0.12.16,3.3.1,2.3.5,2.3.3,1.16.3
+PRO,isotropic,gamma,42,0.9691541698143303,9,2197.16,1.0,1.0,1.0,PRO_isotropic_gamma_s42.db,105,200,8,0.5,50,800,40,Ludwigs-Laptop.local,nathan,0.12.16,3.3.1,2.3.5,2.3.3,1.16.3
+PRO,isotropic,weibull,42,0.6707626629840387,9,1434.77,0.925,1.0,0.825,PRO_isotropic_weibull_s42.db,105,200,8,0.5,50,800,40,Ludwigs-Laptop.local,nathan,0.12.16,3.3.1,2.3.5,2.3.3,1.16.3
+PRO,persistent,constant,42,0.8382311358106699,9,1380.61,0.325,0.975,0.975,PRO_persistent_constant_s42.db,105,200,8,0.5,50,800,40,Ludwigs-Laptop.local,nathan,0.12.16,3.3.1,2.3.5,2.3.3,1.16.3
+PRO,persistent,lognorm,42,1.8456587631634793,9,976.8,0.95,1.0,1.0,PRO_persistent_lognorm_s42.db,105,200,8,0.5,50,800,40,Ludwigs-Laptop.local,nathan,0.12.16,3.3.1,2.3.5,2.3.3,1.16.3
+PRO,persistent,gamma,42,1.1060109472551611,9,2452.04,1.0,1.0,1.0,PRO_persistent_gamma_s42.db,105,200,8,0.5,50,800,40,Ludwigs-Laptop.local,nathan,0.12.16,3.3.1,2.3.5,2.3.3,1.16.3
+PRO,persistent,weibull,42,0.8540446868734131,9,1177.89,1.0,1.0,0.85,PRO_persistent_weibull_s42.db,105,200,8,0.5,50,800,40,Ludwigs-Laptop.local,nathan,0.12.16,3.3.1,2.3.5,2.3.3,1.16.3
