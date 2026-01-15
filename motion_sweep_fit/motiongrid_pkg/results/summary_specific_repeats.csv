@@ -1,0 +1,10 @@
+dataset,motion,speed_dist,seed,final_eps,n_populations,db
+INV,isotropic,lognorm,1,0.44612186000572346,11,INV_isotropic_lognorm_s1.db
+INV,isotropic,lognorm,2,0.40794673141563154,11,INV_isotropic_lognorm_s2.db
+INV,isotropic,lognorm,3,0.4364683049893907,11,INV_isotropic_lognorm_s3.db
+INV,persistent,gamma,1,0.42230165906393685,11,INV_persistent_gamma_s1.db
+INV,persistent,gamma,2,0.40146256095677096,11,INV_persistent_gamma_s2.db
+INV,persistent,gamma,3,0.42864772001595575,11,INV_persistent_gamma_s3.db
+INV,persistent,lognorm,1,0.4153095369007334,11,INV_persistent_lognorm_s1.db
+INV,persistent,lognorm,2,0.4190086928163499,11,INV_persistent_lognorm_s2.db
+INV,persistent,lognorm,3,0.40775765675122927,11,INV_persistent_lognorm_s3.db

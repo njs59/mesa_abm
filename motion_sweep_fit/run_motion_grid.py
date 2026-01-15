@@ -235,8 +235,8 @@ def run_all(args):
     print(f"Seeds: {args.seeds}")
     obs_df = pd.read_csv(args.obs_csv)
     obs = obs_df[['S0','S1','S2']].to_numpy(dtype=float)
-    # fixed_n_clusters = args.init_cells_fixed if args.init_cells_fixed > 0 else int(max(1, round(obs[0,0])))
-    fixed_n_clusters = 800
+    fixed_n_clusters = args.init_cells_fixed if args.init_cells_fixed > 0 else int(max(1, round(obs[0,0])))
+    # fixed_n_clusters = 800
     print(f"Fixed init n_clusters: {fixed_n_clusters}\n")
 
     results_dir = Path(args.results_dir); results_dir.mkdir(parents=True, exist_ok=True)
@@ -251,6 +251,13 @@ def run_all(args):
         ('persistent','gamma'),
         ('persistent','weibull'),
     ]
+
+    # variants = [
+    #     ('isotropic', 'lognorm'),
+    #     ('persistent','lognorm'),
+    #     ('persistent','gamma'),
+    #     ('persistent','weibull'),
+    # ]
 
     rows = []
 
