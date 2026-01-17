@@ -1,0 +1,6 @@
+PC0,PC1,PC2,PC3,PC4,PC5
+adhesion,merge_prob,prolif_rate,fragment_rate,merge_prob,speed_meanlog
+speed_sdlog,speed_meanlog,speed_sdlog,prolif_rate,adhesion,speed_sdlog
+speed_meanlog,speed_sdlog,adhesion,adhesion,speed_sdlog,adhesion
+merge_prob,adhesion,fragment_rate,merge_prob,prolif_rate,merge_prob
+fragment_rate,fragment_rate,speed_meanlog,speed_meanlog,speed_meanlog,prolif_rate

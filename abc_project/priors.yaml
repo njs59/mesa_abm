@@ -1,0 +1,7 @@
+# Tighten any bounds here; leave others commented to keep defaults
+# prolif_rate: [0.001, 0.015]
+# adhesion: [0.2, 0.8]
+# fragment_rate: [0.0, 0.005]
+# merge_prob: [0.3, 0.9]
+# init_n_clusters: [200, 1200]
+# heading_sigma: [0.0, 0.4]
