@@ -1,0 +1,9 @@
+db,motion,speed,label,epsilon_final,N_pp,coverage_S0,coverage_S1,coverage_S2,coverage_NND_med,coverage_g_r40,coverage_g_r80,disc_med_median,disc_med_q05,disc_med_q95
+results/abc_PRO_ABM_ready_summary_isotropic_constant_seed42_20260117_191218.db,isotropic,constant,isotropic/constant,18.528768177000913,80,0.65,1.0,0.65,0.05,0.15,0.95,69.86358003309508,31.37928522708132,92.8426894070248
+results/abc_PRO_ABM_ready_summary_isotropic_lognorm_seed42_20260117_191218.db,isotropic,lognorm,isotropic/lognorm,12.676095391217897,80,0.65,1.0,1.0,0.75,0.5,0.95,31.248507987199954,8.440306838680181,48.056735873105076
+results/abc_PRO_ABM_ready_summary_isotropic_gamma_seed42_20260117_191218.db,isotropic,gamma,isotropic/gamma,15.451269462638553,80,1.0,1.0,0.7,0.1,0.25,0.9,54.09006801898258,17.143387738757397,79.88656501942413
+results/abc_PRO_ABM_ready_summary_isotropic_weibull_seed42_20260117_191218.db,isotropic,weibull,isotropic/weibull,18.670987279996012,80,0.9,1.0,0.65,0.4,0.25,0.95,52.034246647100176,18.941124302826676,74.10804431458537
+results/abc_PRO_ABM_ready_summary_persistent_constant_seed42_20260117_191218.db,persistent,constant,persistent/constant,15.690193783025553,80,0.75,1.0,0.95,0.05,0.3,0.95,52.08332973273888,14.040083080128543,68.28041120090572
+results/abc_PRO_ABM_ready_summary_persistent_lognorm_seed42_20260117_191218.db,persistent,lognorm,persistent/lognorm,13.763010792517987,80,0.75,1.0,1.0,0.7,0.25,0.95,33.17593856182877,13.905248837267955,49.50373604115391
+results/abc_PRO_ABM_ready_summary_persistent_gamma_seed42_20260117_191218.db,persistent,gamma,persistent/gamma,11.601415056660427,80,0.65,1.0,0.95,0.5,0.4,0.95,30.680798035732114,9.51401131807591,49.38783189340723
+results/abc_PRO_ABM_ready_summary_persistent_weibull_seed42_20260117_191218.db,persistent,weibull,persistent/weibull,11.74357914650614,80,0.7,1.0,1.0,0.3,0.4,0.95,30.602005618128494,13.856815018964687,42.365680555446865
