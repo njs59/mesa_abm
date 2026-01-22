@@ -1,0 +1,4 @@
+
+# Simulation outputs and databases
+abc_project/results/
+*.db
