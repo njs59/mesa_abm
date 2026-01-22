@@ -1,0 +1,12 @@
+
+===== STAGE 19 =====
+Evaluated: 240 candidates
+Best score: 21.881  |  NND RMSE: 9.677  |  S0 RMSE: 11.625  |  Penalty: 0.579
+Best params:
+  -      merge_prob: 0.842525
+  -        adhesion: 0.828217
+  -   fragment_rate: 0.000628433
+  -   heading_sigma: 0.475559
+  - init_n_clusters: 959
+  -          dist_s: 0.688741
+  -      dist_scale: 3.46099

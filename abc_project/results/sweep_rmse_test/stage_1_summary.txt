@@ -1,0 +1,12 @@
+
+===== STAGE 1 =====
+Evaluated: 120 candidates
+Best score: 0.1768  |  rS0: 0.198  |  rS1: 0.130  |  rS2: 0.302  |  rNND: 0.077
+Best params:
+  -      merge_prob: 0.850405
+  -        adhesion: 0.712296
+  -   fragment_rate: 0.00182998
+  -   heading_sigma: 0.689365
+  -          dist_s: 0.887522
+  -      dist_scale: 3.61843
+  - init_n_clusters: 904

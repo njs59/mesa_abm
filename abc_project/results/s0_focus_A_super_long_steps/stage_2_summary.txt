@@ -1,0 +1,12 @@
+
+===== STAGE 2 =====
+Evaluated: 250 candidates
+Best score: 24.189  |  NND RMSE: 11.930  |  S0 RMSE: 11.318  |  Penalty: 0.941
+Best params:
+  -      merge_prob: 0.689209
+  -        adhesion: 0.750464
+  -   fragment_rate: 0.000383162
+  -   heading_sigma: 0.505648
+  - init_n_clusters: 1042
+  -          dist_s: 0.669818
+  -      dist_scale: 3.57942

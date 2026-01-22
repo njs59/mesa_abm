@@ -1,0 +1,12 @@
+
+===== STAGE 10 =====
+Evaluated: 240 candidates
+Best score: 23.115  |  NND RMSE: 11.862  |  S0 RMSE: 10.325  |  Penalty: 0.929
+Best params:
+  -      merge_prob: 0.785144
+  -        adhesion: 0.810798
+  -   fragment_rate: 0.000616954
+  -   heading_sigma: 0.427488
+  - init_n_clusters: 955
+  -          dist_s: 0.679849
+  -      dist_scale: 3.47485

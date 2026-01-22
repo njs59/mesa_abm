@@ -1,0 +1,12 @@
+
+===== STAGE 9 =====
+Evaluated: 160 candidates
+Best score: 20.904  |  NND RMSE: 8.977  |  S0 RMSE: 11.368  |  Penalty: 0.560
+Best params:
+  -      merge_prob: 0.840741
+  -        adhesion: 0.850155
+  -   fragment_rate: 0.000835959
+  -   heading_sigma: 0.510318
+  - init_n_clusters: 967
+  -          dist_s: 0.722314
+  -      dist_scale: 3.49974

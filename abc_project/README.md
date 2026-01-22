@@ -46,7 +46,7 @@ pip install mesa pyabc numpy pandas matplotlib seaborn pyyaml
 ## Running ABC from scratch
 
 ```
-python -m abc.run_abc   --db results/abc_run.db   --popsize 200   --maxgen 12   --min_eps 0.5   --observed_ts observed/INV_ABM_ready_summary.csv   --t_start 22   --total_steps 300   --priors_yaml priors.yaml   --motion isotropic   --speed constant   --workers 1
+python -m abcp.run_abc   --db results/abc_run.db   --popsize 200   --maxgen 12   --min_eps 0.5   --observed_ts observed/INV_ABM_ready_summary.csv   --t_start 22   --total_steps 300   --priors_yaml priors.yaml   --motion isotropic   --speed constant   --workers 1
 ```
 
 - **Distance**: Straight Euclidean on the **flattened time-series** of all six statistics (most obvious, transparent choice).
@@ -57,7 +57,7 @@ python -m abc.run_abc   --db results/abc_run.db   --popsize 200   --maxgen 12   
 After ABC completes:
 
 ```
-python -m abc.analyze_posterior --db results/abc_run.db   --observed_ts observed/INV_ABM_ready_summary.csv   --t_start 22 --total_steps 300 --pp 100   --motion isotropic --speed constant
+python -m abcp.analyze_posterior --db results/abc_run.db   --observed_ts observed/INV_ABM_ready_summary.csv   --t_start 22 --total_steps 300 --pp 100   --motion isotropic --speed constant
 ```
 
 This generates in `results/`:

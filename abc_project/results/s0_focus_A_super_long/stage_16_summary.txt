@@ -1,0 +1,12 @@
+
+===== STAGE 16 =====
+Evaluated: 240 candidates
+Best score: 22.915  |  NND RMSE: 8.956  |  S0 RMSE: 13.086  |  Penalty: 0.873
+Best params:
+  -      merge_prob: 0.842924
+  -        adhesion: 0.838826
+  -   fragment_rate: 0.000576698
+  -   heading_sigma: 0.487576
+  - init_n_clusters: 962
+  -          dist_s: 0.700294
+  -      dist_scale: 3.47404

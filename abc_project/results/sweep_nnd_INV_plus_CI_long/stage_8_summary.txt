@@ -1,0 +1,12 @@
+
+===== STAGE 8 =====
+Evaluated: 200 candidates
+Best score: 7.628  |  NND RMSE: 5.748  |  Penalty: 1.881
+Best params:
+  -      merge_prob: 0.857983
+  -        adhesion: 0.917185
+  -   fragment_rate: 0.000899242
+  -   heading_sigma: 0.520861
+  -          dist_s: 0.855132
+  -      dist_scale: 3.40873
+  - init_n_clusters: 913

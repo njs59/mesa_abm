@@ -1,0 +1,7 @@
+db,motion,speed,label,epsilon_final,N_pp,coverage_S0,coverage_S1,coverage_S2,coverage_NND_med,coverage_g_r40,coverage_g_r80,disc_med_median,disc_med_q05,disc_med_q95
+results/abc_15_pop_PRO_ABM_ready_summary_isotropic_lognorm_seed42_20260118_093138.db,isotropic,lognorm,isotropic/lognorm,7.792001664276173,80,0.7,1.0,0.9,0.4,0.45,0.95,22.210098336890155,7.265399797229441,43.26228663793809
+results/abc_15_pop_PRO_ABM_ready_summary_isotropic_gamma_seed42_20260118_093138.db,isotropic,gamma,isotropic/gamma,9.916595408482584,80,0.425,0.925,0.5,0.0,0.175,0.95,49.22168415442135,14.941818274785076,73.46974180388497
+results/abc_15_pop_PRO_ABM_ready_summary_persistent_lognorm_seed42_20260118_093138.db,persistent,lognorm,persistent/lognorm,8.704644693175766,80,0.725,1.0,1.0,0.375,0.4,0.925,23.564741538744673,8.878615762451286,42.597055595509545
+results/abc_15_pop_PRO_ABM_ready_summary_persistent_gamma_seed42_20260118_093138.db,persistent,gamma,persistent/gamma,7.564926782711017,80,0.725,1.0,1.0,0.4,0.425,0.95,22.47064487501912,9.211937643095547,41.655267365200125
+results/abc_15_pop_PRO_ABM_ready_summary_persistent_gamma_seed42_20260118_005640.db,persistent,gamma,persistent/gamma,8.036125488011232,80,0.675,1.0,0.925,0.375,0.45,0.925,25.743846991030466,8.745651799926756,48.08537234950091
+results/abc_15_pop_PRO_ABM_ready_summary_persistent_lognorm_seed42_20260118_005640.db,persistent,lognorm,persistent/lognorm,9.09032148897734,80,0.725,1.0,1.0,0.4,0.3,0.95,25.26227697332408,7.160616204712809,45.252842167834416

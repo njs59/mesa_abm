@@ -1,0 +1,12 @@
+
+===== STAGE 18 =====
+Evaluated: 240 candidates
+Best score: 22.330  |  NND RMSE: 10.253  |  S0 RMSE: 11.375  |  Penalty: 0.703
+Best params:
+  -      merge_prob: 0.840384
+  -        adhesion: 0.821428
+  -   fragment_rate: 0.000603953
+  -   heading_sigma: 0.483973
+  - init_n_clusters: 957
+  -          dist_s: 0.688681
+  -      dist_scale: 3.46736

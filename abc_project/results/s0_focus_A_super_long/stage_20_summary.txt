@@ -1,0 +1,12 @@
+
+===== STAGE 20 =====
+Evaluated: 640 candidates
+Best score: 22.602  |  NND RMSE: 9.036  |  S0 RMSE: 12.747  |  Penalty: 0.818
+Best params:
+  -      merge_prob: 0.842912
+  -        adhesion: 0.831991
+  -   fragment_rate: 0.000656993
+  -   heading_sigma: 0.479243
+  - init_n_clusters: 958
+  -          dist_s: 0.694554
+  -      dist_scale: 3.46301

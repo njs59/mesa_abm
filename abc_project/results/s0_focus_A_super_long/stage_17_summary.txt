@@ -1,0 +1,12 @@
+
+===== STAGE 17 =====
+Evaluated: 240 candidates
+Best score: 22.767  |  NND RMSE: 9.292  |  S0 RMSE: 12.601  |  Penalty: 0.874
+Best params:
+  -      merge_prob: 0.843079
+  -        adhesion: 0.82045
+  -   fragment_rate: 0.000587886
+  -   heading_sigma: 0.476823
+  - init_n_clusters: 959
+  -          dist_s: 0.689104
+  -      dist_scale: 3.45799

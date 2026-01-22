@@ -1,0 +1,12 @@
+
+===== STAGE 13 =====
+Evaluated: 200 candidates
+Best score: 22.886  |  NND RMSE: 11.786  |  S0 RMSE: 10.327  |  Penalty: 0.773
+Best params:
+  -      merge_prob: 0.839739
+  -        adhesion: 0.820446
+  -   fragment_rate: 0.000687634
+  -   heading_sigma: 0.494859
+  - init_n_clusters: 959
+  -          dist_s: 0.70571
+  -      dist_scale: 3.45937
