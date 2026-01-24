@@ -63,16 +63,57 @@ def make_model_factory(seed: int = 777):
     return factory
 
 
+
 def parse_model_from_name(p: Path) -> Tuple[str, str]:
     """
-    Expect: abc_{obs}_{motion}_{speed}_seed{seed}[_{ts}].db
-    where {obs} may contain underscores.
+    Parse motion and speed from filenames.
+
+    Accepts:
+      - abc_{obs}_{motion}_{speed}_seed{seed}[_{ts}].db     (original)
+      - abc_{obs}_{motion}_{speed}_noGR.db                  (your current)
+      - Or any filename containing the tokens 'isotropic'/'persistent'
+        and 'constant'/'lognorm'/'gamma'/'weibull' in any order.
+
+    Returns ("unknown", "unknown") only if neither token is found.
     """
-    m = re.search(r"abc_(.+?)_(isotropic|persistent)_(constant|lognorm|gamma|weibull)_seed", p.name)
+    name = p.name.lower()
+
+    # First try strict regex (original expectation with _seed)
+    m = re.search(
+        r"abc_.+?_(isotropic|persistent)_(constant|lognorm|gamma|weibull)_seed",
+        name
+    )
     if m:
-        motion, speed = m.group(2), m.group(3)
-        return motion, speed
-    return "unknown", "unknown"
+        return m.group(1), m.group(2)
+
+    # Try your noGR pattern explicitly
+    m2 = re.search(
+        r"abc_.+?_(isotropic|persistent)_(constant|lognorm|gamma|weibull)_nogr\.db$",
+        name
+    )
+    if m2:
+        return m2.group(1), m2.group(2)
+
+    # Permissive fallback: find tokens anywhere, avoid partial-word matches
+    motion = "unknown"
+    speed = "unknown"
+
+    if re.search(r"(?:^|[^a-z])isotropic(?:[^a-z]|$)", name):
+        motion = "isotropic"
+    elif re.search(r"(?:^|[^a-z])persistent(?:[^a-z]|$)", name):
+        motion = "persistent"
+
+    if re.search(r"(?:^|[^a-z])constant(?:[^a-z]|$)", name):
+        speed = "constant"
+    elif re.search(r"(?:^|[^a-z])lognorm(?:[^a-z]|$)", name):
+        speed = "lognorm"
+    elif re.search(r"(?:^|[^a-z])gamma(?:[^a-z]|$)", name):
+        speed = "gamma"
+    elif re.search(r"(?:^|[^a-z])weibull(?:[^a-z]|$)", name):
+        speed = "weibull"
+
+    return motion, speed
+
 
 
 def load_posterior(db_path: Path) -> Tuple[pd.DataFrame, np.ndarray, pyabc.History, int]:
@@ -164,8 +205,10 @@ def ppc_hybrid_parallel(
 ) -> Dict[str, np.ndarray]:
     rng = np.random.default_rng(seed)
     N = len(params_df)
-    K = min(K, N)
-    base_idxs = rng.choice(np.arange(N), size=K, replace=False, p=w)
+    # Allow K > N when sampling with replacement; do not cap K at N
+    # K = min(K, N)  # <-- remove this line
+    base_idxs = rng.choice(np.arange(N), size=K, replace=True, p=w)  # now WITH replacement
+
     full_order = ["S0", "S1", "S2", "NND_med", "g_r40", "g_r80"]
     col_idx = [full_order.index(s) for s in stats]
 
