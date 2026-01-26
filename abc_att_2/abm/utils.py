@@ -1,20 +1,29 @@
+
 import os
 from typing import Optional
 import numpy as np
 import pandas as pd
-# -----------------
+
+# --------------------
 # Global parameters
-# -----------------
+# --------------------
 DEFAULTS = {
     "space": {"width": 1344.0, "height": 1025.0, "torus": True},
     "time": {"dt": 1.0, "steps": 300},
-    "physics": {"cell_volume": 1954.0, "density": 1.0},
+    # Soft separation & fragment placement controls (Fixes 1 & 5)
+    "physics": {
+        "cell_volume": 1954.0,
+        "density": 1.0,
+        "soft_separate": True,          # enable/disable soft separation
+        "softness": 0.15,               # strength of the soft push (0..~0.3 recommended)
+        "fragment_minsep_factor": 1.1,  # child at >= factor*(r_parent+r_child)
+    },
     "phenotypes": {
+        # No adhesion here; single merge parameter is used instead.
         "proliferative": {
             "speed_base": 1.0,
             "speed_size_exp": 0.0,
             "prolif_rate": 0.005,
-            "adhesion": 0.6,
             "fragment_rate": 0.0005,
             "frag_size_exp": 0.0,
             "color": (186 / 256, 29 / 256, 186 / 256),
@@ -23,7 +32,6 @@ DEFAULTS = {
             "speed_base": 3.0,
             "speed_size_exp": 0.0,
             "prolif_rate": 0.002,
-            "adhesion": 0.9,
             "fragment_rate": 0.0,
             "frag_size_exp": 0.0,
             "color": (70 / 256, 158 / 256, 44 / 256),
@@ -37,23 +45,30 @@ DEFAULTS = {
         "dist_params": {
             # For lognorm: s (shape, >0) and scale (>0); loc is fixed to 0
             "s": 0.6,
-            "scale": 2.0
+            "scale": 2.0,
         },
         # Small angular noise when direction="persistent" (radians, std dev for normal)
-        "heading_sigma": 0.25
+        "heading_sigma": 0.25,
     },
-    "merge": {"prob_contact_merge": 0.9},
+    # One merge probability parameter (replaces prob_contact_merge * adhesion)
+    "merge": {
+        "p_merge": 0.9,  # probability to merge upon contact
+    },
     # Initial condition controls
     "init": {
         "n_clusters": 800,  # agents at t=0
-        "size": 1,  # each singleton
+        "size": 1,          # each singleton
         "phenotype": "proliferative",  # "proliferative" or "invasive"
     },
 }
-# -----------------
+
+# --------------------
 # Geometry helpers
-# -----------------
-def radius_from_size_3d(n_cells: int, cell_volume: float = DEFAULTS["physics"]["cell_volume"]) -> float:
+# --------------------
+def radius_from_size_3d(
+    n_cells: int,
+    cell_volume: float = DEFAULTS["physics"]["cell_volume"]
+) -> float:
     return float(((3.0 / (4.0 * np.pi)) * n_cells * cell_volume) ** (1.0 / 3.0))
 
 def volume_conserving_radius(r1: float, r2: float) -> float:
@@ -68,9 +83,10 @@ def mass_from_size(
 
 def momentum_merge(m1: float, v1: np.ndarray, m2: float, v2: np.ndarray) -> np.ndarray:
     return (m1 * v1 + m2 * v2) / (m1 + m2)
-# -----------------
+
+# --------------------
 # Export helpers
-# -----------------
+# --------------------
 def export_timeseries_state(
     model,
     out_csv: str = "results/state_timeseries.csv",
@@ -103,14 +119,17 @@ def export_timeseries_state(
             speeds = np.asarray(model.speed_log[t_idx], dtype=float)
         else:
             speeds = np.zeros_like(sizes, dtype=float)
+
         n_rows = min(len(ids), pos.shape[0], radii.shape[0], sizes.shape[0], speeds.shape[0])
         if n_rows == 0:
             continue
+
         ids = ids[:n_rows]
         pos = pos[:n_rows, :]
         radii = radii[:n_rows]
         sizes = sizes[:n_rows]
         speeds = speeds[:n_rows]
+
         time_min = t_idx * dt
         for i in range(n_rows):
             rows.append(
@@ -125,6 +144,7 @@ def export_timeseries_state(
                     "speed": float(speeds[i]),
                 }
             )
+
     df = pd.DataFrame(rows)
     df.to_csv(out_csv, index=False)
     if out_parquet:
