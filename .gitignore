@@ -2,3 +2,4 @@
 # Simulation outputs and databases
 abc_project/results/*.db
 abc_project/results/test_runs/*.db
+abc_att_2/results/*.db
