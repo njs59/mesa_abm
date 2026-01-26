@@ -1,0 +1,5 @@
+stat,coverage_overall,coverage_early,coverage_late
+S0,0.925,0.875,1.0
+S1,1.0,1.0,1.0
+S2,1.0,1.0,1.0
+NND_med,0.05,0.08333333333333333,0.0

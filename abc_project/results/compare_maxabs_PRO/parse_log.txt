@@ -1,0 +1,9 @@
+USED FILES:
+  abc_maxabs_PRO_isotropic_constant_noGR.db → isotropic/constant
+  abc_maxabs_PRO_isotropic_lognorm_noGR.db → isotropic/lognorm
+  abc_maxabs_PRO_isotropic_gamma_noGR.db → isotropic/gamma
+  abc_maxabs_PRO_isotropic_weibull_noGR.db → isotropic/weibull
+  abc_maxabs_PRO_persistent_constant_noGR.db → persistent/constant
+  abc_maxabs_PRO_persistent_lognorm_noGR.db → persistent/lognorm
+  abc_maxabs_PRO_persistent_gamma_noGR.db → persistent/gamma
+  abc_maxabs_PRO_persistent_weibull_noGR.db → persistent/weibull

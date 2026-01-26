@@ -1,0 +1,9 @@
+db,motion,speed,label,epsilon_final,N_pp,coverage_S0,coverage_S1,coverage_S2,coverage_NND_med,disc_med_median,disc_med_q05,disc_med_q95
+results/abc_maxabs_PRO_isotropic_constant_noGR.db,isotropic,constant,isotropic/constant,1.518104507440389,100,0.75,0.85,0.5,0.0,56.04815457082284,25.46182424595334,82.26439153535091
+results/abc_maxabs_PRO_isotropic_lognorm_noGR.db,isotropic,lognorm,isotropic/lognorm,0.8068811420807603,100,1.0,1.0,1.0,0.35,27.56619053967311,19.175813470690024,58.22640940246834
+results/abc_maxabs_PRO_isotropic_gamma_noGR.db,isotropic,gamma,isotropic/gamma,1.5028685528386883,100,0.85,0.5,0.4,0.0,65.51621355956385,45.79699502158785,100.67738555869394
+results/abc_maxabs_PRO_isotropic_weibull_noGR.db,isotropic,weibull,isotropic/weibull,1.1595807902845852,100,0.6,0.95,0.5,0.0,55.230704254972764,20.729689966855464,81.06565834482251
+results/abc_maxabs_PRO_persistent_constant_noGR.db,persistent,constant,persistent/constant,1.1372219194482402,100,1.0,0.9,0.5,0.0,41.47005339607607,21.110151390986367,67.07681488732997
+results/abc_maxabs_PRO_persistent_lognorm_noGR.db,persistent,lognorm,persistent/lognorm,0.8908177872518709,100,0.8,1.0,1.0,0.1,22.627470058271573,8.398752034778788,42.59974159044865
+results/abc_maxabs_PRO_persistent_gamma_noGR.db,persistent,gamma,persistent/gamma,0.7878225149405924,100,0.7,1.0,1.0,0.2,22.469367197502155,8.822495717186941,42.33814215841003
+results/abc_maxabs_PRO_persistent_weibull_noGR.db,persistent,weibull,persistent/weibull,0.7756696847950928,100,0.9,1.0,0.9,0.0,20.888173387010262,10.430221496969027,45.898981591500565
