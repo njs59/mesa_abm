@@ -3,3 +3,5 @@
 abc_project/results/*.db
 abc_project/results/test_runs/*.db
 abc_att_2/results/*.db
+abc_ss_nnd/results/*.db
+abc_noisy_radius/results/*.db
