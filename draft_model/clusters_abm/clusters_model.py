@@ -1,29 +1,27 @@
-
 from mesa import Model
 from mesa.space import ContinuousSpace
 import numpy as np
-
 from .cluster_agent import ClusterAgent
 from .utils import DEFAULTS
-
 
 class ClustersModel(Model):
     """
     ABM for motility-driven clustering with merging, proliferation, and fragmentation.
 
     Logs recorded each timestep (aligned numpy arrays):
-      - size_log   : list of (N,) arrays (cluster sizes for alive agents)
-      - speed_log  : list of (N,) arrays (speed magnitudes for alive agents)
-      - pos_log    : list of (N,2) arrays (x,y for alive agents)
-      - radius_log : list of (N,) arrays (r for alive agents)
-      - id_log     : list of (N,) integer arrays (agent unique_id for alive agents)
+    - size_log : list of (N,) arrays (cluster sizes for alive agents)
+    - speed_log : list of (N,) arrays (speed magnitudes for alive agents)
+    - pos_log : list of (N,2) arrays (x,y for alive agents)
+    - radius_log : list of (N,) arrays (r for alive agents)
+    - id_log : list of (N,) integer arrays (agent unique_id for alive agents)
+
     N varies over time due to merges and fragmentation.
     """
 
     def __init__(self, params=None, seed=42, init_clusters=None):
         super().__init__()
 
-        # Seed the model RNG (Mesa 3)
+        # Seed the model RNG
         self.random.seed(seed)
 
         self.params = params or DEFAULTS
@@ -84,7 +82,8 @@ class ClustersModel(Model):
 
     def spawn_cluster(self, size, phenotype, pos=None, jitter=False):
         # Construct agent and register first so unique_id exists before placement
-        a = ClusterAgent(model=self, size=size, phenotype=phenotype)
+        uid = self.next_id()
+        a = ClusterAgent(uid, self, size=size, phenotype=phenotype)
         self.agents.add(a)
 
         if pos is None:
@@ -135,7 +134,6 @@ class ClustersModel(Model):
             except Exception:
                 # Skip anything that doesn't parse cleanly this tick
                 continue
-
             xs.append(x)
             ys.append(y)
             radii.append(r)
@@ -163,7 +161,7 @@ class ClustersModel(Model):
         )
 
     def step(self):
-        # Activate each agent once in random order (Mesa 3 AgentSet API)
+        # Activate each agent once in random order (Mesa AgentSet API)
         self.agents.shuffle_do("step")  # calls a.step() for each agent in random order
 
         # Advance time
@@ -184,4 +182,4 @@ class ClustersModel(Model):
         self.pos_log.append(pos)
         self.radius_log.append(radii)
         self.size_log.append(sizes)
-        self.speed_log.append(speeds)  # <-- ensure t=0 includes speed as well
+        self.speed_log.append(speeds)  # ensure t=0 includes speed as well
