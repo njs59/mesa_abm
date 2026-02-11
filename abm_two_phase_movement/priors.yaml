@@ -1,0 +1,7 @@
+# Priors for NEW ABM (movement_v2; speed_base unused)
+prolif_rate: [0.010, 0.012]
+fragment_rate: [0.0, 0.002]
+p_merge: [0.3, 0.8]
+softness: [0.1, 0.4]
+fragment_minsep_factor: [1.1, 1.8]
+n_init: [300, 1200]
