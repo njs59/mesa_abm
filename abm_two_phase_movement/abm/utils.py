@@ -64,6 +64,8 @@ DEFAULTS = {
         },
     },
 
+    "interactions": {"allow_cross_phase_interactions": True},
+
     "merge": {"p_merge": 0.9},
 
     "init": {"n_clusters": 800, "size": 1, "phenotype": "proliferative"},

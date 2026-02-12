@@ -78,7 +78,21 @@ class ClustersModel(Model):
         if agent.pos is None:
             return []
         cand = self.space.get_neighbors(pos=agent.pos, radius=float(r), include_center=False)
-        return [a for a in cand if getattr(a, "alive", True)]
+        alive = [a for a in cand if getattr(a, "alive", True)]
+        allow_cross = bool(self.params.get("interactions", {}).get("allow_cross_phase_interactions", True))
+        if not allow_cross:
+            same_phase = []
+            am = getattr(agent, "movement_phase", None)
+            for a in alive:
+                try:
+                    if getattr(a, "movement_phase", None) == am:
+                        same_phase.append(a)
+                except Exception:
+                    pass
+            return same_phase
+        return alive
+
+    
 
     def remove_agent(self, agent):
         self.agent_set.discard(agent)
