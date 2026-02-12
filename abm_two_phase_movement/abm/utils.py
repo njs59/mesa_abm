@@ -14,7 +14,7 @@ DEFAULTS = {
         "cell_volume": 1954.0,
         "density": 1.0,
         "soft_separate": True,
-        "softness": 0.15,
+        "softness": 0.05,
         "fragment_minsep_factor": 1.1,
     },
 
