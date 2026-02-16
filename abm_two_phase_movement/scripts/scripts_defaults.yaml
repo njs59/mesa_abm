@@ -1,0 +1,32 @@
+
+# Default sweep configuration (single baseline values)
+# These values are used unless explicitly overridden in the sweep scripts.
+
+# ---- Experiment / data ----
+observed_csv: "observed/INV_ABM_ready_summary.csv"
+
+# ---- Simulation control ----
+total_steps: 145
+# Provide either explicit timesteps or an interval. If timesteps is omitted,
+# timesteps_every will be used to build [0, every, 2*every, ... total_steps].
+# timesteps: [0, 5, 10, 15]
+timesteps_every: 1
+
+# Summary statistics to compare against the observed CSV
+summary_stats: ["S0", "S1", "S2", "NND_med"]
+
+# ---- Sweep engine defaults ----
+replicates: 1000
+workers: 8
+seed_base: 0
+
+# ---- Baseline parameters (flat names) ----
+# These are the model parameters used by default for runs unless a sweep overrides them.
+params:
+  prolif_rate: 0.011 # V well defined
+  softness: 0.15 # Initial guess
+  fragment_minsep_factor: 1.1 # Initial guess
+  n_init: 800 # Informed guess (600<x<1100)
+  fragment_rate: 0.0008 # Sweep informed (x < 0.005)
+  p_merge: 0.56 # Sweep informed (0.3<x<1)
+
