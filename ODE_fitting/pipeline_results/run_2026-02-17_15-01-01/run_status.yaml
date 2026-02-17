@@ -1,0 +1,28 @@
+status: running
+last_update: 2026-02-17 15:07:11 UTC
+pipeline_total:
+  started: 2026-02-17 15:01:01 UTC
+  finished: null
+sections:
+  abm_forward:
+    started: 2026-02-17 15:01:01 UTC
+    finished: 2026-02-17 15:01:06 UTC
+    duration_seconds: 5.019
+  models:
+    Cell_num_prolif_cst_shed:
+      mcmc:
+        started: 2026-02-17 15:01:06 UTC
+        finished: null
+        current_block: 3
+        total_iters_so_far: 30000
+        last_rhat:
+        - 1.0015845740969398
+        - 1.0134387386841925
+        - 1.0164693585298843
+        - 1.0161554087482279
+        - 1.0043174778472492
+        - 1.0007696105638315
+        - 1.02018070126816
+      diagnostics:
+        started: null
+        finished: null

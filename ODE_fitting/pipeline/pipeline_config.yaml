@@ -12,13 +12,13 @@ abm:
 
 # MCMC settings (keeps your per-model internal parallelism)
 mcmc:
-  chunk: 5000
-  print_every: 1000
-  rhat_threshold: 1.01
+  chunk: 10000
+  print_every: 2000
+  rhat_threshold: 1.05
   max_total_iters: 200000
   burn_in_fraction: 0.5
   nsamples_ppc: 300
-  random_seed: 12345
+  random_seed: 123
 
 # Root for timestamped results folders
 results_root: "pipeline_results"

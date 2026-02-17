@@ -53,6 +53,7 @@ def run_adaptive_mcmc(
     out_dir: str,
     model_meta_overrides: dict | None = None,
     random_seed: int = 12345,
+    progress_callback=None,      # NEW: live progress hook (optional)
 ):
     os.makedirs(out_dir, exist_ok=True)
 
@@ -78,11 +79,13 @@ def run_adaptive_mcmc(
     total_iters = 0
     converged = False
     all_chains = None
+    block_idx = 0
 
     print(f"\n=== [{model_key}] Starting HaarioBardenetACMC (3 chains) ===")
 
     while not converged and total_iters < max_total_iters:
-        print(f"\n--- [{model_key}] Running block of {chunk} iterations ---")
+        block_idx += 1
+        print(f"\n--- [{model_key}] Running block {block_idx} of {chunk} iterations ---")
 
         # Use the non-deprecated sampler
         controller = pints.MCMCController(
@@ -94,11 +97,11 @@ def run_adaptive_mcmc(
         controller.set_parallel(True)
         controller.set_log_interval(print_every)
         controller.set_max_iterations(chunk)
-        # NOTE: No controller.set_random_seed() in this PINTS version.
 
         start = time.time()
         part = controller.run()  # (chains, chunk, n_params)
-        print(f"Block time: {time.time() - start:.2f}s")
+        elapsed = time.time() - start
+        print(f"[{model_key}] Block {block_idx} time: {elapsed:.2f}s")
 
         all_chains = part if all_chains is None else np.concatenate([all_chains, part], axis=1)
         total_iters = all_chains.shape[1]
@@ -114,8 +117,20 @@ def run_adaptive_mcmc(
         except Exception:
             rhat = pints.rhat(np.asarray(recent))
         rhat = np.asarray(rhat).ravel()
-        print("R-hat (last 50%):", ", ".join(f"{v:.4f}" for v in rhat))
-        if np.all(np.isfinite(rhat)) and np.max(rhat) < rhat_threshold:
+
+        # ✅ Extra prints requested
+        max_rhat = float(np.max(rhat)) if rhat.size else float('nan')
+        print(f"[{model_key}] R-hat (last 50%): " + ", ".join(f"{v:.4f}" for v in rhat))
+        print(f"[{model_key}] Max R-hat this block: {max_rhat:.5f} | Total iterations so far: {total_iters}")
+
+        # Live progress callback (optional)
+        if callable(progress_callback):
+            try:
+                progress_callback(block_idx, total_iters, rhat.tolist())
+            except Exception as e:
+                print("Progress callback failed:", e)
+
+        if np.all(np.isfinite(rhat)) and max_rhat < rhat_threshold:
             converged = True
             print(f"\n=== [{model_key}] Convergence achieved. ===")
             break
@@ -144,12 +159,30 @@ def run_adaptive_mcmc(
 
     # Trace plot
     try:
-        pints.plot.trace(all_chains)
-        plt.tight_layout()
-        plt.savefig(os.path.join(out_dir, f"mcmc_{model_key}_trace.png"), dpi=150)
-        plt.close()
+        # Prefer the pints plotting submodule if available
+        try:
+            import pints.plot as pplot
+            pplot.trace(all_chains)
+            plt.tight_layout()
+            plt.savefig(os.path.join(out_dir, f"mcmc_{model_key}_trace.png"), dpi=150)
+            plt.close()
+        except Exception:
+            # Fallback: minimal Matplotlib trace plot
+            n_chains, n_iters, n_params = all_chains.shape
+            fig, axes = plt.subplots(n_params, 1, figsize=(10, 2 * n_params), sharex=True)
+            if n_params == 1:
+                axes = [axes]
+            for p_idx in range(n_params):
+                ax = axes[p_idx]
+                for c_idx in range(n_chains):
+                    ax.plot(all_chains[c_idx, :, p_idx], lw=0.5, alpha=0.8)
+                ax.set_ylabel(f"θ{p_idx+1}")
+            axes[-1].set_xlabel("Iteration")
+            fig.tight_layout()
+            plt.savefig(os.path.join(out_dir, f"mcmc_{model_key}_trace.png"), dpi=150)
+            plt.close()
     except Exception as e:
-        print("Trace plot failed:", e)
+        print("Trace plot failed (fallback also failed):", e)
 
     # # Approximate MLE from posterior samples (likelihood only)
     # loglik = pints.LogNormalLogLikelihood(problem)

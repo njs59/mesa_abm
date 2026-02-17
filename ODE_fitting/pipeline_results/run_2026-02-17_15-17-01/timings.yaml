@@ -1,0 +1,8 @@
+abm_forward_seconds: 4.753
+models:
+  Cell_num_prolif_cst_shed:
+    mcmc_seconds: 366.737
+    diagnostics_seconds: 4.899
+    total_seconds: 371.636
+    n_params: 7
+pipeline_total_seconds: 371.641
