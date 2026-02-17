@@ -1,0 +1,42 @@
+# Top-level pipeline configuration
+# Place in ODE_fitting/pipeline/pipeline_config.yaml
+
+# Select one or many models (keys must exist in Model_structures/model_registry.py)
+models:
+  - Cell_num_prolif_cst_shed
+  - Cell_num_prolif_SA_shed
+  - Cell_num_prolif_no_shed      # example of adding more from your 16 variants
+
+# Optional per-model metadata overrides (priors, initials, readable names).
+# If omitted for a model, the pipeline infers parameter count and uses generic priors.
+models_meta:
+  Cell_num_prolif_cst_shed:
+    param_names: ["b", "p", "s", "N0"]
+    priors:      [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+  Cell_num_prolif_SA_shed:
+    param_names: ["b", "p", "s", "N0"]
+    priors:      [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
+# ABM forward-simulation options
+abm:
+  start_step: 71
+  n_runs: 100
+  n_workers: 8
+  seed: 42
+  defaults_yaml: "ODE_fitting/scripts/scripts_defaults.yaml"
+  background_dir: "ODE_fitting/background"
+
+# MCMC settings (each model runs its own PINTS AdaptiveCovarianceMCMC with 3 chains)
+mcmc:
+  chunk: 5000           # iterations per block (per chain)
+  print_every: 1000
+  rhat_threshold: 1.01
+  max_total_iters: 200000
+  burn_in_fraction: 0.5 # fraction of total iterations discarded as burn-in
+  nsamples_ppc: 300     # number of posterior draws for PPC plots
+  random_seed: 123
+
+# Pipeline output directory (a timestamped run folder will be created inside this)
+results_root: "ODE_fitting/results"
