@@ -28,12 +28,12 @@ results_root: "pipeline_results"
 
 # Run any subset or all 16 models by listing keys here:
 models:
-  # - no_prolif_no_shed
+  - no_prolif_no_shed
   # - no_prolif_cst_shed
   # - no_prolif_SA_shed
   # - no_prolif_Cell_num_shed
   # - cst_prolif_no_shed
-  # - cst_prolif_cst_shed
+  - cst_prolif_cst_shed
   # - cst_prolif_SA_shed
   # - cst_prolif_Cell_num_shed
   # - SA_prolif_no_shed

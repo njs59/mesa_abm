@@ -1,0 +1,88 @@
+status: finished
+last_update: 2026-02-17 16:01:42 UTC
+pipeline_total:
+  started: 2026-02-17 15:45:05 UTC
+  finished: 2026-02-17 16:01:42 UTC
+  duration_seconds: 991.395
+sections:
+  abm_forward:
+    started: 2026-02-17 15:45:05 UTC
+    finished: 2026-02-17 15:45:10 UTC
+    duration_seconds: 4.9
+  models:
+    no_prolif_no_shed:
+      mle:
+        started: 2026-02-17 15:45:10 UTC
+        finished: 2026-02-17 15:45:39 UTC
+        duration_seconds: 29.138
+        AIC: 1895.7459965077269
+        max_loglik: -942.8729982538634
+        n_params: 5
+      mcmc:
+        started: 2026-02-17 15:45:39 UTC
+        current_block: 1
+        total_iters_so_far: 10000
+        last_rhat:
+        - 1.006587495817549
+        - 1.003768250569445
+        - 1.0024226453388334
+        - 1.0043188743546703
+        - 1.0019798961632336
+        finished: 2026-02-17 15:47:23 UTC
+        duration_seconds: 103.339
+      diagnostics:
+        started: 2026-02-17 15:47:23 UTC
+        finished: 2026-02-17 15:47:26 UTC
+        duration_seconds: 2.718
+    cst_prolif_cst_shed:
+      mle:
+        started: 2026-02-17 15:47:26 UTC
+        finished: 2026-02-17 15:48:02 UTC
+        duration_seconds: 36.627
+        AIC: 1897.8553168303015
+        max_loglik: -941.9276584151507
+        n_params: 7
+      mcmc:
+        started: 2026-02-17 15:48:02 UTC
+        current_block: 5
+        total_iters_so_far: 50000
+        last_rhat:
+        - 1.038012658338894
+        - 1.041207616253226
+        - 1.0062059575399547
+        - 1.042390265745228
+        - 1.003458548638693
+        - 1.0173577271765248
+        - 1.006417335680249
+        finished: 2026-02-17 15:56:42 UTC
+        duration_seconds: 519.569
+      diagnostics:
+        started: 2026-02-17 15:56:42 UTC
+        finished: 2026-02-17 15:56:47 UTC
+        duration_seconds: 4.809
+    Cell_num_prolif_cst_shed:
+      mle:
+        started: 2026-02-17 15:56:47 UTC
+        finished: 2026-02-17 15:57:29 UTC
+        duration_seconds: 42.825
+        AIC: 1651.5550095289977
+        max_loglik: -818.7775047644989
+        n_params: 7
+      mcmc:
+        started: 2026-02-17 15:57:29 UTC
+        current_block: 2
+        total_iters_so_far: 20000
+        last_rhat:
+        - 1.0213995098559339
+        - 1.0236365528170064
+        - 1.0244197280732135
+        - 1.0229761474125945
+        - 1.007457054138151
+        - 1.015513994885244
+        - 1.048605174969665
+        finished: 2026-02-17 16:01:37 UTC
+        duration_seconds: 247.997
+      diagnostics:
+        started: 2026-02-17 16:01:37 UTC
+        finished: 2026-02-17 16:01:42 UTC
+        duration_seconds: 4.326
