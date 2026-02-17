@@ -2,7 +2,7 @@ import os
 import sys
 
 # Import your existing ABM forward sims script (as a module, not a subprocess)
-from ODE_fitting.scripts import run_forward_sims_phase_2 as fwd
+from scripts import run_forward_sims_phase_2 as fwd
 
 
 def _as_argv(args_dict):
