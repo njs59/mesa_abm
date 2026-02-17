@@ -1,0 +1,38 @@
+status: finished
+last_update: 2026-02-17 15:38:32 UTC
+pipeline_total:
+  started: 2026-02-17 15:31:14 UTC
+  finished: 2026-02-17 15:38:32 UTC
+  duration_seconds: 432.629
+sections:
+  abm_forward:
+    started: 2026-02-17 15:31:14 UTC
+    finished: 2026-02-17 15:31:19 UTC
+    duration_seconds: 4.808
+  models:
+    Cell_num_prolif_cst_shed:
+      mle:
+        started: 2026-02-17 15:31:19 UTC
+        finished: 2026-02-17 15:32:19 UTC
+        duration_seconds: 59.321
+        AIC: 1659.275660774361
+        max_loglik: -822.6378303871805
+        n_params: 7
+      mcmc:
+        started: 2026-02-17 15:32:19 UTC
+        current_block: 3
+        total_iters_so_far: 30000
+        last_rhat:
+        - 1.0040155157832886
+        - 1.0127401372865121
+        - 1.004610181348173
+        - 1.0104097424276413
+        - 1.0023701405142862
+        - 1.0004544685768568
+        - 1.0156659442643359
+        finished: 2026-02-17 15:38:27 UTC
+        duration_seconds: 368.54
+      diagnostics:
+        started: 2026-02-17 15:38:27 UTC
+        finished: 2026-02-17 15:38:32 UTC
+        duration_seconds: 4.759
