@@ -1,0 +1,68 @@
+abm_forward_seconds: 5.279
+models:
+  no_prolif_no_shed:
+    mle_seconds: 24.762
+    mcmc_seconds: 100.564
+    diagnostics_seconds: 2.709
+  no_prolif_cst_shed:
+    mle_seconds: 30.875
+    mcmc_seconds: 103.478
+    diagnostics_seconds: 3.026
+  no_prolif_SA_shed:
+    mle_seconds: 30.07
+    mcmc_seconds: 98.216
+    diagnostics_seconds: 2.996
+  no_prolif_Cell_num_shed:
+    mle_seconds: 29.778
+    mcmc_seconds: 298.105
+    diagnostics_seconds: 3.532
+  cst_prolif_no_shed:
+    mle_seconds: 32.345
+    mcmc_seconds: 95.587
+    diagnostics_seconds: 3.008
+  cst_prolif_cst_shed:
+    mle_seconds: 36.238
+    mcmc_seconds: 715.454
+    diagnostics_seconds: 5.748
+  cst_prolif_SA_shed:
+    mle_seconds: 34.9
+    mcmc_seconds: 532.059
+    diagnostics_seconds: 4.86
+  cst_prolif_Cell_num_shed:
+    mle_seconds: 45.277
+    mcmc_seconds: 329.433
+    diagnostics_seconds: 4.193
+  SA_prolif_no_shed:
+    mle_seconds: 27.263
+    mcmc_seconds: 303.731
+    diagnostics_seconds: 3.59
+  SA_prolif_cst_shed:
+    mle_seconds: 34.43
+    mcmc_seconds: 314.352
+    diagnostics_seconds: 4.097
+  SA_prolif_SA_shed:
+    mle_seconds: 35.539
+    mcmc_seconds: 731.499
+    diagnostics_seconds: 6.038
+  SA_prolif_Cell_num_shed:
+    mle_seconds: 33.275
+    mcmc_seconds: 338.843
+    diagnostics_seconds: 4.193
+  Cell_num_prolif_no_shed:
+    mle_seconds: 42.936
+    mcmc_seconds: 129.795
+    diagnostics_seconds: 3.633
+  Cell_num_prolif_cst_shed:
+    mle_seconds: 46.449
+    mcmc_seconds: 264.867
+    diagnostics_seconds: 4.657
+  Cell_num_prolif_SA_shed:
+    mle_seconds: 48.976
+    mcmc_seconds: 382.685
+    diagnostics_seconds: 4.744
+  Cell_num_prolif_Cell_num_shed:
+    mle_seconds: 37.78
+    mcmc_seconds: 520.325
+    diagnostics_seconds: 5.126
+aic_seconds: 0.001
+pipeline_total_seconds: 5896.931

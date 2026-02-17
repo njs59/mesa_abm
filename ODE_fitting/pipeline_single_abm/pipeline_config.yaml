@@ -1,0 +1,145 @@
+# Top-level pipeline configuration
+# Place this file at: ODE_fitting/pipeline/pipeline_config.yaml
+
+# ABM forward-simulation options
+abm:
+  start_step: 71
+  n_runs: 100
+  n_workers: 8
+  seed: 42
+  defaults_yaml: "scripts/scripts_defaults.yaml"
+  background_dir: "background"
+
+# MCMC settings (keeps your per-model internal parallelism)
+mcmc:
+  chunk: 10000
+  print_every: 2000
+  rhat_threshold: 1.05
+  max_total_iters: 200000
+  burn_in_fraction: 0.5
+  nsamples_ppc: 300
+  random_seed: 123
+
+# Root for timestamped results folders
+results_root: "pipeline_results"
+
+
+
+
+# Run any subset or all 16 models by listing keys here:
+models:
+  - no_prolif_no_shed
+  - no_prolif_cst_shed
+  - no_prolif_SA_shed
+  - no_prolif_Cell_num_shed
+  - cst_prolif_no_shed
+  - cst_prolif_cst_shed
+  - cst_prolif_SA_shed
+  - cst_prolif_Cell_num_shed
+  - SA_prolif_no_shed
+  - SA_prolif_cst_shed
+  - SA_prolif_SA_shed
+  - SA_prolif_Cell_num_shed
+  - Cell_num_prolif_no_shed
+  - Cell_num_prolif_cst_shed
+  - Cell_num_prolif_SA_shed
+  - Cell_num_prolif_Cell_num_shed
+  # - Cell_num_prolif_cst_shed
+
+# Optional per-model metadata overrides (names / priors / initials).
+# If omitted for a model, the pipeline infers parameter count and uses
+# generic priors; but explicit entries improve convergence & labelling.
+models_meta:
+
+  # ────────────────────────────────────────────────────────────────
+  # No proliferation
+  # ────────────────────────────────────────────────────────────────
+  no_prolif_no_shed:
+    param_names: ["b", "N_0"]
+    priors:      [[0.0, 1.0e-2], [1.0, 4000.0]]
+    initial:     [3.0e-4, 900.0]
+
+  no_prolif_cst_shed:
+    param_names: ["b", "s", "N_0"]
+    priors:      [[0.0, 1.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-4, 900.0]
+
+  no_prolif_SA_shed:
+    param_names: ["b", "s", "N_0"]     # 's' acts with √size weighting in the model code
+    priors:      [[0.0, 1.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-4, 900.0]
+
+  no_prolif_Cell_num_shed:
+    param_names: ["b", "s", "N_0"]     # 's' scales with cluster size in shedding
+    priors:      [[0.0, 1.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-4, 900.0]
+
+  # ────────────────────────────────────────────────────────────────
+  # Constant-rate proliferation (p), various shedding
+  # ────────────────────────────────────────────────────────────────
+  cst_prolif_no_shed:
+    param_names: ["b", "p", "N_0"]
+    priors:      [[0.0, 1.0e-2], [0.0, 5.0e-2], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-3, 900.0]
+
+  cst_prolif_cst_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors:      [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
+  cst_prolif_SA_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors:      [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
+  cst_prolif_Cell_num_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors:      [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
+  # ────────────────────────────────────────────────────────────────
+  # Surface-area–weighted proliferation (SA_prolif), various shedding
+  # ────────────────────────────────────────────────────────────────
+  SA_prolif_no_shed:
+    param_names: ["b", "p", "N_0"]  # p acts with √size weighting in proliferation
+    priors:      [[0.0, 1.0e-2], [0.0, 5.0e-2], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-3, 900.0]
+
+  SA_prolif_cst_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors:      [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
+  SA_prolif_SA_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors:      [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
+  SA_prolif_Cell_num_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors:      [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
+  # ────────────────────────────────────────────────────────────────
+  # Cell-number–weighted proliferation (Cell_num_prolif), various shedding
+  # (You shared these model files; the order (b, p, s?, N) matches your code.)
+  # ────────────────────────────────────────────────────────────────
+  Cell_num_prolif_no_shed:
+    param_names: ["b", "p", "N_0"]
+    priors:      [[0.0, 1.0e-2], [0.0, 5.0e-2], [1.0, 4000.0]]
+    initial:     [4.0e-4, 1.0e-2, 500.0]  # aligns with suggested values in your code
+
+  Cell_num_prolif_cst_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors:      [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
+  Cell_num_prolif_SA_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors:      [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
+  Cell_num_prolif_Cell_num_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors:      [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial:     [3.0e-4, 1.0e-3, 1.0e-4, 900.0]

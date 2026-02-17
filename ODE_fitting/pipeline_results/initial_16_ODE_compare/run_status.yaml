@@ -1,0 +1,420 @@
+status: finished
+last_update: 2026-02-17 17:48:40 UTC
+pipeline_total:
+  started: 2026-02-17 16:10:17 UTC
+  finished: 2026-02-17 17:48:40 UTC
+  duration_seconds: 5896.931
+sections:
+  abm_forward:
+    started: 2026-02-17 16:10:17 UTC
+    finished: 2026-02-17 16:10:23 UTC
+    duration_seconds: 5.279
+  models:
+    no_prolif_no_shed:
+      mle:
+        started: 2026-02-17 16:10:23 UTC
+        finished: 2026-02-17 16:10:47 UTC
+        duration_seconds: 24.762
+        AIC: 1899.9641763213262
+        max_loglik: -944.9820881606631
+        n_params: 5
+      mcmc:
+        started: 2026-02-17 16:10:47 UTC
+        current_block: 1
+        total_iters_so_far: 10000
+        last_rhat:
+        - 1.0037048709213052
+        - 1.0018697182552274
+        - 1.0127416406762695
+        - 1.0034343783178348
+        - 1.0058814941132135
+        finished: 2026-02-17 16:12:28 UTC
+        duration_seconds: 100.564
+      diagnostics:
+        started: 2026-02-17 16:12:28 UTC
+        finished: 2026-02-17 16:12:31 UTC
+        duration_seconds: 2.709
+    no_prolif_cst_shed:
+      mle:
+        started: 2026-02-17 16:12:31 UTC
+        finished: 2026-02-17 16:13:02 UTC
+        duration_seconds: 30.875
+        AIC: 1901.9641763213262
+        max_loglik: -944.9820881606631
+        n_params: 6
+      mcmc:
+        started: 2026-02-17 16:13:02 UTC
+        current_block: 1
+        total_iters_so_far: 10000
+        last_rhat:
+        - 1.0020828394637844
+        - 1.005220530758941
+        - 1.000864073412708
+        - 1.0023727379874492
+        - 1.0069609635917873
+        - 1.004892456008137
+        finished: 2026-02-17 16:14:45 UTC
+        duration_seconds: 103.478
+      diagnostics:
+        started: 2026-02-17 16:14:45 UTC
+        finished: 2026-02-17 16:14:48 UTC
+        duration_seconds: 3.026
+    no_prolif_SA_shed:
+      mle:
+        started: 2026-02-17 16:14:48 UTC
+        finished: 2026-02-17 16:15:18 UTC
+        duration_seconds: 30.07
+        AIC: 1901.9641763213276
+        max_loglik: -944.9820881606638
+        n_params: 6
+      mcmc:
+        started: 2026-02-17 16:15:18 UTC
+        current_block: 1
+        total_iters_so_far: 10000
+        last_rhat:
+        - 1.0011272435404832
+        - 1.0041064742007533
+        - 1.0012408716029872
+        - 1.0091425623945465
+        - 1.0161087199359475
+        - 1.011401128850445
+        finished: 2026-02-17 16:16:56 UTC
+        duration_seconds: 98.216
+      diagnostics:
+        started: 2026-02-17 16:16:56 UTC
+        finished: 2026-02-17 16:16:59 UTC
+        duration_seconds: 2.996
+    no_prolif_Cell_num_shed:
+      mle:
+        started: 2026-02-17 16:16:59 UTC
+        finished: 2026-02-17 16:17:29 UTC
+        duration_seconds: 29.778
+        AIC: 1901.9641763213283
+        max_loglik: -944.9820881606641
+        n_params: 6
+      mcmc:
+        started: 2026-02-17 16:17:29 UTC
+        current_block: 3
+        total_iters_so_far: 30000
+        last_rhat:
+        - 1.00225862805562
+        - 1.0046023718540738
+        - 1.001310980810133
+        - 1.0032619826057758
+        - 1.0155843745447326
+        - 1.002859623498787
+        finished: 2026-02-17 16:22:27 UTC
+        duration_seconds: 298.105
+      diagnostics:
+        started: 2026-02-17 16:22:27 UTC
+        finished: 2026-02-17 16:22:31 UTC
+        duration_seconds: 3.532
+    cst_prolif_no_shed:
+      mle:
+        started: 2026-02-17 16:22:31 UTC
+        finished: 2026-02-17 16:23:03 UTC
+        duration_seconds: 32.345
+        AIC: 1899.5366795541156
+        max_loglik: -943.7683397770578
+        n_params: 6
+      mcmc:
+        started: 2026-02-17 16:23:03 UTC
+        current_block: 1
+        total_iters_so_far: 10000
+        last_rhat:
+        - 1.038216530795187
+        - 1.0353607375772524
+        - 1.0335280059257848
+        - 1.004277638996074
+        - 1.005163047549824
+        - 1.0025559308554373
+        finished: 2026-02-17 16:24:39 UTC
+        duration_seconds: 95.587
+      diagnostics:
+        started: 2026-02-17 16:24:39 UTC
+        finished: 2026-02-17 16:24:42 UTC
+        duration_seconds: 3.008
+    cst_prolif_cst_shed:
+      mle:
+        started: 2026-02-17 16:24:42 UTC
+        finished: 2026-02-17 16:25:18 UTC
+        duration_seconds: 36.238
+        AIC: 1901.536679554114
+        max_loglik: -943.768339777057
+        n_params: 7
+      mcmc:
+        started: 2026-02-17 16:25:18 UTC
+        current_block: 7
+        total_iters_so_far: 70000
+        last_rhat:
+        - 1.038866520588336
+        - 1.0442692941934977
+        - 1.003343618754631
+        - 1.0431768748988741
+        - 1.0024865098298987
+        - 1.0093614163847922
+        - 1.010442264060055
+        finished: 2026-02-17 16:37:14 UTC
+        duration_seconds: 715.454
+      diagnostics:
+        started: 2026-02-17 16:37:14 UTC
+        finished: 2026-02-17 16:37:19 UTC
+        duration_seconds: 5.748
+    cst_prolif_SA_shed:
+      mle:
+        started: 2026-02-17 16:37:19 UTC
+        finished: 2026-02-17 16:37:54 UTC
+        duration_seconds: 34.9
+        AIC: 1901.5366795541154
+        max_loglik: -943.7683397770577
+        n_params: 7
+      mcmc:
+        started: 2026-02-17 16:37:54 UTC
+        current_block: 5
+        total_iters_so_far: 50000
+        last_rhat:
+        - 1.02609969797407
+        - 1.0263022792578045
+        - 1.00679970634695
+        - 1.0267389454622111
+        - 1.0010896997648422
+        - 1.0138562758800909
+        - 1.0239104138127524
+        finished: 2026-02-17 16:46:46 UTC
+        duration_seconds: 532.059
+      diagnostics:
+        started: 2026-02-17 16:46:46 UTC
+        finished: 2026-02-17 16:46:51 UTC
+        duration_seconds: 4.86
+    cst_prolif_Cell_num_shed:
+      mle:
+        started: 2026-02-17 16:46:51 UTC
+        finished: 2026-02-17 16:47:37 UTC
+        duration_seconds: 45.277
+        AIC: 1901.536679554115
+        max_loglik: -943.7683397770575
+        n_params: 7
+      mcmc:
+        started: 2026-02-17 16:47:37 UTC
+        current_block: 3
+        total_iters_so_far: 30000
+        last_rhat:
+        - 1.0199083566402838
+        - 1.0279757700665804
+        - 1.0095076124339046
+        - 1.0243263082530658
+        - 1.0118749370750346
+        - 1.00894806449717
+        - 1.0197022287381403
+        finished: 2026-02-17 16:53:06 UTC
+        duration_seconds: 329.433
+      diagnostics:
+        started: 2026-02-17 16:53:06 UTC
+        finished: 2026-02-17 16:53:10 UTC
+        duration_seconds: 4.193
+    SA_prolif_no_shed:
+      mle:
+        started: 2026-02-17 16:53:10 UTC
+        finished: 2026-02-17 16:53:37 UTC
+        duration_seconds: 27.263
+        AIC: 1885.825209265694
+        max_loglik: -936.912604632847
+        n_params: 6
+      mcmc:
+        started: 2026-02-17 16:53:37 UTC
+        current_block: 3
+        total_iters_so_far: 30000
+        last_rhat:
+        - 1.004848854524182
+        - 1.0067487412183074
+        - 1.0056042878297131
+        - 1.0048861976280687
+        - 1.0155599898731047
+        - 1.0025289336191625
+        finished: 2026-02-17 16:58:41 UTC
+        duration_seconds: 303.731
+      diagnostics:
+        started: 2026-02-17 16:58:41 UTC
+        finished: 2026-02-17 16:58:45 UTC
+        duration_seconds: 3.59
+    SA_prolif_cst_shed:
+      mle:
+        started: 2026-02-17 16:58:45 UTC
+        finished: 2026-02-17 16:59:19 UTC
+        duration_seconds: 34.43
+        AIC: 1887.8252092656942
+        max_loglik: -936.9126046328471
+        n_params: 7
+      mcmc:
+        started: 2026-02-17 16:59:19 UTC
+        current_block: 3
+        total_iters_so_far: 30000
+        last_rhat:
+        - 1.0320554087874005
+        - 1.040199828141547
+        - 1.0141877538238155
+        - 1.032464018580224
+        - 1.0314882768288096
+        - 1.0172824223175427
+        - 1.0076331287916491
+        finished: 2026-02-17 17:04:34 UTC
+        duration_seconds: 314.352
+      diagnostics:
+        started: 2026-02-17 17:04:34 UTC
+        finished: 2026-02-17 17:04:38 UTC
+        duration_seconds: 4.097
+    SA_prolif_SA_shed:
+      mle:
+        started: 2026-02-17 17:04:38 UTC
+        finished: 2026-02-17 17:05:13 UTC
+        duration_seconds: 35.539
+        AIC: 1887.8252092656933
+        max_loglik: -936.9126046328466
+        n_params: 7
+      mcmc:
+        started: 2026-02-17 17:05:13 UTC
+        current_block: 7
+        total_iters_so_far: 70000
+        last_rhat:
+        - 1.0400115831181325
+        - 1.041916676926974
+        - 1.0035215190751148
+        - 1.0469264337618551
+        - 1.008830935036081
+        - 1.0137347877541634
+        - 1.0023934786027926
+        finished: 2026-02-17 17:17:25 UTC
+        duration_seconds: 731.499
+      diagnostics:
+        started: 2026-02-17 17:17:25 UTC
+        finished: 2026-02-17 17:17:31 UTC
+        duration_seconds: 6.038
+    SA_prolif_Cell_num_shed:
+      mle:
+        started: 2026-02-17 17:17:31 UTC
+        finished: 2026-02-17 17:18:04 UTC
+        duration_seconds: 33.275
+        AIC: 1887.8252092656942
+        max_loglik: -936.9126046328471
+        n_params: 7
+      mcmc:
+        started: 2026-02-17 17:18:04 UTC
+        current_block: 3
+        total_iters_so_far: 30000
+        last_rhat:
+        - 1.044178197323067
+        - 1.0483890105408795
+        - 1.0047129655162552
+        - 1.0455525213628232
+        - 1.01408687217249
+        - 1.0221799504632845
+        - 1.0313464659822325
+        finished: 2026-02-17 17:23:43 UTC
+        duration_seconds: 338.843
+      diagnostics:
+        started: 2026-02-17 17:23:43 UTC
+        finished: 2026-02-17 17:23:47 UTC
+        duration_seconds: 4.193
+    Cell_num_prolif_no_shed:
+      mle:
+        started: 2026-02-17 17:23:47 UTC
+        finished: 2026-02-17 17:24:30 UTC
+        duration_seconds: 42.936
+        AIC: 1651.690147474433
+        max_loglik: -819.8450737372165
+        n_params: 6
+      mcmc:
+        started: 2026-02-17 17:24:30 UTC
+        current_block: 1
+        total_iters_so_far: 10000
+        last_rhat:
+        - 1.0066936369976394
+        - 1.0060534850700142
+        - 1.0047833468225023
+        - 1.0072607357201389
+        - 1.0052368590743455
+        - 1.0023827532418028
+        finished: 2026-02-17 17:26:40 UTC
+        duration_seconds: 129.795
+      diagnostics:
+        started: 2026-02-17 17:26:40 UTC
+        finished: 2026-02-17 17:26:44 UTC
+        duration_seconds: 3.633
+    Cell_num_prolif_cst_shed:
+      mle:
+        started: 2026-02-17 17:26:44 UTC
+        finished: 2026-02-17 17:27:30 UTC
+        duration_seconds: 46.449
+        AIC: 1653.6901481142245
+        max_loglik: -819.8450740571122
+        n_params: 7
+      mcmc:
+        started: 2026-02-17 17:27:30 UTC
+        current_block: 2
+        total_iters_so_far: 20000
+        last_rhat:
+        - 1.0009429051503331
+        - 1.0092222940703746
+        - 1.0132063385019305
+        - 1.010057776031073
+        - 1.0074746772119505
+        - 1.0052125249466495
+        - 1.035332788509555
+        finished: 2026-02-17 17:31:55 UTC
+        duration_seconds: 264.867
+      diagnostics:
+        started: 2026-02-17 17:31:55 UTC
+        finished: 2026-02-17 17:32:00 UTC
+        duration_seconds: 4.657
+    Cell_num_prolif_SA_shed:
+      mle:
+        started: 2026-02-17 17:32:00 UTC
+        finished: 2026-02-17 17:32:49 UTC
+        duration_seconds: 48.976
+        AIC: 1653.6901492971494
+        max_loglik: -819.8450746485747
+        n_params: 7
+      mcmc:
+        started: 2026-02-17 17:32:49 UTC
+        current_block: 3
+        total_iters_so_far: 30000
+        last_rhat:
+        - 1.0141606959732998
+        - 1.0275167702087944
+        - 1.0010852453666164
+        - 1.0277170826295454
+        - 1.0023779578961158
+        - 1.002004865533325
+        - 1.0142042824292776
+        finished: 2026-02-17 17:39:12 UTC
+        duration_seconds: 382.685
+      diagnostics:
+        started: 2026-02-17 17:39:12 UTC
+        finished: 2026-02-17 17:39:16 UTC
+        duration_seconds: 4.744
+    Cell_num_prolif_Cell_num_shed:
+      mle:
+        started: 2026-02-17 17:39:16 UTC
+        finished: 2026-02-17 17:39:54 UTC
+        duration_seconds: 37.78
+        AIC: 1823.3526084492555
+        max_loglik: -904.6763042246278
+        n_params: 7
+      mcmc:
+        started: 2026-02-17 17:39:54 UTC
+        current_block: 4
+        total_iters_so_far: 40000
+        last_rhat:
+        - 1.0033157978102454
+        - 1.0268067718194793
+        - 1.0037188629691913
+        - 1.0294992878274418
+        - 1.005671961291062
+        - 1.0028030517514892
+        - 1.0089833912288204
+        finished: 2026-02-17 17:48:34 UTC
+        duration_seconds: 520.325
+      diagnostics:
+        started: 2026-02-17 17:48:34 UTC
+        finished: 2026-02-17 17:48:40 UTC
+        duration_seconds: 5.126
