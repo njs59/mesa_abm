@@ -1,0 +1,26 @@
+scenarios:
+  abm_00_data_t71_phase2__p_merge_0p5__prolif_rate_0p005:
+    abm_seconds: 4.818
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 45.358
+      mcmc_seconds: 325.263
+      diagnostics_seconds: 145.758
+  abm_01_data_t71_phase2__p_merge_0p9__prolif_rate_0p005:
+    abm_seconds: 4.697
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 41.492
+      mcmc_seconds: 216.202
+      diagnostics_seconds: 98.31
+  abm_02_data_t71_phase2__p_merge_0p5__prolif_rate_0p01:
+    abm_seconds: 4.707
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 66.283
+      mcmc_seconds: 376.033
+      diagnostics_seconds: 145.598
+  abm_03_data_t71_phase2__p_merge_0p9__prolif_rate_0p01:
+    abm_seconds: 4.738
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 54.655
+      mcmc_seconds: 258.922
+      diagnostics_seconds: 100.111
+pipeline_total_seconds: 1893.03

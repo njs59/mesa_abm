@@ -99,7 +99,7 @@ def posterior_predictive_checks(
     for i in range(len(idx)):
         y_clean = model.simulate(theta[i], times)
         eps = rng.standard_normal(size=(T, 3))
-        noise = np.exp(sigmas[i] * eps)   # multiplicative log-normal
+        noise = np.exp(sigmas[i] * eps)  # multiplicative log-normal
         y_rep[i] = y_clean * noise
 
     med = np.median(y_rep, axis=0)
@@ -135,7 +135,6 @@ def run_diagnostics(
 ):
     os.makedirs(out_dir, exist_ok=True)
     names = _param_names_with_noise(model_key)
-
     plot_traces(chains, names, os.path.join(out_dir, "trace_plots.png"))
     plot_marginals(flat_post, names, os.path.join(out_dir, "posterior_marginals.png"))
 

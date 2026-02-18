@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import os; os.environ["OMP_NUM_THREADS"]="1"; os.environ["OPENBLAS_NUM_THREADS"]="1"
 os.environ["MKL_NUM_THREADS"]="1"; os.environ["NUMEXPR_NUM_THREADS"]="1"
-
 import yaml, argparse, pandas as pd, csv, itertools
 import numpy as np
+import matplotlib
+matplotlib.use("Agg")  # headless backend (safe with savefig)
 import matplotlib.pyplot as plt
 import seaborn as sns
 
@@ -13,7 +14,6 @@ from .mcmc_runner import run_adaptive_mcmc
 from .diagnostics_runner import run_diagnostics
 from .aic_tools import write_aic_table
 from .model_registry import get_model_meta
-
 from .utils_logging import (
     make_run_dir, save_manifest, save_run_input,
     timer, write_timings, init_run_status, update_run_status, utcnow
@@ -28,8 +28,11 @@ def slice_data(mean_csv, mode):
     df = pd.read_csv(mean_csv)
     if mode in ["data_t71_phase2", "singletons_phase2_fit71plus", "singletons_phase1_to_2_fit71plus"]:
         df = df[df["step"] >= 71].reset_index(drop=True)
-    return (df, df["step"].to_numpy(),
-            df[["num_clusters","mean_cluster_size","mean_squared_cluster_size"]].to_numpy())
+    return (
+        df,
+        df["step"].to_numpy(),
+        df[["num_clusters","mean_cluster_size","mean_squared_cluster_size"]].to_numpy()
+    )
 
 def _flatten(d, prefix=""):
     out={}
@@ -69,8 +72,8 @@ def _expand_param_sweep(cfg, base_scenarios):
     expanded=[]
     for block in sweep:
         apply_modes = block.get("apply_to_modes", ["*"])
-        overrides   = block.get("overrides", {})
-        combos      = _cartesian(overrides)
+        overrides = block.get("overrides", {})
+        combos = _cartesian(overrides)
         for base in base_scenarios:
             mode = base["mode"]
             applies = ("*" in apply_modes) or (mode in apply_modes)
@@ -101,9 +104,97 @@ def _expand_param_sweep(cfg, base_scenarios):
 def _ensure(dirpath):
     os.makedirs(dirpath, exist_ok=True)
 
+# ===== Helpers for compact, nicer labels (minimal-impact changes) =====
+# Map movement modes to compact integers for legend/labels
+MODE_MAP = {
+    "data_t71_phase2": 1,
+    "singletons_phase2_fit71plus": 2,
+    "singletons_phase2_fit_all": 3,
+    "singletons_phase1_to_2_fit71plus": 4,
+    "singletons_phase1_to_2_fit_all": 5,
+}
+
+def _parse_mode_from_scenario_name(scenario_name: str):
+    """From 'abm_03_data_t71_phase2__alpha_0p1' return 'data_t71_phase2'."""
+    head = scenario_name.split("__")[0]
+    bits = head.split("_", 2)
+    return bits[2] if len(bits) >= 3 else None
+
+def _prettify_key(k: str) -> str:
+    """Replace hyphens/underscores with spaces for nicer display."""
+    return k.replace("-", " ").replace("_", " ")
+
+def _format_number_like(v_str: str) -> str:
+    """
+    Parse numeric string to float and format nicely:
+      - integers shown as '3'
+      - otherwise up to 6 significant figures
+      - very small/large values use scientific notation
+      - no trailing zeros/dot
+    Fallback to original if parsing fails.
+    """
+    try:
+        v = float(v_str)
+        if np.isfinite(v):
+            if abs(v) >= 1e-3 and abs(v) < 1e4:
+                s = f"{v:.6g}"
+            else:
+                s = f"{v:.3e}"
+            if "e" not in s and "." in s:
+                s = s.rstrip("0").rstrip(".")
+            return s
+        else:
+            return v_str
+    except Exception:
+        return v_str
+
+def _overrides_from_scenario_name(scenario_name: str):
+    """
+    From '...__alpha_0p1__beta_2p0' return [('alpha','0.1'), ('beta','2')], prettified.
+    """
+    overrides = []
+    for part in scenario_name.split("__")[1:]:
+        if "_" in part:
+            k, v = part.split("_", 1)
+            v = v.replace("p", ".")
+            overrides.append((_prettify_key(k), _format_number_like(v)))
+    return overrides
+
+def _label_for_scenario(scenario_name: str, include_mode: bool = False) -> str:
+    """
+    Build a compact label such as:
+        'mode=1, alpha = 1, beta = 0.0025'      (if include_mode=True)
+        'alpha = 1, beta = 0.0025'              (otherwise)
+    If there are no overrides, returns 'mode=<'n'>' if include_mode else the original name.
+    """
+    pieces = []
+    if include_mode:
+        mode = _parse_mode_from_scenario_name(scenario_name)
+        if mode and mode in MODE_MAP:
+            pieces.append(f"mode={MODE_MAP[mode]}")
+    items = sorted(_overrides_from_scenario_name(scenario_name), key=lambda kv: kv[0])
+    for k, v in items:
+        pieces.append(f"{k} = {v}")
+    if pieces:
+        return ", ".join(pieces)
+    if include_mode:
+        m = _parse_mode_from_scenario_name(scenario_name)
+        return f"mode={MODE_MAP.get(m, '')}"
+    return scenario_name
+# ============================ end helpers ============================
+
 def _plot_model_violin(out_dir, model_key, records, max_per_scenario=5000):
     """Violin of marginals across scenarios for one model."""
     if not records: return
+
+    # Include mode in labels only if multiple modes present
+    modes_present = set()
+    for rec in records:
+        scen = rec["scenario"]
+        m = _parse_mode_from_scenario_name(scen)
+        if m: modes_present.add(m)
+    include_mode = (len(modes_present) > 1)
+
     frames=[]
     for rec in records:
         sam = rec["samples"]
@@ -112,8 +203,9 @@ def _plot_model_violin(out_dir, model_key, records, max_per_scenario=5000):
             sam = sam[idx]
         df = pd.DataFrame(sam, columns=rec["param_names"]).melt(
             var_name="parameter", value_name="value")
-        df["scenario"]=rec["scenario"]
+        df["scenario"] = _label_for_scenario(rec["scenario"], include_mode=include_mode)
         frames.append(df)
+
     all_df = pd.concat(frames, ignore_index=True)
     plt.figure(figsize=(max(10, 2 + 1.6*all_df["parameter"].nunique()),
                         max(6, 0.45*all_df["scenario"].nunique())))
@@ -121,23 +213,42 @@ def _plot_model_violin(out_dir, model_key, records, max_per_scenario=5000):
         data=all_df, x="value", y="scenario", hue="parameter",
         inner="quartile", density_norm="area", cut=0, bw_method="scott"
     )
+
+    # Log scale with safe fallback
+    try:
+        if (all_df["value"] > 0).all():
+            plt.xscale("log")
+        else:
+            plt.xscale("symlog", linthresh=1e-6)
+    except Exception:
+        pass
+
     plt.title(f"Across-scenario posterior marginals — {model_key}")
     plt.xlabel("Parameter value"); plt.ylabel("Scenario")
     plt.legend(bbox_to_anchor=(1.02,1), loc="upper left", title="Parameter", frameon=False)
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, "marginals_violin.png"), dpi=150)
-    plt.close()
+    plt.clf(); plt.close('all')
 
 def _plot_model_aic_bar(out_dir, model_key, aic_rows):
     if not aic_rows: return
     df = pd.DataFrame(aic_rows).sort_values("AIC", ascending=True)
+
+    modes_present = set()
+    for s in df["scenario"]:
+        m = _parse_mode_from_scenario_name(s)
+        if m: modes_present.add(m)
+    include_mode = (len(modes_present) > 1)
+
+    df["scenario"] = df["scenario"].apply(lambda s: _label_for_scenario(s, include_mode=include_mode))
+
     plt.figure(figsize=(10, max(4, 0.35*len(df))))
     sns.barplot(data=df, x="AIC", y="scenario", orient="h", color="#4c78a8")
     plt.title(f"AIC across scenarios — {model_key}")
     plt.xlabel("AIC (lower is better)"); plt.ylabel("Scenario")
     plt.tight_layout()
     plt.savefig(os.path.join(out_dir, "AIC_bar.png"), dpi=150)
-    plt.close()
+    plt.clf(); plt.close('all')
 
 def _plot_model_overlaid_kde(out_dir, model_key, records, max_per_scenario=8000):
     """
@@ -145,9 +256,16 @@ def _plot_model_overlaid_kde(out_dir, model_key, records, max_per_scenario=8000)
     Saves: marginals_overlaid_param_<idx>_<name>.png
     """
     if not records: return
+
     # assume all records share the same param_names order
     param_names = records[0]["param_names"]
-    # build data per scenario
+
+    modes_present = set()
+    for rec in records:
+        m = _parse_mode_from_scenario_name(rec["scenario"])
+        if m: modes_present.add(m)
+    include_mode = (len(modes_present) > 1)
+
     data_by_scenario = []
     for rec in records:
         sam = rec["samples"]
@@ -160,9 +278,10 @@ def _plot_model_overlaid_kde(out_dir, model_key, records, max_per_scenario=8000)
     for j, pname in enumerate(param_names):
         plt.figure(figsize=(10, 6))
         for (scen, sam), col in zip(data_by_scenario, palette):
+            short = _label_for_scenario(scen, include_mode=include_mode)
             sns.kdeplot(
                 x=sam[:, j], fill=False, common_norm=False,
-                label=scen, lw=2, color=col
+                label=short, lw=2, color=col
             )
         plt.title(f"{model_key} — Overlaid KDE: {pname}")
         plt.xlabel("Value"); plt.ylabel("Density")
@@ -171,13 +290,13 @@ def _plot_model_overlaid_kde(out_dir, model_key, records, max_per_scenario=8000)
         safe = pname.strip("$").replace("\\", "").replace("{","").replace("}","").replace("^","").replace("_","")
         fname = f"marginals_overlaid_param_{j+1}_{safe}.png"
         plt.savefig(os.path.join(out_dir, fname), dpi=150)
-        plt.close()
+        plt.clf(); plt.close('all')
 
 # ----------------------------- MAIN -----------------------------------
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--config", type=str,
-                  default=os.path.join(os.path.dirname(__file__), "pipeline_config.yaml"))
+                   default=os.path.join(os.path.dirname(__file__), "pipeline_config.yaml"))
     args = p.parse_args()
 
     cfg = load_cfg(args.config)
@@ -194,8 +313,8 @@ def main():
     summary_rows = []
 
     # sweep-level collectors (per model)
-    post_cache = {}  # { model_key: [ {scenario, samples, param_names}, ... ] }
-    aic_cache  = {}  # { model_key: [ {scenario, AIC}, ... ] }
+    post_cache = {} # { model_key: [ {scenario, samples, param_names}, ... ] }
+    aic_cache = {}  # { model_key: [ {scenario, AIC}, ... ] }
 
     with timer() as t_all:
         for i, scenario in enumerate(sweep_list):
@@ -203,9 +322,8 @@ def main():
             abm_params = scenario.get("abm_params", {})
             overrides = abm_params.get("overrides", {})
             scenario_name = _make_scenario_name(i, mode, overrides)
-
             scenario_dir = os.path.join(run_dir, scenario_name)
-            fsim_dir     = os.path.join(scenario_dir, "forward_sims")
+            fsim_dir = os.path.join(scenario_dir, "forward_sims")
             os.makedirs(scenario_dir, exist_ok=True)
 
             abm_cfg = {**cfg["abm"], "mode": mode, "abm_params": abm_params}
@@ -292,13 +410,13 @@ def main():
                 meta = get_model_meta(model_key, cfg.get("models_meta", {}).get(model_key, {}))
                 param_names = [f"${n}$" for n in meta["param_names"]] + [r"$\sigma_0$", r"$\sigma_1$", r"$\sigma_2$"]
                 post_cache.setdefault(model_key, []).append({
-                    "scenario":    scenario_name,
-                    "samples":     mcmc_out["post_burn_flat"],
+                    "scenario": scenario_name,
+                    "samples": mcmc_out["post_burn_flat"],
                     "param_names": param_names
                 })
                 aic_cache.setdefault(model_key, []).append({
                     "scenario": scenario_name,
-                    "AIC":      mle_out["AIC"]
+                    "AIC": mle_out["AIC"]
                 })
 
             # per-scenario model comparison
@@ -326,7 +444,6 @@ def main():
         "pipeline_total":{"finished":utcnow(), "duration_seconds":timings["pipeline_total_seconds"]}
     })
     print(f"\nPipeline complete. Run folder: {run_dir}")
-
 
 if __name__ == "__main__":
     main()

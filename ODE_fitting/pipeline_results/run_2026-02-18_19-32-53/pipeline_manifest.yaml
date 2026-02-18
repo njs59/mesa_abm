@@ -1,0 +1,320 @@
+config:
+  results_root: pipeline_results
+  abm:
+    n_runs: 100
+    n_workers: 8
+    seed: 42
+    defaults_yaml: scripts/scripts_defaults.yaml
+    background_dir: background
+  abm_sweep:
+  - mode: data_t71_phase2
+    abm_params: {}
+  abm_param_sweep:
+  - apply_to_modes:
+    - data_t71_phase2
+    overrides:
+      phenotypes.proliferative.prolif_rate:
+      - 0.005
+      - 0.01
+      merge.p_merge:
+      - 0.5
+      - 0.9
+  mcmc:
+    chunk: 10000
+    print_every: 2000
+    rhat_threshold: 1.05
+    max_total_iters: 200000
+    burn_in_fraction: 0.5
+    nsamples_ppc: 300
+    random_seed: 123
+  models:
+  - Cell_num_prolif_cst_shed
+  models_meta:
+    no_prolif_no_shed:
+      param_names:
+      - b
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0003
+      - 900.0
+    no_prolif_cst_shed:
+      param_names:
+      - b
+      - s
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 0.0
+        - 0.1
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0003
+      - 0.0001
+      - 900.0
+    no_prolif_SA_shed:
+      param_names:
+      - b
+      - s
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 0.0
+        - 0.1
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0003
+      - 0.0001
+      - 900.0
+    no_prolif_Cell_num_shed:
+      param_names:
+      - b
+      - s
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 0.0
+        - 0.1
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0003
+      - 0.0001
+      - 900.0
+    cst_prolif_no_shed:
+      param_names:
+      - b
+      - p
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 0.0
+        - 0.05
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0003
+      - 0.001
+      - 900.0
+    cst_prolif_cst_shed:
+      param_names:
+      - b
+      - p
+      - s
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 0.0
+        - 0.05
+      - - 0.0
+        - 0.1
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0003
+      - 0.001
+      - 0.0001
+      - 900.0
+    cst_prolif_SA_shed:
+      param_names:
+      - b
+      - p
+      - s
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 0.0
+        - 0.05
+      - - 0.0
+        - 0.1
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0003
+      - 0.001
+      - 0.0001
+      - 900.0
+    cst_prolif_Cell_num_shed:
+      param_names:
+      - b
+      - p
+      - s
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 0.0
+        - 0.05
+      - - 0.0
+        - 0.1
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0003
+      - 0.001
+      - 0.0001
+      - 900.0
+    SA_prolif_no_shed:
+      param_names:
+      - b
+      - p
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 0.0
+        - 0.05
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0003
+      - 0.001
+      - 900.0
+    SA_prolif_cst_shed:
+      param_names:
+      - b
+      - p
+      - s
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 0.0
+        - 0.05
+      - - 0.0
+        - 0.1
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0003
+      - 0.001
+      - 0.0001
+      - 900.0
+    SA_prolif_SA_shed:
+      param_names:
+      - b
+      - p
+      - s
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 0.0
+        - 0.05
+      - - 0.0
+        - 0.1
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0003
+      - 0.001
+      - 0.0001
+      - 900.0
+    SA_prolif_Cell_num_shed:
+      param_names:
+      - b
+      - p
+      - s
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 0.0
+        - 0.05
+      - - 0.0
+        - 0.1
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0003
+      - 0.001
+      - 0.0001
+      - 900.0
+    Cell_num_prolif_no_shed:
+      param_names:
+      - b
+      - p
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 0.0
+        - 0.05
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0004
+      - 0.01
+      - 500.0
+    Cell_num_prolif_cst_shed:
+      param_names:
+      - b
+      - p
+      - s
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 0.0
+        - 0.05
+      - - 0.0
+        - 0.1
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0003
+      - 0.001
+      - 0.0001
+      - 900.0
+    Cell_num_prolif_SA_shed:
+      param_names:
+      - b
+      - p
+      - s
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 0.0
+        - 0.05
+      - - 0.0
+        - 0.1
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0003
+      - 0.001
+      - 0.0001
+      - 900.0
+    Cell_num_prolif_Cell_num_shed:
+      param_names:
+      - b
+      - p
+      - s
+      - N_0
+      priors:
+      - - 0.0
+        - 0.01
+      - - 0.0
+        - 0.05
+      - - 0.0
+        - 0.1
+      - - 1.0
+        - 4000.0
+      initial:
+      - 0.0003
+      - 0.001
+      - 0.0001
+      - 900.0

@@ -1,0 +1,61 @@
+status: finished
+last_update: 2026-02-18 19:26:54 UTC
+pipeline_total:
+  started: 2026-02-18 19:11:38 UTC
+  finished: 2026-02-18 19:26:54 UTC
+  duration_seconds: 915.778
+sections:
+  abm_00_data_t71_phase2__prolif_rate_0p005:
+    abm:
+      started: 2026-02-18 19:11:38 UTC
+      finished: 2026-02-18 19:11:43 UTC
+      duration_seconds: 5.17
+    Cell_num_prolif_cst_shed:
+      mle:
+        started: 2026-02-18 19:11:43 UTC
+        finished: 2026-02-18 19:12:19 UTC
+        duration_seconds: 35.69
+        AIC: 1202.373495220546
+      mcmc:
+        started: 2026-02-18 19:12:19 UTC
+        current_block: 2
+        total_iters: 20000
+        last_rhat:
+        - 1.006613713310581
+        - 1.02424406152033
+        - 1.0073293140191943
+        - 1.0247298073795132
+        - 1.0140306340049905
+        - 1.0053639129570835
+        - 1.0133370250368747
+      diagnostics:
+        started: 2026-02-18 19:15:52 UTC
+        finished: 2026-02-18 19:17:30 UTC
+        duration_seconds: 98.756
+  abm_01_data_t71_phase2__prolif_rate_0p01:
+    abm:
+      started: 2026-02-18 19:17:30 UTC
+      finished: 2026-02-18 19:17:35 UTC
+      duration_seconds: 4.592
+    Cell_num_prolif_cst_shed:
+      mle:
+        started: 2026-02-18 19:17:35 UTC
+        finished: 2026-02-18 19:18:21 UTC
+        duration_seconds: 45.631
+        AIC: 1575.9092059666891
+      mcmc:
+        started: 2026-02-18 19:18:21 UTC
+        current_block: 3
+        total_iters: 30000
+        last_rhat:
+        - 1.0013998026503979
+        - 1.0107819778897997
+        - 1.010448114956844
+        - 1.0121163948363776
+        - 1.0106326262085004
+        - 1.0072125478276899
+        - 1.0169003169320545
+      diagnostics:
+        started: 2026-02-18 19:24:27 UTC
+        finished: 2026-02-18 19:26:53 UTC
+        duration_seconds: 145.932

@@ -1,0 +1,3 @@
+forward_means_csv,init_singletons,mode,override.phenotypes.proliferative.prolif_rate,scenario
+abm_00_data_t71_phase2__prolif_rate_0p005/forward_sims/forward_means_stats.csv,,data_t71_phase2,0.005,abm_00_data_t71_phase2__prolif_rate_0p005
+abm_01_data_t71_phase2__prolif_rate_0p01/forward_sims/forward_means_stats.csv,,data_t71_phase2,0.01,abm_01_data_t71_phase2__prolif_rate_0p01

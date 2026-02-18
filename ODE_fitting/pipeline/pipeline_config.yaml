@@ -28,9 +28,9 @@ abm_sweep:
   #   abm_params:
   #     initial_singleton_count: 800
 
-  # - mode: singletons_phase2_fit_all
-  #   abm_params:
-  #     initial_singleton_count: 800
+  - mode: singletons_phase2_fit_all
+    abm_params:
+      initial_singleton_count: 800
 
   # - mode: singletons_phase1_to_2_fit71plus
   #   abm_params:
@@ -51,13 +51,16 @@ abm_param_sweep:
 
   # Example sweep block (remove/modify as needed)
   # - apply_to_modes: ["*"]       # Sweeps apply to all 5 modes
-  - apply_to_modes: ["data_t71_phase2"]       # Sweeps apply to all 5 modes
+  - apply_to_modes: ["data_t71_phase2", "singletons_phase2_fit_all"]       # Sweeps apply to all 5 modes
     overrides:
       # movement_v2.phase2.speed_dist.params.a: [1.5, 2.0, 3.0]
       # # movement_v2.phase2.speed_dist.params.scale: [2.5, 3.5]
       # movement_v2.phase2.turning.kappa: [0.1, 0.2, 0.5]
       # phenotypes.proliferative.prolif_rate: [0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1]
-      phenotypes.proliferative.prolif_rate: [0.005, 0.01]
+      # phenotypes.proliferative.prolif_rate: [0.005, 0.01]
+      # merge.p_merge: [0.5, 0.9]
+      # phenotypes.proliferative.prolif_rate: [0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1]
+      phenotypes.proliferative.fragment_rate: [0.0, 0.0008, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1]
 
   # Additional sweep blocks possible:
   # - apply_to_modes: ["singletons_phase2_fit71plus", "singletons_phase2_fit_all"]
@@ -82,7 +85,7 @@ mcmc:
 # ODE model list (all 16 variants preserved from your current file)
 # -----------------------------------------------------------------------------
 models:
-  # - no_prolif_no_shed
+  - no_prolif_no_shed
   # - no_prolif_cst_shed
   # - no_prolif_SA_shed
   # - no_prolif_Cell_num_shed
@@ -94,7 +97,7 @@ models:
   # - SA_prolif_cst_shed
   # - SA_prolif_SA_shed
   # - SA_prolif_Cell_num_shed
-  # - Cell_num_prolif_no_shed
+  - Cell_num_prolif_no_shed
   - Cell_num_prolif_cst_shed
   # - Cell_num_prolif_SA_shed
   # - Cell_num_prolif_Cell_num_shed
