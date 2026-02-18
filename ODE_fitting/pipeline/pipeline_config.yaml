@@ -1,9 +1,14 @@
+
 # =============================================================================
-# Pipeline configuration (ABM grid + sweep + multi-model ODE fitting)
+# Pipeline configuration (5-mode ABM + Safe ABM parameter sweeping + ODE fitting)
 # =============================================================================
 
+# Where the timestamped run folder will be created
 results_root: "pipeline_results"
 
+# =============================================================================
+# ABM core settings
+# =============================================================================
 abm:
   n_runs: 100
   n_workers: 8
@@ -11,29 +16,59 @@ abm:
   defaults_yaml: "scripts/scripts_defaults.yaml"
   background_dir: "background"
 
-# Optional explicit scenarios (kept for backwards compatibility)
-# abm_sweep:
-#   - mode: singletons_phase2_fit71plus
-#     abm_params: {}
+# =============================================================================
+# 5 STRUCTURAL ABM MODES
+# (Initial condition + movement-phase logic; physics comes from defaults/overrides)
+# =============================================================================
+abm_sweep:
+  - mode: data_t71_phase2
+    abm_params: {}
 
-# Parameter GRID (automatically expanded to all Cartesian combinations)
-abm_grid:
-  - modes: [data_t71_phase2]
-    # base_params:
-    #   initial_singleton_count: 800
+  # - mode: singletons_phase2_fit71plus
+  #   abm_params:
+  #     initial_singleton_count: 800
+
+  # - mode: singletons_phase2_fit_all
+  #   abm_params:
+  #     initial_singleton_count: 800
+
+  # - mode: singletons_phase1_to_2_fit71plus
+  #   abm_params:
+  #     initial_singleton_count: 800
+
+  # - mode: singletons_phase1_to_2_fit_all
+  #   abm_params:
+  #     initial_singleton_count: 800
+
+# =============================================================================
+# PARAMETER SWEEP SYSTEM (OPTION A)
+# Applies to ALL 5 MODES unless explicitly restricted via apply_to_modes.
+#
+# Sweeps produce Cartesian combinations. Each scenario gets a merged_defaults.yaml.
+# If a mode has no overrides, defaults are used.
+# =============================================================================
+abm_param_sweep:
+
+  # Example sweep block (remove/modify as needed)
+  # - apply_to_modes: ["*"]       # Sweeps apply to all 5 modes
+  - apply_to_modes: ["data_t71_phase2"]       # Sweeps apply to all 5 modes
     overrides:
-      # phenotypes.proliferative.fragment_rate: [0.0008, 0.08]
-      # phenotypes.proliferative.prolif_rate: [0.0022, 0.011, 0.055]
-      # phenotypes.proliferative.prolif_rate: [0.006, 0.008, 0.01, 0.02, 0.05, 0.1]
-      # merge.p_merge: [0.56, 0.9]
-
-
-
       # movement_v2.phase2.speed_dist.params.a: [1.5, 2.0, 3.0]
-      # movement_v2.phase2.speed_dist.params.scale: [2.5, 3.5, 4.5]
-      # movement_v2.phase2.speed_dist.params.kappa: [0.15, 0.5]
+      # # movement_v2.phase2.speed_dist.params.scale: [2.5, 3.5]
+      # movement_v2.phase2.turning.kappa: [0.1, 0.2, 0.5]
+      # phenotypes.proliferative.prolif_rate: [0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1]
+      phenotypes.proliferative.prolif_rate: [0.005, 0.01]
 
-# --------------------------- MCMC (unchanged) ---------------------------
+  # Additional sweep blocks possible:
+  # - apply_to_modes: ["singletons_phase2_fit71plus", "singletons_phase2_fit_all"]
+  #   overrides:
+  #     merge.p_merge: [0.4, 0.6, 0.8]
+  #     phenotypes.proliferative.prolif_rate: [0.0005, 0.001]
+
+# -----------------------------------------------------------------------------
+# MCMC settings (diagnostics & PPC; AIC comes from MLE stage)
+# (Preserved from your current file)
+# -----------------------------------------------------------------------------
 mcmc:
   chunk: 10000
   print_every: 2000
@@ -43,9 +78,11 @@ mcmc:
   nsamples_ppc: 300
   random_seed: 123
 
-# --------------------------- MODELS (unchanged) --------------------------
+# -----------------------------------------------------------------------------
+# ODE model list (all 16 variants preserved from your current file)
+# -----------------------------------------------------------------------------
 models:
-  - no_prolif_no_shed
+  # - no_prolif_no_shed
   # - no_prolif_cst_shed
   # - no_prolif_SA_shed
   # - no_prolif_Cell_num_shed
@@ -57,74 +94,103 @@ models:
   # - SA_prolif_cst_shed
   # - SA_prolif_SA_shed
   # - SA_prolif_Cell_num_shed
-  - Cell_num_prolif_no_shed
+  # - Cell_num_prolif_no_shed
   - Cell_num_prolif_cst_shed
   # - Cell_num_prolif_SA_shed
   # - Cell_num_prolif_Cell_num_shed
 
-# ------------------------ MODELS META (unchanged) ------------------------
+# -----------------------------------------------------------------------------
+# Per-model metadata (names / priors / initials) — preserved
+# -----------------------------------------------------------------------------
 models_meta:
+  # ────────────────────────────────────────────────────────────────
+  # No proliferation
+  # ────────────────────────────────────────────────────────────────
   no_prolif_no_shed:
     param_names: ["b", "N_0"]
-    priors: [[0.0, 1.0], [1.0, 4000.0]]
+    priors: [[0.0, 1.0e-2], [1.0, 4000.0]]
     initial: [3.0e-4, 900.0]
+
   no_prolif_cst_shed:
     param_names: ["b", "s", "N_0"]
-    priors: [[0.0, 1.0], [0.0, 1.0], [1.0, 4000.0]]
+    priors: [[0.0, 1.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
     initial: [3.0e-4, 1.0e-4, 900.0]
+
   no_prolif_SA_shed:
-    param_names: ["b", "s", "N_0"]
-    priors: [[0.0, 1.0], [0.0, 1.0], [1.0, 4000.0]]
+    param_names: ["b", "s", "N_0"]  # 's' acts with √size weighting in the model code
+    priors: [[0.0, 1.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
     initial: [3.0e-4, 1.0e-4, 900.0]
+
   no_prolif_Cell_num_shed:
-    param_names: ["b", "s", "N_0"]
-    priors: [[0.0, 1.0], [0.0, 1.0], [1.0, 4000.0]]
+    param_names: ["b", "s", "N_0"]  # 's' scales with cluster size in shedding
+    priors: [[0.0, 1.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
     initial: [3.0e-4, 1.0e-4, 900.0]
+
+  # ────────────────────────────────────────────────────────────────
+  # Constant-rate proliferation (p), various shedding
+  # ────────────────────────────────────────────────────────────────
   cst_prolif_no_shed:
     param_names: ["b", "p", "N_0"]
-    priors: [[0.0, 1.0], [0.0, 1.0], [1.0, 4000.0]]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [1.0, 4000.0]]
     initial: [3.0e-4, 1.0e-3, 900.0]
+
   cst_prolif_cst_shed:
     param_names: ["b", "p", "s", "N_0"]
-    priors: [[0.0, 1.0], [0.0, 1.0], [0.0, 1.0], [1.0, 4000.0]]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
     initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
   cst_prolif_SA_shed:
     param_names: ["b", "p", "s", "N_0"]
-    priors: [[0.0, 1.0], [0.0, 1.0], [0.0, 1.0], [1.0, 4000.0]]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
     initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
   cst_prolif_Cell_num_shed:
     param_names: ["b", "p", "s", "N_0"]
-    priors: [[0.0, 1.0], [0.0, 1.0], [0.0, 1.0], [1.0, 4000.0]]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
     initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
+  # ────────────────────────────────────────────────────────────────
+  # Surface-area–weighted proliferation (SA_prolif), various shedding
+  # ────────────────────────────────────────────────────────────────
   SA_prolif_no_shed:
-    param_names: ["b", "p", "N_0"]
-    priors: [[0.0, 1.0], [0.0, 1.0], [1.0, 4000.0]]
+    param_names: ["b", "p", "N_0"]  # p acts with √size weighting in proliferation
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [1.0, 4000.0]]
     initial: [3.0e-4, 1.0e-3, 900.0]
+
   SA_prolif_cst_shed:
     param_names: ["b", "p", "s", "N_0"]
-    priors: [[0.0, 1.0], [0.0, 1.0], [0.0, 1.0], [1.0, 4000.0]]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
     initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
   SA_prolif_SA_shed:
     param_names: ["b", "p", "s", "N_0"]
-    priors: [[0.0, 1.0], [0.0, 1.0], [0.0, 1.0], [1.0, 4000.0]]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
     initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
   SA_prolif_Cell_num_shed:
     param_names: ["b", "p", "s", "N_0"]
-    priors: [[0.0, 1.0], [0.0, 1.0], [0.0, 1.0], [1.0, 4000.0]]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
     initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
+  # ────────────────────────────────────────────────────────────────
+  # Cell-number–weighted proliferation (Cell_num_prolif), various shedding
+  # ────────────────────────────────────────────────────────────────
   Cell_num_prolif_no_shed:
     param_names: ["b", "p", "N_0"]
-    priors: [[0.0, 1.0], [0.0, 1.0], [1.0, 4000.0]]
-    initial: [4.0e-4, 1.0e-2, 500.0]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [1.0, 4000.0]]
+    initial: [4.0e-4, 1.0e-2, 500.0]  # aligns with suggested values in your code
+
   Cell_num_prolif_cst_shed:
     param_names: ["b", "p", "s", "N_0"]
-    priors: [[0.0, 1.0], [0.0, 1.0], [0.0, 1.0], [1.0, 4000.0]]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
     initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
   Cell_num_prolif_SA_shed:
     param_names: ["b", "p", "s", "N_0"]
-    priors: [[0.0, 1.0], [0.0, 1.0], [0.0, 1.0], [1.0, 4000.0]]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
     initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
   Cell_num_prolif_Cell_num_shed:
     param_names: ["b", "p", "s", "N_0"]
-    priors: [[0.0, 1.0], [0.0, 1.0], [0.0, 1.0], [1.0, 4000.0]]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
     initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]

@@ -1,0 +1,9 @@
+start_step: 1
+n_runs: 100
+n_workers: 8
+seed: 42
+defaults_yaml: scripts/scripts_defaults.yaml
+best_model: /Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-18_13-19-44/abm_10_singletons_phase1_to_2_fit_all/forward_sims/best_model.json
+mean_clusters: /Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-18_13-19-44/abm_10_singletons_phase1_to_2_fit_all/forward_sims/mean_initial_clusters.json
+movement_phase: 1
+init_singletons: 800

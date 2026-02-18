@@ -1,0 +1,14 @@
+scenarios:
+  abm_00_data_t71_phase2__prolif_rate_0p005:
+    abm_seconds: 5.44
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 40.577
+      mcmc_seconds: 328.279
+      diagnostics_seconds: 145.353
+  abm_01_data_t71_phase2__prolif_rate_0p01:
+    abm_seconds: 4.998
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 51.797
+      mcmc_seconds: 244.299
+      diagnostics_seconds: 100.161
+pipeline_total_seconds: 920.934

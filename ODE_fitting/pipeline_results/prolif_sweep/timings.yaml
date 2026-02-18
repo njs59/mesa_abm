@@ -1,0 +1,68 @@
+scenarios:
+  abm_00_data_t71_phase2__prolif_rate_0p001:
+    abm_seconds: 5.127
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 38.597
+      mcmc_seconds: 303.768
+      diagnostics_seconds: 142.584
+  abm_01_data_t71_phase2__prolif_rate_0p002:
+    abm_seconds: 4.767
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 41.65
+      mcmc_seconds: 306.214
+      diagnostics_seconds: 144.425
+  abm_02_data_t71_phase2__prolif_rate_0p005:
+    abm_seconds: 4.921
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 38.562
+      mcmc_seconds: 329.288
+      diagnostics_seconds: 145.345
+  abm_03_data_t71_phase2__prolif_rate_0p01:
+    abm_seconds: 4.63
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 45.794
+      mcmc_seconds: 246.711
+      diagnostics_seconds: 100.271
+  abm_04_data_t71_phase2__prolif_rate_0p02:
+    abm_seconds: 4.779
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 56.522
+      mcmc_seconds: 446.027
+      diagnostics_seconds: 144.206
+  abm_05_data_t71_phase2__prolif_rate_0p05:
+    abm_seconds: 4.754
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 77.423
+      mcmc_seconds: 508.349
+      diagnostics_seconds: 145.824
+  abm_06_data_t71_phase2__prolif_rate_0p1:
+    abm_seconds: 4.512
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 63.216
+      mcmc_seconds: 163.861
+      diagnostics_seconds: 53.373
+  abm_07_singletons_phase2_fit71plus:
+    abm_seconds: 20.722
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 46.465
+      mcmc_seconds: 389.491
+      diagnostics_seconds: 143.935
+  abm_08_singletons_phase2_fit_all:
+    abm_seconds: 20.342
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 56.793
+      mcmc_seconds: 294.655
+      diagnostics_seconds: 101.369
+  abm_09_singletons_phase1_to_2_fit71plus:
+    abm_seconds: 20.771
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 51.771
+      mcmc_seconds: 396.82
+      diagnostics_seconds: 145.289
+  abm_10_singletons_phase1_to_2_fit_all:
+    abm_seconds: 20.607
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 87.857
+      mcmc_seconds: 447.248
+      diagnostics_seconds: 147.827
+pipeline_total_seconds: 5968.006

@@ -1,0 +1,70 @@
+status: running
+last_update: 2026-02-18 12:22:07 UTC
+pipeline_total:
+  started: 2026-02-18 12:13:22 UTC
+  finished: null
+sections:
+  abm_00_data_t71_phase2:
+    abm:
+      started: 2026-02-18 12:13:22 UTC
+      finished: 2026-02-18 12:13:27 UTC
+      duration_seconds: 4.809
+    no_prolif_no_shed:
+      mle:
+        started: 2026-02-18 12:13:27 UTC
+        finished: 2026-02-18 12:13:51 UTC
+        duration_seconds: 23.505
+        AIC: 1934.5921829595877
+      mcmc:
+        started: 2026-02-18 12:13:51 UTC
+        current_block: 1
+        total_iters: 10000
+        last_rhat:
+        - 1.0033419441756763
+        - 1.0019716926967703
+        - 1.0051119361065715
+        - 1.0012773781533988
+        - 1.0014262401266203
+      diagnostics:
+        started: 2026-02-18 12:15:36 UTC
+        finished: 2026-02-18 12:15:38 UTC
+        duration_seconds: 2.699
+    Cell_num_prolif_no_shed:
+      mle:
+        started: 2026-02-18 12:15:38 UTC
+        finished: 2026-02-18 12:16:22 UTC
+        duration_seconds: 43.643
+        AIC: 1681.4614897185713
+      mcmc:
+        started: 2026-02-18 12:16:22 UTC
+        current_block: 1
+        total_iters: 10000
+        last_rhat:
+        - 1.0020116295103858
+        - 1.006094559655987
+        - 1.007051338390895
+        - 1.0013451588802307
+        - 1.0036486180782
+        - 1.0060288293388273
+      diagnostics:
+        started: 2026-02-18 12:18:41 UTC
+        finished: 2026-02-18 12:18:44 UTC
+        duration_seconds: 3.702
+    Cell_num_prolif_cst_shed:
+      mle:
+        started: 2026-02-18 12:18:44 UTC
+        finished: 2026-02-18 12:20:02 UTC
+        duration_seconds: 77.764
+        AIC: 1683.461489299798
+      mcmc:
+        started: 2026-02-18 12:20:02 UTC
+        current_block: 1
+        total_iters: 10000
+        last_rhat:
+        - 2.159918015331024
+        - 2.138197945523827
+        - 1.1377855213147487
+        - 2.156220943839884
+        - 1.4372731451491174
+        - 2.073129300397538
+        - 2.0145043442155037
