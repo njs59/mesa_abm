@@ -1,0 +1,9 @@
+start_step: 71
+n_runs: 100
+n_workers: 8
+seed: 42
+defaults_yaml: scripts/scripts_defaults.yaml
+best_model: background/best_model.json
+mean_clusters: background/mean_initial_clusters.json
+movement_phase: 2
+init_singletons: null

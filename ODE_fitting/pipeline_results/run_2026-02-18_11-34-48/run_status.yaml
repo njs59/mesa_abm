@@ -1,0 +1,39 @@
+status: running
+last_update: 2026-02-18 11:38:50 UTC
+pipeline_total:
+  started: 2026-02-18 11:34:48 UTC
+  finished: null
+sections:
+  abm_00_data_t71_phase2:
+    abm:
+      started: 2026-02-18 11:34:48 UTC
+      finished: 2026-02-18 11:34:53 UTC
+      duration_seconds: 4.916
+    no_prolif_no_shed:
+      mle:
+        started: 2026-02-18 11:34:53 UTC
+        finished: 2026-02-18 11:35:18 UTC
+        duration_seconds: 25.654
+        AIC: 1920.7128971492248
+      mcmc:
+        started: 2026-02-18 11:35:18 UTC
+        current_block: 1
+        total_iters: 10000
+        last_rhat:
+        - 1.0022417043649177
+        - 1.0016118737024597
+        - 1.0049379616943617
+        - 1.0012917027306916
+        - 1.0035666356851776
+      diagnostics:
+        started: 2026-02-18 11:36:59 UTC
+        finished: 2026-02-18 11:37:01 UTC
+        duration_seconds: 2.726
+    Cell_num_prolif_no_shed:
+      mle:
+        started: 2026-02-18 11:37:01 UTC
+        finished: 2026-02-18 11:38:50 UTC
+        duration_seconds: 108.078
+        AIC: 2762.3698481177353
+      mcmc:
+        started: 2026-02-18 11:38:50 UTC

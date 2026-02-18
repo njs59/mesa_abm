@@ -1,0 +1,48 @@
+status: running
+last_update: 2026-02-17 22:44:13 UTC
+pipeline_total:
+  started: 2026-02-17 22:23:58 UTC
+  finished: null
+sections:
+  abm_00_data_t71_phase2__p_merge_0p56__fragment_rate_0p0008__prolif_rate_0p0022:
+    abm:
+      started: 2026-02-17 22:23:58 UTC
+      finished: 2026-02-17 22:24:03 UTC
+      duration_seconds: 4.991
+    no_prolif_no_shed:
+      mle:
+        started: 2026-02-17 22:24:03 UTC
+        finished: 2026-02-17 22:24:28 UTC
+        duration_seconds: 25.083
+        AIC: 1467.3408858711723
+      mcmc:
+        started: 2026-02-17 22:24:28 UTC
+        current_block: 1
+        total_iters: 10000
+        last_rhat:
+        - 1.0054972357875993
+        - 1.005372813388816
+        - 1.0047614173551245
+        - 1.0003450673342926
+        - 1.0037840336898687
+      diagnostics:
+        started: 2026-02-17 22:26:02 UTC
+        finished: 2026-02-17 22:26:04 UTC
+        duration_seconds: 2.693
+    Cell_num_prolif_no_shed:
+      mle:
+        started: 2026-02-17 22:26:04 UTC
+        finished: 2026-02-17 22:26:47 UTC
+        duration_seconds: 42.271
+        AIC: 2594.6834622929764
+      mcmc:
+        started: 2026-02-17 22:26:47 UTC
+        current_block: 11
+        total_iters: 110000
+        last_rhat:
+        - 1.0346306596622803
+        - 17.045166659584208
+        - 8.534702716968999
+        - 1.9080491280684253
+        - 7.536385980045898
+        - 10.260547460738554

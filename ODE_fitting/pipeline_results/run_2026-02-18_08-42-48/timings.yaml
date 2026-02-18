@@ -1,0 +1,86 @@
+scenarios:
+  abm_00_data_t71_phase2__prolif_rate_0p006:
+    abm_seconds: 5.006
+    no_prolif_no_shed:
+      mle_seconds: 24.882
+      mcmc_seconds: 101.095
+      diagnostics_seconds: 2.699
+    Cell_num_prolif_no_shed:
+      mle_seconds: 170.253
+      mcmc_seconds: 2256.591
+      diagnostics_seconds: 8.56
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 133.004
+      mcmc_seconds: 327.422
+      diagnostics_seconds: 4.32
+  abm_01_data_t71_phase2__prolif_rate_0p008:
+    abm_seconds: 4.713
+    no_prolif_no_shed:
+      mle_seconds: 25.596
+      mcmc_seconds: 93.949
+      diagnostics_seconds: 2.669
+    Cell_num_prolif_no_shed:
+      mle_seconds: 41.122
+      mcmc_seconds: 232.883
+      diagnostics_seconds: 3.614
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 57.959
+      mcmc_seconds: 344.437
+      diagnostics_seconds: 4.461
+  abm_02_data_t71_phase2__prolif_rate_0p01:
+    abm_seconds: 4.805
+    no_prolif_no_shed:
+      mle_seconds: 23.474
+      mcmc_seconds: 93.593
+      diagnostics_seconds: 2.7
+    Cell_num_prolif_no_shed:
+      mle_seconds: 104.089
+      mcmc_seconds: 123.038
+      diagnostics_seconds: 3.459
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 50.694
+      mcmc_seconds: 363.793
+      diagnostics_seconds: 4.586
+  abm_03_data_t71_phase2__prolif_rate_0p02:
+    abm_seconds: 4.669
+    no_prolif_no_shed:
+      mle_seconds: 26.647
+      mcmc_seconds: 94.782
+      diagnostics_seconds: 2.709
+    Cell_num_prolif_no_shed:
+      mle_seconds: 84.475
+      mcmc_seconds: 147.461
+      diagnostics_seconds: 4.287
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 80.45
+      mcmc_seconds: 449.89
+      diagnostics_seconds: 5.457
+  abm_04_data_t71_phase2__prolif_rate_0p05:
+    abm_seconds: 4.535
+    no_prolif_no_shed:
+      mle_seconds: 25.69
+      mcmc_seconds: 97.232
+      diagnostics_seconds: 2.758
+    Cell_num_prolif_no_shed:
+      mle_seconds: 143.632
+      mcmc_seconds: 166.007
+      diagnostics_seconds: 4.905
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 86.854
+      mcmc_seconds: 505.073
+      diagnostics_seconds: 6.057
+  abm_05_data_t71_phase2__prolif_rate_0p1:
+    abm_seconds: 4.332
+    no_prolif_no_shed:
+      mle_seconds: 23.573
+      mcmc_seconds: 102.738
+      diagnostics_seconds: 2.757
+    Cell_num_prolif_no_shed:
+      mle_seconds: 133.711
+      mcmc_seconds: 169.511
+      diagnostics_seconds: 4.926
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 92.214
+      mcmc_seconds: 871.69
+      diagnostics_seconds: 6.802
+pipeline_total_seconds: 7976.21
