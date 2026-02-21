@@ -1,0 +1,590 @@
+[
+  {
+    "index": 0,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_00_data_t71_phase2__p_merge_0p4__prolif_rate_0p001",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_00_data_t71_phase2__p_merge_0p4__prolif_rate_0p001",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.001,
+        "merge.p_merge": 0.4
+      }
+    }
+  },
+  {
+    "index": 1,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_01_data_t71_phase2__p_merge_0p5__prolif_rate_0p001",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_01_data_t71_phase2__p_merge_0p5__prolif_rate_0p001",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.001,
+        "merge.p_merge": 0.5
+      }
+    }
+  },
+  {
+    "index": 2,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_02_data_t71_phase2__p_merge_0p6__prolif_rate_0p001",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_02_data_t71_phase2__p_merge_0p6__prolif_rate_0p001",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.001,
+        "merge.p_merge": 0.6
+      }
+    }
+  },
+  {
+    "index": 3,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_03_data_t71_phase2__p_merge_0p7__prolif_rate_0p001",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_03_data_t71_phase2__p_merge_0p7__prolif_rate_0p001",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.001,
+        "merge.p_merge": 0.7
+      }
+    }
+  },
+  {
+    "index": 4,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_04_data_t71_phase2__p_merge_0p8__prolif_rate_0p001",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_04_data_t71_phase2__p_merge_0p8__prolif_rate_0p001",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.001,
+        "merge.p_merge": 0.8
+      }
+    }
+  },
+  {
+    "index": 5,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_05_data_t71_phase2__p_merge_0p9__prolif_rate_0p001",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_05_data_t71_phase2__p_merge_0p9__prolif_rate_0p001",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.001,
+        "merge.p_merge": 0.9
+      }
+    }
+  },
+  {
+    "index": 6,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_06_data_t71_phase2__p_merge_1p0__prolif_rate_0p001",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_06_data_t71_phase2__p_merge_1p0__prolif_rate_0p001",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.001,
+        "merge.p_merge": 1.0
+      }
+    }
+  },
+  {
+    "index": 7,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_07_data_t71_phase2__p_merge_0p4__prolif_rate_0p002",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_07_data_t71_phase2__p_merge_0p4__prolif_rate_0p002",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.002,
+        "merge.p_merge": 0.4
+      }
+    }
+  },
+  {
+    "index": 8,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_08_data_t71_phase2__p_merge_0p5__prolif_rate_0p002",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_08_data_t71_phase2__p_merge_0p5__prolif_rate_0p002",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.002,
+        "merge.p_merge": 0.5
+      }
+    }
+  },
+  {
+    "index": 9,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_09_data_t71_phase2__p_merge_0p6__prolif_rate_0p002",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_09_data_t71_phase2__p_merge_0p6__prolif_rate_0p002",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.002,
+        "merge.p_merge": 0.6
+      }
+    }
+  },
+  {
+    "index": 10,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_10_data_t71_phase2__p_merge_0p7__prolif_rate_0p002",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_10_data_t71_phase2__p_merge_0p7__prolif_rate_0p002",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.002,
+        "merge.p_merge": 0.7
+      }
+    }
+  },
+  {
+    "index": 11,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_11_data_t71_phase2__p_merge_0p8__prolif_rate_0p002",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_11_data_t71_phase2__p_merge_0p8__prolif_rate_0p002",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.002,
+        "merge.p_merge": 0.8
+      }
+    }
+  },
+  {
+    "index": 12,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_12_data_t71_phase2__p_merge_0p9__prolif_rate_0p002",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_12_data_t71_phase2__p_merge_0p9__prolif_rate_0p002",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.002,
+        "merge.p_merge": 0.9
+      }
+    }
+  },
+  {
+    "index": 13,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_13_data_t71_phase2__p_merge_1p0__prolif_rate_0p002",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_13_data_t71_phase2__p_merge_1p0__prolif_rate_0p002",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.002,
+        "merge.p_merge": 1.0
+      }
+    }
+  },
+  {
+    "index": 14,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_14_data_t71_phase2__p_merge_0p4__prolif_rate_0p005",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_14_data_t71_phase2__p_merge_0p4__prolif_rate_0p005",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.005,
+        "merge.p_merge": 0.4
+      }
+    }
+  },
+  {
+    "index": 15,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_15_data_t71_phase2__p_merge_0p5__prolif_rate_0p005",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_15_data_t71_phase2__p_merge_0p5__prolif_rate_0p005",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.005,
+        "merge.p_merge": 0.5
+      }
+    }
+  },
+  {
+    "index": 16,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_16_data_t71_phase2__p_merge_0p6__prolif_rate_0p005",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_16_data_t71_phase2__p_merge_0p6__prolif_rate_0p005",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.005,
+        "merge.p_merge": 0.6
+      }
+    }
+  },
+  {
+    "index": 17,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_17_data_t71_phase2__p_merge_0p7__prolif_rate_0p005",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_17_data_t71_phase2__p_merge_0p7__prolif_rate_0p005",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.005,
+        "merge.p_merge": 0.7
+      }
+    }
+  },
+  {
+    "index": 18,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_18_data_t71_phase2__p_merge_0p8__prolif_rate_0p005",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_18_data_t71_phase2__p_merge_0p8__prolif_rate_0p005",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.005,
+        "merge.p_merge": 0.8
+      }
+    }
+  },
+  {
+    "index": 19,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_19_data_t71_phase2__p_merge_0p9__prolif_rate_0p005",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_19_data_t71_phase2__p_merge_0p9__prolif_rate_0p005",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.005,
+        "merge.p_merge": 0.9
+      }
+    }
+  },
+  {
+    "index": 20,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_20_data_t71_phase2__p_merge_1p0__prolif_rate_0p005",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_20_data_t71_phase2__p_merge_1p0__prolif_rate_0p005",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.005,
+        "merge.p_merge": 1.0
+      }
+    }
+  },
+  {
+    "index": 21,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_21_data_t71_phase2__p_merge_0p4__prolif_rate_0p01",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_21_data_t71_phase2__p_merge_0p4__prolif_rate_0p01",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.01,
+        "merge.p_merge": 0.4
+      }
+    }
+  },
+  {
+    "index": 22,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_22_data_t71_phase2__p_merge_0p5__prolif_rate_0p01",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_22_data_t71_phase2__p_merge_0p5__prolif_rate_0p01",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.01,
+        "merge.p_merge": 0.5
+      }
+    }
+  },
+  {
+    "index": 23,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_23_data_t71_phase2__p_merge_0p6__prolif_rate_0p01",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_23_data_t71_phase2__p_merge_0p6__prolif_rate_0p01",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.01,
+        "merge.p_merge": 0.6
+      }
+    }
+  },
+  {
+    "index": 24,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_24_data_t71_phase2__p_merge_0p7__prolif_rate_0p01",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_24_data_t71_phase2__p_merge_0p7__prolif_rate_0p01",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.01,
+        "merge.p_merge": 0.7
+      }
+    }
+  },
+  {
+    "index": 25,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_25_data_t71_phase2__p_merge_0p8__prolif_rate_0p01",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_25_data_t71_phase2__p_merge_0p8__prolif_rate_0p01",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.01,
+        "merge.p_merge": 0.8
+      }
+    }
+  },
+  {
+    "index": 26,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_26_data_t71_phase2__p_merge_0p9__prolif_rate_0p01",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_26_data_t71_phase2__p_merge_0p9__prolif_rate_0p01",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.01,
+        "merge.p_merge": 0.9
+      }
+    }
+  },
+  {
+    "index": 27,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_27_data_t71_phase2__p_merge_1p0__prolif_rate_0p01",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_27_data_t71_phase2__p_merge_1p0__prolif_rate_0p01",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.01,
+        "merge.p_merge": 1.0
+      }
+    }
+  },
+  {
+    "index": 28,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_28_data_t71_phase2__p_merge_0p4__prolif_rate_0p02",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_28_data_t71_phase2__p_merge_0p4__prolif_rate_0p02",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.02,
+        "merge.p_merge": 0.4
+      }
+    }
+  },
+  {
+    "index": 29,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_29_data_t71_phase2__p_merge_0p5__prolif_rate_0p02",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_29_data_t71_phase2__p_merge_0p5__prolif_rate_0p02",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.02,
+        "merge.p_merge": 0.5
+      }
+    }
+  },
+  {
+    "index": 30,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_30_data_t71_phase2__p_merge_0p6__prolif_rate_0p02",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_30_data_t71_phase2__p_merge_0p6__prolif_rate_0p02",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.02,
+        "merge.p_merge": 0.6
+      }
+    }
+  },
+  {
+    "index": 31,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_31_data_t71_phase2__p_merge_0p7__prolif_rate_0p02",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_31_data_t71_phase2__p_merge_0p7__prolif_rate_0p02",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.02,
+        "merge.p_merge": 0.7
+      }
+    }
+  },
+  {
+    "index": 32,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_32_data_t71_phase2__p_merge_0p8__prolif_rate_0p02",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_32_data_t71_phase2__p_merge_0p8__prolif_rate_0p02",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.02,
+        "merge.p_merge": 0.8
+      }
+    }
+  },
+  {
+    "index": 33,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_33_data_t71_phase2__p_merge_0p9__prolif_rate_0p02",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_33_data_t71_phase2__p_merge_0p9__prolif_rate_0p02",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.02,
+        "merge.p_merge": 0.9
+      }
+    }
+  },
+  {
+    "index": 34,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_34_data_t71_phase2__p_merge_1p0__prolif_rate_0p02",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_34_data_t71_phase2__p_merge_1p0__prolif_rate_0p02",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.02,
+        "merge.p_merge": 1.0
+      }
+    }
+  },
+  {
+    "index": 35,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_35_data_t71_phase2__p_merge_0p4__prolif_rate_0p05",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_35_data_t71_phase2__p_merge_0p4__prolif_rate_0p05",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.05,
+        "merge.p_merge": 0.4
+      }
+    }
+  },
+  {
+    "index": 36,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_36_data_t71_phase2__p_merge_0p5__prolif_rate_0p05",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_36_data_t71_phase2__p_merge_0p5__prolif_rate_0p05",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.05,
+        "merge.p_merge": 0.5
+      }
+    }
+  },
+  {
+    "index": 37,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_37_data_t71_phase2__p_merge_0p6__prolif_rate_0p05",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_37_data_t71_phase2__p_merge_0p6__prolif_rate_0p05",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.05,
+        "merge.p_merge": 0.6
+      }
+    }
+  },
+  {
+    "index": 38,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_38_data_t71_phase2__p_merge_0p7__prolif_rate_0p05",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_38_data_t71_phase2__p_merge_0p7__prolif_rate_0p05",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.05,
+        "merge.p_merge": 0.7
+      }
+    }
+  },
+  {
+    "index": 39,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_39_data_t71_phase2__p_merge_0p8__prolif_rate_0p05",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_39_data_t71_phase2__p_merge_0p8__prolif_rate_0p05",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.05,
+        "merge.p_merge": 0.8
+      }
+    }
+  },
+  {
+    "index": 40,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_40_data_t71_phase2__p_merge_0p9__prolif_rate_0p05",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_40_data_t71_phase2__p_merge_0p9__prolif_rate_0p05",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.05,
+        "merge.p_merge": 0.9
+      }
+    }
+  },
+  {
+    "index": 41,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_41_data_t71_phase2__p_merge_1p0__prolif_rate_0p05",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_41_data_t71_phase2__p_merge_1p0__prolif_rate_0p05",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.05,
+        "merge.p_merge": 1.0
+      }
+    }
+  },
+  {
+    "index": 42,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_42_data_t71_phase2__p_merge_0p4__prolif_rate_0p1",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_42_data_t71_phase2__p_merge_0p4__prolif_rate_0p1",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.1,
+        "merge.p_merge": 0.4
+      }
+    }
+  },
+  {
+    "index": 43,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_43_data_t71_phase2__p_merge_0p5__prolif_rate_0p1",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_43_data_t71_phase2__p_merge_0p5__prolif_rate_0p1",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.1,
+        "merge.p_merge": 0.5
+      }
+    }
+  },
+  {
+    "index": 44,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_44_data_t71_phase2__p_merge_0p6__prolif_rate_0p1",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_44_data_t71_phase2__p_merge_0p6__prolif_rate_0p1",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.1,
+        "merge.p_merge": 0.6
+      }
+    }
+  },
+  {
+    "index": 45,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_45_data_t71_phase2__p_merge_0p7__prolif_rate_0p1",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_45_data_t71_phase2__p_merge_0p7__prolif_rate_0p1",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.1,
+        "merge.p_merge": 0.7
+      }
+    }
+  },
+  {
+    "index": 46,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_46_data_t71_phase2__p_merge_0p8__prolif_rate_0p1",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_46_data_t71_phase2__p_merge_0p8__prolif_rate_0p1",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.1,
+        "merge.p_merge": 0.8
+      }
+    }
+  },
+  {
+    "index": 47,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_47_data_t71_phase2__p_merge_0p9__prolif_rate_0p1",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_47_data_t71_phase2__p_merge_0p9__prolif_rate_0p1",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.1,
+        "merge.p_merge": 0.9
+      }
+    }
+  },
+  {
+    "index": 48,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_48_data_t71_phase2__p_merge_1p0__prolif_rate_0p1",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_17-25-24/abm_48_data_t71_phase2__p_merge_1p0__prolif_rate_0p1",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.1,
+        "merge.p_merge": 1.0
+      }
+    }
+  }
+]

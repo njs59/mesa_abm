@@ -1,0 +1,72 @@
+scenarios:
+  abm_00_singletons_phase2_fit_all__a_0p7:
+    abm_seconds: 36.708
+    no_prolif_no_shed:
+      mle_seconds: 28.413
+      mcmc_seconds: 120.654
+      diagnostics_seconds: 26.724
+    Cell_num_prolif_no_shed:
+      mle_seconds: 43.479
+      mcmc_seconds: 284.318
+      diagnostics_seconds: 74.291
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 50.389
+      mcmc_seconds: 279.674
+      diagnostics_seconds: 100.551
+  abm_01_singletons_phase2_fit_all__a_1p05:
+    abm_seconds: 34.543
+    no_prolif_no_shed:
+      mle_seconds: 28.205
+      mcmc_seconds: 123.472
+      diagnostics_seconds: 26.779
+    Cell_num_prolif_no_shed:
+      mle_seconds: 45.952
+      mcmc_seconds: 291.472
+      diagnostics_seconds: 73.012
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 53.668
+      mcmc_seconds: 284.122
+      diagnostics_seconds: 101.225
+  abm_02_singletons_phase2_fit_all__a_1p4:
+    abm_seconds: 26.739
+    no_prolif_no_shed:
+      mle_seconds: 29.3
+      mcmc_seconds: 122.271
+      diagnostics_seconds: 26.743
+    Cell_num_prolif_no_shed:
+      mle_seconds: 55.599
+      mcmc_seconds: 148.158
+      diagnostics_seconds: 39.544
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 55.743
+      mcmc_seconds: 297.36
+      diagnostics_seconds: 102.031
+  abm_03_singletons_phase2_fit_all__a_1p75:
+    abm_seconds: 22.925
+    no_prolif_no_shed:
+      mle_seconds: 27.864
+      mcmc_seconds: 2490.239
+      diagnostics_seconds: 379.607
+    Cell_num_prolif_no_shed:
+      mle_seconds: 54.874
+      mcmc_seconds: 150.19
+      diagnostics_seconds: 39.137
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 74.922
+      mcmc_seconds: 294.034
+      diagnostics_seconds: 100.632
+  abm_04_singletons_phase2_fit_all__a_2p1:
+    abm_seconds: 20.951
+    no_prolif_no_shed:
+      mle_seconds: 28.228
+      mcmc_seconds: 121.982
+      diagnostics_seconds: 26.802
+    Cell_num_prolif_no_shed:
+      mle_seconds: 55.0
+      mcmc_seconds: 150.846
+      diagnostics_seconds: 39.199
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 53.118
+      mcmc_seconds: 450.396
+      diagnostics_seconds: 148.898
+pipeline_total_seconds: 7741.643

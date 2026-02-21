@@ -1,0 +1,24 @@
+{
+  "scenario": "abm_13_data_t71_phase2__p_merge_1p0__prolif_rate_0p002",
+  "mode": "data_t71_phase2",
+  "finished": "2026-02-20 18:08:20 UTC",
+  "timings": {
+    "abm_seconds": 4.447,
+    "models": {
+      "no_prolif_no_shed": {
+        "mle_seconds": 22.598
+      },
+      "Cell_num_prolif_no_shed": {
+        "mle_seconds": 38.929
+      },
+      "Cell_num_prolif_cst_shed": {
+        "mle_seconds": 39.639
+      }
+    }
+  },
+  "mean_csv": "forward_sims/forward_means_stats.csv",
+  "overrides": {
+    "phenotypes.proliferative.prolif_rate": 0.002,
+    "merge.p_merge": 1.0
+  }
+}

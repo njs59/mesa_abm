@@ -1,0 +1,9 @@
+status: running
+last_update: 2026-02-20 16:49:17 UTC
+pipeline_total:
+  started: 2026-02-20 16:49:17 UTC
+  finished: null
+sections:
+  abm_00_data_t71_phase2__prolif_rate_0p005:
+    abm:
+      started: 2026-02-20 16:49:17 UTC

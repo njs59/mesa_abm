@@ -1,0 +1,19 @@
+status: running
+last_update: 2026-02-20 14:07:26 UTC
+pipeline_total:
+  started: 2026-02-20 14:06:33 UTC
+  finished: null
+sections:
+  abm_00_singletons_phase1_to_2_fit_all__a_0p7:
+    abm:
+      started: 2026-02-20 14:06:33 UTC
+      finished: 2026-02-20 14:06:54 UTC
+      duration_seconds: 21.511
+    no_prolif_no_shed:
+      mle:
+        started: 2026-02-20 14:06:54 UTC
+        finished: 2026-02-20 14:07:26 UTC
+        duration_seconds: 31.957
+        AIC: 4117.199191019546
+      mcmc:
+        started: 2026-02-20 14:07:26 UTC

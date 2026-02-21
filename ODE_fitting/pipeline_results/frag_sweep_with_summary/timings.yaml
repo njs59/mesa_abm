@@ -1,0 +1,226 @@
+scenarios:
+  abm_00_data_t71_phase2__fragment_rate_0p0:
+    abm_seconds: 4.625
+    no_prolif_no_shed:
+      mle_seconds: 22.493
+      mcmc_seconds: 104.147
+      diagnostics_seconds: 26.138
+    Cell_num_prolif_no_shed:
+      mle_seconds: 41.185
+      mcmc_seconds: 128.316
+      diagnostics_seconds: 38.22
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 68.097
+      mcmc_seconds: 380.454
+      diagnostics_seconds: 145.559
+  abm_01_data_t71_phase2__fragment_rate_0p0008:
+    abm_seconds: 4.724
+    no_prolif_no_shed:
+      mle_seconds: 24.497
+      mcmc_seconds: 105.145
+      diagnostics_seconds: 25.841
+    Cell_num_prolif_no_shed:
+      mle_seconds: 41.137
+      mcmc_seconds: 127.561
+      diagnostics_seconds: 38.083
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 41.38
+      mcmc_seconds: 633.777
+      diagnostics_seconds: 235.477
+  abm_02_data_t71_phase2__fragment_rate_0p002:
+    abm_seconds: 5.001
+    no_prolif_no_shed:
+      mle_seconds: 23.958
+      mcmc_seconds: 103.368
+      diagnostics_seconds: 25.88
+    Cell_num_prolif_no_shed:
+      mle_seconds: 41.964
+      mcmc_seconds: 127.278
+      diagnostics_seconds: 38.055
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 47.432
+      mcmc_seconds: 629.52
+      diagnostics_seconds: 232.944
+  abm_03_data_t71_phase2__fragment_rate_0p005:
+    abm_seconds: 4.983
+    no_prolif_no_shed:
+      mle_seconds: 24.254
+      mcmc_seconds: 105.348
+      diagnostics_seconds: 25.924
+    Cell_num_prolif_no_shed:
+      mle_seconds: 37.655
+      mcmc_seconds: 248.645
+      diagnostics_seconds: 71.694
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 58.698
+      mcmc_seconds: 369.38
+      diagnostics_seconds: 146.63
+  abm_04_data_t71_phase2__fragment_rate_0p01:
+    abm_seconds: 5.26
+    no_prolif_no_shed:
+      mle_seconds: 21.745
+      mcmc_seconds: 105.035
+      diagnostics_seconds: 26.103
+    Cell_num_prolif_no_shed:
+      mle_seconds: 65.498
+      mcmc_seconds: 133.968
+      diagnostics_seconds: 37.746
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 52.536
+      mcmc_seconds: 370.783
+      diagnostics_seconds: 146.403
+  abm_05_data_t71_phase2__fragment_rate_0p02:
+    abm_seconds: 5.609
+    no_prolif_no_shed:
+      mle_seconds: 21.494
+      mcmc_seconds: 105.353
+      diagnostics_seconds: 26.141
+    Cell_num_prolif_no_shed:
+      mle_seconds: 63.214
+      mcmc_seconds: 129.092
+      diagnostics_seconds: 38.41
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 46.363
+      mcmc_seconds: 373.58
+      diagnostics_seconds: 146.014
+  abm_06_data_t71_phase2__fragment_rate_0p05:
+    abm_seconds: 6.936
+    no_prolif_no_shed:
+      mle_seconds: 22.224
+      mcmc_seconds: 104.888
+      diagnostics_seconds: 25.605
+    Cell_num_prolif_no_shed:
+      mle_seconds: 42.814
+      mcmc_seconds: 114.246
+      diagnostics_seconds: 38.458
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 45.318
+      mcmc_seconds: 390.718
+      diagnostics_seconds: 145.529
+  abm_07_data_t71_phase2__fragment_rate_0p1:
+    abm_seconds: 9.404
+    no_prolif_no_shed:
+      mle_seconds: 22.494
+      mcmc_seconds: 2108.181
+      diagnostics_seconds: 434.421
+    Cell_num_prolif_no_shed:
+      mle_seconds: 45.083
+      mcmc_seconds: 112.253
+      diagnostics_seconds: 37.881
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 95.167
+      mcmc_seconds: 479.951
+      diagnostics_seconds: 146.018
+  abm_08_singletons_phase2_fit_all__fragment_rate_0p0:
+    abm_seconds: 20.446
+    no_prolif_no_shed:
+      mle_seconds: 27.778
+      mcmc_seconds: 121.207
+      diagnostics_seconds: 26.688
+    Cell_num_prolif_no_shed:
+      mle_seconds: 49.787
+      mcmc_seconds: 149.782
+      diagnostics_seconds: 39.194
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 77.356
+      mcmc_seconds: 296.036
+      diagnostics_seconds: 100.673
+  abm_09_singletons_phase2_fit_all__fragment_rate_0p0008:
+    abm_seconds: 20.065
+    no_prolif_no_shed:
+      mle_seconds: 30.73
+      mcmc_seconds: 2423.085
+      diagnostics_seconds: 377.117
+    Cell_num_prolif_no_shed:
+      mle_seconds: 64.314
+      mcmc_seconds: 150.996
+      diagnostics_seconds: 39.114
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 64.615
+      mcmc_seconds: 445.048
+      diagnostics_seconds: 146.618
+  abm_10_singletons_phase2_fit_all__fragment_rate_0p002:
+    abm_seconds: 20.457
+    no_prolif_no_shed:
+      mle_seconds: 26.6
+      mcmc_seconds: 120.716
+      diagnostics_seconds: 26.688
+    Cell_num_prolif_no_shed:
+      mle_seconds: 50.777
+      mcmc_seconds: 149.651
+      diagnostics_seconds: 39.211
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 71.26
+      mcmc_seconds: 443.262
+      diagnostics_seconds: 148.208
+  abm_11_singletons_phase2_fit_all__fragment_rate_0p005:
+    abm_seconds: 21.249
+    no_prolif_no_shed:
+      mle_seconds: 31.288
+      mcmc_seconds: 120.874
+      diagnostics_seconds: 26.743
+    Cell_num_prolif_no_shed:
+      mle_seconds: 61.167
+      mcmc_seconds: 150.801
+      diagnostics_seconds: 39.151
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 53.609
+      mcmc_seconds: 444.568
+      diagnostics_seconds: 148.327
+  abm_12_singletons_phase2_fit_all__fragment_rate_0p01:
+    abm_seconds: 22.31
+    no_prolif_no_shed:
+      mle_seconds: 27.114
+      mcmc_seconds: 120.185
+      diagnostics_seconds: 26.743
+    Cell_num_prolif_no_shed:
+      mle_seconds: 53.322
+      mcmc_seconds: 298.273
+      diagnostics_seconds: 72.982
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 66.143
+      mcmc_seconds: 299.972
+      diagnostics_seconds: 101.326
+  abm_13_singletons_phase2_fit_all__fragment_rate_0p02:
+    abm_seconds: 24.565
+    no_prolif_no_shed:
+      mle_seconds: 27.943
+      mcmc_seconds: 120.816
+      diagnostics_seconds: 26.699
+    Cell_num_prolif_no_shed:
+      mle_seconds: 70.242
+      mcmc_seconds: 2969.845
+      diagnostics_seconds: 581.338
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 63.05
+      mcmc_seconds: 301.159
+      diagnostics_seconds: 101.301
+  abm_14_singletons_phase2_fit_all__fragment_rate_0p05:
+    abm_seconds: 32.425
+    no_prolif_no_shed:
+      mle_seconds: 28.194
+      mcmc_seconds: 120.407
+      diagnostics_seconds: 26.581
+    Cell_num_prolif_no_shed:
+      mle_seconds: 54.509
+      mcmc_seconds: 3024.558
+      diagnostics_seconds: 578.823
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 72.771
+      mcmc_seconds: 451.652
+      diagnostics_seconds: 148.469
+  abm_15_singletons_phase2_fit_all__fragment_rate_0p1:
+    abm_seconds: 46.283
+    no_prolif_no_shed:
+      mle_seconds: 29.233
+      mcmc_seconds: 121.306
+      diagnostics_seconds: 26.455
+    Cell_num_prolif_no_shed:
+      mle_seconds: 44.549
+      mcmc_seconds: 2942.876
+      diagnostics_seconds: 585.395
+    Cell_num_prolif_cst_shed:
+      mle_seconds: 82.782
+      mcmc_seconds: 450.58
+      diagnostics_seconds: 142.295
+pipeline_total_seconds: 32210.605

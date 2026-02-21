@@ -1,0 +1,86 @@
+observed_csv: observed/INV_ABM_ready_summary.csv
+total_steps: 145
+timesteps_every: 1
+summary_stats:
+- S0
+- S1
+- S2
+- NND_med
+replicates: 1000
+workers: 8
+seed_base: 0
+params:
+  prolif_rate: 0.011
+  softness: 0.15
+  fragment_minsep_factor: 1.1
+  n_init: 800
+  fragment_rate: 0.0008
+  p_merge: 0.56
+init:
+  n_clusters: 800
+  size: 1
+  phenotype: proliferative
+space:
+  width: 1344.0
+  height: 1025.0
+  torus: true
+time:
+  dt: 1.0
+  steps: 145
+physics:
+  cell_volume: 1954.0
+  density: 1.0
+  soft_separate: true
+  softness: 0.15
+  fragment_minsep_factor: 1.1
+merge:
+  p_merge: 0.56
+phenotypes:
+  proliferative:
+    speed_base: 1.0
+    speed_size_exp: 0.0
+    prolif_rate: 0.01
+    fragment_rate: 0.0008
+    frag_size_exp: 0.0
+    color:
+    - 0.72656
+    - 0.11328
+    - 0.72656
+  invasive:
+    speed_base: 3.0
+    speed_size_exp: 0.0
+    prolif_rate: 0.002
+    fragment_rate: 0.0
+    frag_size_exp: 0.0
+    color:
+    - 0.27343
+    - 0.61718
+    - 0.17187
+movement_v2:
+  phase1:
+    speed_dist:
+      name: lognorm
+      params:
+        s: 0.9702953903470796
+        scale: 4.517258693059166
+    turning:
+      mu: 3.141592653589793
+      kappa: 0.24187571808790503
+  phase2:
+    speed_dist:
+      name: gamma
+      params:
+        a: 1.1
+        scale: 3.548763926965852
+    turning:
+      mu: 0.0
+      kappa: 0.14698710452005212
+  transition:
+    p_max: 0.999999999964594
+    shift: 13.182589764562103
+    b: 0.027843583207496258
+    c: 0.03085478819397927
+    t_max: 400.0
+    n_points: 3000
+interactions:
+  allow_cross_phase_interactions: true

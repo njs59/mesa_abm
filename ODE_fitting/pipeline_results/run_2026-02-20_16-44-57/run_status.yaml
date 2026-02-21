@@ -1,0 +1,52 @@
+status: running
+last_update: 2026-02-20 16:48:56 UTC
+pipeline_total:
+  started: 2026-02-20 16:44:57 UTC
+  finished: null
+sections:
+  abm_00_data_t71_phase2__prolif_rate_0p005:
+    abm:
+      started: 2026-02-20 16:44:57 UTC
+      finished: 2026-02-20 16:45:02 UTC
+      duration_seconds: 5.182
+    no_prolif_no_shed:
+      mle:
+        started: 2026-02-20 16:45:02 UTC
+        finished: 2026-02-20 16:45:24 UTC
+        duration_seconds: 21.673
+        AIC: 1753.453518612429
+    Cell_num_prolif_no_shed:
+      mle:
+        started: 2026-02-20 16:45:24 UTC
+        finished: 2026-02-20 16:46:06 UTC
+        duration_seconds: 42.108
+        AIC: 1294.6293047558438
+    Cell_num_prolif_cst_shed:
+      mle:
+        started: 2026-02-20 16:46:06 UTC
+        finished: 2026-02-20 16:46:50 UTC
+        duration_seconds: 43.895
+        AIC: 1166.5800401942267
+  abm_01_data_t71_phase2__prolif_rate_0p01:
+    abm:
+      started: 2026-02-20 16:46:50 UTC
+      finished: 2026-02-20 16:46:55 UTC
+      duration_seconds: 4.858
+    no_prolif_no_shed:
+      mle:
+        started: 2026-02-20 16:46:55 UTC
+        finished: 2026-02-20 16:47:18 UTC
+        duration_seconds: 23.013
+        AIC: 1846.2017436347196
+    Cell_num_prolif_no_shed:
+      mle:
+        started: 2026-02-20 16:47:18 UTC
+        finished: 2026-02-20 16:48:03 UTC
+        duration_seconds: 45.218
+        AIC: 1567.0221519341487
+    Cell_num_prolif_cst_shed:
+      mle:
+        started: 2026-02-20 16:48:03 UTC
+        finished: 2026-02-20 16:48:56 UTC
+        duration_seconds: 52.33
+        AIC: 1569.0221517905304

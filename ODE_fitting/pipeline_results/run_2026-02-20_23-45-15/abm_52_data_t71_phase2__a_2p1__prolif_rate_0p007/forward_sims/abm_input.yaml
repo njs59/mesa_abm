@@ -1,0 +1,9 @@
+start_step: 71
+n_runs: 100
+n_workers: 8
+seed: 42
+defaults_yaml: /Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_23-45-15/abm_52_data_t71_phase2__a_2p1__prolif_rate_0p007/forward_sims/merged_defaults.yaml
+best_model: background/best_model.json
+mean_clusters: background/mean_initial_clusters.json
+movement_phase: 2
+init_singletons: null

@@ -1,0 +1,24 @@
+{
+  "scenario": "abm_85_singletons_phase2_fit71plus__a_1p5__prolif_rate_0p005",
+  "mode": "singletons_phase2_fit71plus",
+  "finished": "2026-02-21 02:31:44 UTC",
+  "timings": {
+    "abm_seconds": 25.065,
+    "models": {
+      "no_prolif_no_shed": {
+        "mle_seconds": 20.266
+      },
+      "Cell_num_prolif_no_shed": {
+        "mle_seconds": 27.779
+      },
+      "Cell_num_prolif_cst_shed": {
+        "mle_seconds": 50.292
+      }
+    }
+  },
+  "mean_csv": "forward_sims/forward_means_stats.csv",
+  "overrides": {
+    "movement_v2.phase2.speed_dist.params.a": 1.5,
+    "phenotypes.proliferative.prolif_rate": 0.005
+  }
+}

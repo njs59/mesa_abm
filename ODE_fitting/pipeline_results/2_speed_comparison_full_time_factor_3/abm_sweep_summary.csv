@@ -1,0 +1,3 @@
+forward_means_csv,init_singletons,mode,override.movement_v2.phase2.speed_dist.params.a,scenario
+abm_00_singletons_phase2_fit_all__a_0p7/forward_sims/forward_means_stats.csv,800,singletons_phase2_fit_all,0.7,abm_00_singletons_phase2_fit_all__a_0p7
+abm_01_singletons_phase2_fit_all__a_2p1/forward_sims/forward_means_stats.csv,800,singletons_phase2_fit_all,2.1,abm_01_singletons_phase2_fit_all__a_2p1

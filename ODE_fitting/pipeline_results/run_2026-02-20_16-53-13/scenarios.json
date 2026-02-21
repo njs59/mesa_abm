@@ -1,0 +1,24 @@
+[
+  {
+    "index": 0,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_00_data_t71_phase2__prolif_rate_0p005",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_16-53-13/abm_00_data_t71_phase2__prolif_rate_0p005",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.005
+      }
+    }
+  },
+  {
+    "index": 1,
+    "mode": "data_t71_phase2",
+    "scenario_name": "abm_01_data_t71_phase2__prolif_rate_0p01",
+    "scenario_dir": "/Users/nathan/Documents/Oxford/DPhil/mesa_abm/ODE_fitting/pipeline_results/run_2026-02-20_16-53-13/abm_01_data_t71_phase2__prolif_rate_0p01",
+    "abm_params": {
+      "overrides": {
+        "phenotypes.proliferative.prolif_rate": 0.01
+      }
+    }
+  }
+]

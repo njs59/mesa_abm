@@ -1,0 +1,3 @@
+mode,override.phenotypes.proliferative.prolif_rate,scenario
+data_t71_phase2,0.005,abm_00_data_t71_phase2__prolif_rate_0p005
+data_t71_phase2,0.01,abm_01_data_t71_phase2__prolif_rate_0p01
