@@ -1,0 +1,153 @@
+# =============================================================================
+# Pipeline configuration (3 scenarios: defaults, Dist-1 in phase 2, Dist-2 in phase 2)
+# =============================================================================
+
+results_root: "pipeline_results"
+
+# =============================================================================
+# ABM core settings
+# =============================================================================
+abm:
+  n_runs: 1000
+  n_workers: 8
+  seed: 42
+  # IMPORTANT: Your phase-2 forward-sim script lives under top-level `scripts/`,
+  # so we point defaults_yaml there (not inside the package).
+  defaults_yaml: "scripts/scripts_defaults.yaml"
+  background_dir: "background"
+
+# =============================================================================
+# Exactly three scenarios (no Cartesian sweep)
+# =============================================================================
+abm_sweep:
+  # 1) Defaults: no overrides -> uses whatever your ABM defaults define for phase 1 & 2
+  - mode: singletons_phase1_to_2_fit_all
+
+  # 2) Phase 2 movement = Distribution 1 (lognormal), for all of phase 2
+  - mode: singletons_phase2_fit_all
+    abm_params:
+      overrides:
+        phase2.speed_dist.name: "lognorm"
+        phase2.speed_dist.params.s: 0.9702953903470796
+        phase2.speed_dist.params.scale: 4.517258693059166
+        # Provide minimal mean_info expected by the phase-2 runner
+        phase2.mean_info.mean_initial_clusters: 800
+        # phase2.mean_info.mean_initial_cluster_size: 1.5
+        # phase2.mean_info.mean_initial_squared_cluster_size: 3.0
+
+  # 3) Phase 2 movement = Distribution 2 (lognormal), for all of phase 2
+  - mode: singletons_phase2_fit_all
+    abm_params:
+      overrides:
+        phase2.speed_dist.name: "lognorm"
+        phase2.speed_dist.params.s: 0.780221656064522
+        phase2.speed_dist.params.scale: 1.9923611753273975
+        # Same mean_info block for this phase-2 run
+        phase2.mean_info.mean_initial_clusters: 900
+        # phase2.mean_info.mean_initial_cluster_size: 1.5
+        # phase2.mean_info.mean_initial_squared_cluster_size: 3.0
+
+# =============================================================================
+# MCMC settings (diagnostics & PPC; AIC comes from MLE stage)
+# =============================================================================
+mcmc:
+  chunk: 10000
+  print_every: 2000
+  rhat_threshold: 1.05
+  max_total_iters: 200000
+  burn_in_fraction: 0.5
+  nsamples_ppc: 300
+  random_seed: 123
+
+# =============================================================================
+# ODE model list (preserved)
+# =============================================================================
+models:
+  # - no_prolif_no_shed
+  # - no_prolif_cst_shed
+  # - no_prolif_SA_shed
+  # - no_prolif_Cell_num_shed
+  # - cst_prolif_no_shed
+  # - cst_prolif_cst_shed
+  # - cst_prolif_SA_shed
+  # - cst_prolif_Cell_num_shed
+  # - SA_prolif_no_shed
+  # - SA_prolif_cst_shed
+  # - SA_prolif_SA_shed
+  # - SA_prolif_Cell_num_shed
+  - Cell_num_prolif_no_shed
+  - Cell_num_prolif_cst_shed
+  # - Cell_num_prolif_SA_shed
+  # - Cell_num_prolif_Cell_num_shed
+
+# =============================================================================
+# Per-model metadata (preserved from your file)
+# =============================================================================
+models_meta:
+  no_prolif_no_shed:
+    param_names: ["b", "N_0"]
+    priors: [[0.0, 1.0e-2], [1.0, 4000.0]]
+    initial: [3.0e-4, 900.0]
+  no_prolif_cst_shed:
+    param_names: ["b", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-4, 900.0]
+  no_prolif_SA_shed:
+    param_names: ["b", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-4, 900.0]
+  no_prolif_Cell_num_shed:
+    param_names: ["b", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-4, 900.0]
+
+  cst_prolif_no_shed:
+    param_names: ["b", "p", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 900.0]
+  cst_prolif_cst_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+  cst_prolif_SA_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+  cst_prolif_Cell_num_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
+  SA_prolif_no_shed:
+    param_names: ["b", "p", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 900.0]
+  SA_prolif_cst_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+  SA_prolif_SA_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+  SA_prolif_Cell_num_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+
+  Cell_num_prolif_no_shed:
+    param_names: ["b", "p", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [1.0, 4000.0]]
+    initial: [4.0e-4, 1.0e-2, 500.0]
+  Cell_num_prolif_cst_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+  Cell_num_prolif_SA_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+  Cell_num_prolif_Cell_num_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]

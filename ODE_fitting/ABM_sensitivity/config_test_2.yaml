@@ -1,0 +1,105 @@
+# =============================================================================
+# ABM Sensitivity Analysis Configuration (with 5 movement modes)
+# =============================================================================
+
+results_root: "ABM_sensitivity_results"
+
+# -----------------------------------------------------------------------------
+# ABM core settings (global defaults; can be overridden by modes or sweeps)
+# -----------------------------------------------------------------------------
+
+abm:
+  n_repeats: 200
+  seed: 42
+  steps: 145
+  dt: 1.0
+  width: 1344
+  height: 1025
+
+  # NEW: parallel + I/O controls
+  n_workers: 8         # number of worker processes per scenario
+  save_raw: true       # write one CSV per timestep per repeat (workers do it)
+  save_every: 1        # save every k timesteps (1 = every timestep)
+  task_timeout: null   # e.g., 1800 seconds per repeat; null disables
+
+morisita:
+  grid_x: 20
+  grid_y: 15
+
+
+# -----------------------------------------------------------------------------
+# Movement “modes” (reintroduced)
+# - movement_phase: 1 = natural Phase1→Phase2, 2 = force Phase‑2 only
+# - analysis_start_step: if >0, summaries (and plots) are sliced to steps >= this
+# - init: optional ABM init block to override DEFAULTS.init for this mode
+# -----------------------------------------------------------------------------
+modes:
+  # - name: data_t71_phase2
+  #   movement_phase: 2
+  #   analysis_start_step: 71
+  #   # (uses DEFAULTS.init; typically singletons already)
+
+  # - name: singletons_phase2_fit71plus
+  #   movement_phase: 2
+  #   analysis_start_step: 71
+  #   init:
+  #     n_clusters: 800
+  #     size: 1
+  #     phenotype: proliferative
+
+  - name: singletons_phase2_fit_all
+    movement_phase: 2
+    analysis_start_step: 0
+    init:
+      n_clusters: 800
+      size: 1
+      phenotype: proliferative
+
+  # - name: singletons_phase1_to_2_fit71plus
+  #   movement_phase: 1
+  #   analysis_start_step: 71
+  #   init:
+  #     n_clusters: 800
+  #     size: 1
+  #     phenotype: proliferative
+
+  # - name: singletons_phase1_to_2_fit_all
+  #   movement_phase: 1
+  #   analysis_start_step: 0
+  #   init:
+  #     n_clusters: 800
+  #     size: 1
+  #     phenotype: proliferative
+
+# -----------------------------------------------------------------------------
+# Parameter Sweep
+# - Crossed with EACH mode above (Cartesian product)
+# - Use 'values' or 'range'
+# -----------------------------------------------------------------------------
+sweep:
+  # movement_v2.phase2.speed_dist.params.a:
+  #   range: {start: 0.5, stop: 2.5, step: 0.2}
+
+  # merge.p_merge:
+  #   range: {start: 0.0, stop: 1.0, step: 0.05}
+
+  # phenotypes.proliferative.prolif_rate: {range: {start: 0.004, stop: 0.02, step: 0.002}}
+  # phenotypes.proliferative.fragment_rate: {range: {start: 0.0, stop: 0.008, step: 0.001}}
+
+  phenotypes.proliferative.prolif_rate: {range: {start: 0.004, stop: 0.02, step: 0.008}}
+  phenotypes.proliferative.fragment_rate: {range: {start: 0.0, stop: 0.008, step: 0.004}}
+
+
+  # movement_v2.phase2.speed_dist.params.a:
+  #   range: {start: 0.7, stop: 2.1, step: 0.35}
+
+  # merge.p_merge:
+  #   range: {start: 0.2, stop: 1.0, step: 0.2}
+
+  # movement_v2.phase2.speed_dist.params.a: [0.7, 2.1]
+
+  # merge.p_merge: [0.5, 0.9]
+
+# Example additional sweep:
+# phenotypes.proliferative.prolif_rate:
+#   values: [0.004, 0.006, 0.008]

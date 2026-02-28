@@ -6,3 +6,6 @@ abc_att_2/results/*.db
 abc_ss_nnd/results/*.db
 abc_noisy_radius/results/*.db
 abm_two_phase_movement/results/*.db
+ODE_fitting/pipeline_results/
+ODE_fitting/sobol_results/
+ODE_fitting/ABM_sensitivity_results/

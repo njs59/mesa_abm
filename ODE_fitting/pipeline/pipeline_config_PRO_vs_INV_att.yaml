@@ -1,0 +1,153 @@
+# =============================================================================
+# PRO vs INV attributes — 3 runs as requested
+#   Run 1: Normal Phase1→Phase2 (defaults)
+#   Run 2: Phase 1 only (never transition) + custom Phase 1 movement
+#   Run 3: Phase 2 only (movement identical to Run 2)
+# =============================================================================
+
+results_root: "pipeline_results"
+
+abm:
+  # For smoke tests, you can temporarily lower n_runs (e.g., 50) and n_workers.
+  n_runs: 100
+  n_workers: 8
+  seed: 42
+  # The forward-sim script opens this path directly; keep it top-level "scripts/...".
+  defaults_yaml: "scripts/scripts_defaults.yaml"
+  background_dir: "background"
+
+abm_sweep:
+  # ---------------------------------------------------------------------------
+  # Run 1 — Normal behaviour: Phase1→Phase2 according to your defaults
+  # (No movement overrides; we still set initial_singleton_count to match your working setup.)
+  # ---------------------------------------------------------------------------
+  - mode: singletons_phase1_to_2_fit_all
+    abm_params:
+      initial_singleton_count: 800
+
+  # ---------------------------------------------------------------------------
+  # Run 2 — Phase 1 only + requested Phase 1 movement
+  # Enforce "never switch" by shifting the transition CDF far beyond sim horizon.
+  # Also overwrite Phase 1 movement to lognormal(s=0.780221656..., scale=1.992361175...)
+  # with turning centred on π and kappa=0.4.
+  # ---------------------------------------------------------------------------
+  # - mode: singletons_phase1_to_2_fit_all
+  #   abm_params:
+  #     initial_singleton_count: 800
+  #     overrides:
+  #       # Never transition: push one-time switch beyond sim horizon
+  #       movement_v2.transition.shift: 1000000000.0   # 1e9
+  #       movement_v2.transition.t_max: 1000000100.0   # keep table valid (t_max > shift)
+
+  #       # Phase 1 movement overrides (used while agents remain in Phase 1)
+  #       movement_v2.phase1.speed_dist.name: "lognorm"
+  #       movement_v2.phase1.speed_dist.params.s: 0.780221656064522
+  #       movement_v2.phase1.speed_dist.params.scale: 1.9923611753273975
+  #       movement_v2.phase1.turning.mu: 3.141592653589793   # π
+  #       movement_v2.phase1.turning.kappa: 0.4
+
+  # ---------------------------------------------------------------------------
+  # Run 3 — Phase 2 only; movement identical to Run 2 (to match behaviour)
+  # abm_runner sets movement_phase=2 for this mode; forward-sim starts and stays in Phase 2.
+  # ---------------------------------------------------------------------------
+  - mode: singletons_phase2_fit_all
+    abm_params:
+      initial_singleton_count: 800
+      overrides:
+        # Phase 2 movement overrides (match Run 2 parameters)
+        movement_v2.phase2.speed_dist.name: "lognorm"
+        movement_v2.phase2.speed_dist.params.s: 0.780221656064522
+        movement_v2.phase2.speed_dist.params.scale: 1.9923611753273975
+        movement_v2.phase2.turning.mu: 3.141592653589793   # π
+        movement_v2.phase2.turning.kappa: 0.4
+        phenotypes.proliferative.prolif_rate: 0.013
+
+
+# abm_param_sweep:
+
+#   # Example sweep block (remove/modify as needed)
+#   # - apply_to_modes: ["*"]       # Sweeps apply to all 5 modes
+#   - apply_to_modes: ["singletons_phase2_fit_all"]       # Sweeps apply to all 5 modes
+#     overrides:
+#       # phenotypes.proliferative.prolif_rate: [0.005, 0.02, 0.1]
+#       phenotypes.proliferative.prolif_rate: [0.008, 0.01, 0.015]
+# ------------------------------ MCMC / Models -------------------------------
+
+mcmc:
+  chunk: 10000
+  print_every: 2000
+  rhat_threshold: 1.05
+  max_total_iters: 200000
+  burn_in_fraction: 0.5
+  nsamples_ppc: 300
+  random_seed: 123
+
+models:
+  # - Cell_num_prolif_no_shed
+  - Cell_num_prolif_cst_shed
+
+models_meta:
+  no_prolif_no_shed:
+    param_names: ["b", "N_0"]
+    priors: [[0.0, 1.0e-2], [1.0, 4000.0]]
+    initial: [3.0e-4, 900.0]
+  no_prolif_cst_shed:
+    param_names: ["b", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-4, 900.0]
+  no_prolif_SA_shed:
+    param_names: ["b", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-4, 900.0]
+  no_prolif_Cell_num_shed:
+    param_names: ["b", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-4, 900.0]
+  cst_prolif_no_shed:
+    param_names: ["b", "p", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 900.0]
+  cst_prolif_cst_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+  cst_prolif_SA_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+  cst_prolif_Cell_num_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+  SA_prolif_no_shed:
+    param_names: ["b", "p", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 900.0]
+  SA_prolif_cst_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+  SA_prolif_SA_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+  SA_prolif_Cell_num_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+  Cell_num_prolif_no_shed:
+    param_names: ["b", "p", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [1.0, 4000.0]]
+    initial: [4.0e-4, 1.0e-2, 500.0]
+  Cell_num_prolif_cst_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+  Cell_num_prolif_SA_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
+  Cell_num_prolif_Cell_num_shed:
+    param_names: ["b", "p", "s", "N_0"]
+    priors: [[0.0, 1.0e-2], [0.0, 5.0e-2], [0.0, 1.0e-1], [1.0, 4000.0]]
+    initial: [3.0e-4, 1.0e-3, 1.0e-4, 900.0]
