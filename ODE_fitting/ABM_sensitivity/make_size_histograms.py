@@ -300,6 +300,12 @@ def plot_overlay_bars(
 ) -> None:
     """
     Overlaid bars (same x) for each condition using alpha.
+
+    Notes on y-axis:
+      * For mode='percent' we typically pass a fixed y_max so frames are comparable.
+      * For mode='counts' we can pass y_max=None, in which case the y-axis rescales
+        each frame based on the maximum mean count across conditions at that timestep.
+
     If chop_max_size is set, label the final tick as '<max>+'.
     """
     fig, ax = plt.subplots(figsize=(12, 6))
@@ -311,6 +317,7 @@ def plot_overlay_bars(
     n_bins = len(sizes)
 
     any_data = False
+    local_ymax = 0.0  # used for dynamic y-limits in counts mode
     bar_w = 0.90
 
     for cd in condition_dirs:
@@ -320,6 +327,13 @@ def plot_overlay_bars(
         if np.all(np.isnan(hist)):
             continue
         any_data = True
+
+        # Track per-frame max so the y-axis can rescale each timestep (counts mode)
+        if mode == 'counts':
+            try:
+                local_ymax = max(local_ymax, float(np.nanmax(hist)))
+            except (ValueError, TypeError):
+                pass
 
         ax.bar(
             sizes,
@@ -341,6 +355,9 @@ def plot_overlay_bars(
 
     if y_max is not None and np.isfinite(y_max):
         ax.set_ylim(0, y_max)
+    elif mode == 'counts' and local_ymax > 0:
+        # Dynamic y-axis for counts: rescale each frame to the data at this timestep
+        ax.set_ylim(0, local_ymax * 1.10)
 
     # ticks: avoid huge label sets
     if n_bins <= 30:
@@ -361,8 +378,11 @@ def plot_overlay_bars(
     if any_data:
         ax.legend(loc="upper right", fontsize=9, frameon=False)
     else:
-        ax.text(0.5, 0.5, "No data for this timestep", transform=ax.transAxes,
-                ha="center", va="center")
+        ax.text(
+            0.5, 0.5, "No data for this timestep",
+            transform=ax.transAxes,
+            ha="center", va="center"
+        )
 
     ensure_dir(out_png.parent)
     fig.savefig(out_png, dpi=200, bbox_inches="tight")
@@ -485,11 +505,14 @@ def process_run(
         gifs_dir = out_root / mode / variant / "gifs"
         ensure_dir(frames_dir)
         ensure_dir(gifs_dir)
-
-        ymax = estimate_ymax(
-            condition_dirs, sample_steps, edges,
-            size_col=size_col, mode=mode, chop_max_size=chop
-        )
+        # For 'percent' plots we keep a fixed y-axis across time for comparability.
+        # For 'counts' plots we let the y-axis vary per timestep (dynamic scaling).
+        ymax = None
+        if mode == 'percent':
+            ymax = estimate_ymax(
+                condition_dirs, sample_steps, edges,
+                size_col=size_col, mode=mode, chop_max_size=chop
+            )
 
         frame_files: List[Path] = []
         for step in timesteps:
