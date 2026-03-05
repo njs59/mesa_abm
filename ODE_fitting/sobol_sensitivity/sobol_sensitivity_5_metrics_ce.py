@@ -66,8 +66,11 @@ OUTPUT_LABELS = [
 DISTS = [
     uniform(loc=0.10, scale=0.90),
     uniform(loc=0.001, scale=0.019),
+    # uniform(loc=0.001, scale=0.049),
     uniform(loc=0.0000, scale=0.0020),
-    uniform(loc=0.50, scale=2.00),
+    # uniform(loc=0.0000, scale=0.010),
+    # uniform(loc=0.50, scale=2.00),
+    uniform(loc=1.90, scale=0.40),
     uniform(loc=0.0,  scale=0.40),
 ]
 
