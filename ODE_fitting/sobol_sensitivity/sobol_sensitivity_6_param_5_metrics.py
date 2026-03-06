@@ -61,7 +61,8 @@ DISTS = [
     uniform(loc=0.001, scale=0.019),  # prolif
     uniform(loc=0.0000, scale=0.0020),  # fragment
     uniform(loc=0.50, scale=2.00),  # a (shape)
-    uniform(loc=1.00, scale=5.00),  # scale (~1..6)
+    uniform(loc=1.01, scale=1.99),  # scale (~1.01..3)
+    # uniform(loc=1.00, scale=5.00),  # scale (~1..6)
     uniform(loc=0.0, scale=0.40),  # kappa
 ]
 

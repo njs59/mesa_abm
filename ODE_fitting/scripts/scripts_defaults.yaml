@@ -86,6 +86,9 @@ movement_v2:
       params:
         s: 0.9702953903470796
         scale: 4.517258693059166
+        # Late time PRO params below
+        # s: 0.780221656064522 
+        # scale: 1.9923611753273975
     turning:
       mu: 3.141592653589793
       kappa: 0.24187571808790503

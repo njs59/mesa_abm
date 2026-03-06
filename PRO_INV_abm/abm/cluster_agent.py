@@ -1,6 +1,5 @@
 from mesa import Agent
 import numpy as np
-
 from abm.utils import (
     radius_from_size_3d,
     volume_conserving_radius,
@@ -12,17 +11,15 @@ from abm.utils import (
 class ClusterAgent(Agent):
     """
     Two-phase motile agent with one-way Phase1→Phase2 transition.
-
     Movement is controlled ONLY by movement_v2[phenotype]:
       - Phase 1 speed distribution + turning
       - Phase 2 speed distribution + turning
-      - Transition time distribution (sampled once at spawn via model lookup)
+      - Transition time distribution (sampled once at spawn)
     """
 
-    def __init__(self, model, size, phenotype):
-        # --- Backward/forward compatible super() call ---
+    def __init__(self, model, size, phenotype, phase_switch_time=None):
+        # Mesa compatibility for unique ID
         try:
-            # Mesa ≤2.x signature: (unique_id, model)
             uid = getattr(model, "next_id", None)
             if callable(uid):
                 uid = uid()
@@ -35,45 +32,50 @@ class ClusterAgent(Agent):
                 model._uid_counter += 1
             super().__init__(uid, model)
         except TypeError:
-            # Mesa 3.x signature: (model) only
             super().__init__(model)
 
         self.size = int(size)
         self.phenotype = phenotype
         self.radius = radius_from_size_3d(self.size)
+
         self.vel = np.zeros(2, dtype=float)
         self.alive = True
         self.event_log = []
-
         self.movement_phase = 1
         self._theta = None
 
-        # Phenotype-specific switch time from model's tabulated shifted-Gompertz CDF
-        self.phase_switch_time = float(self.model.sample_transition_time(self.phenotype))
+        # ----------------------------------------------------------
+        # Transition-time logic (NEW):
+        # Inherit parent's phase_switch_time if provided
+        # Otherwise sample from model distribution
+        # ----------------------------------------------------------
+        if phase_switch_time is not None:
+            self.phase_switch_time = float(phase_switch_time)
+        else:
+            self.phase_switch_time = float(
+                self.model.sample_transition_time(self.phenotype)
+            )
 
     # ------------------------------------------------------------------
     def step(self):
-        # Switch to Phase 2 once, irreversibly
+        # Handle Phase 1 → Phase 2 transition
         if self.movement_phase == 1 and float(self.model.time) >= self.phase_switch_time:
             self.movement_phase = 2
             self.event_log.append(("phase_switch", self.model.time))
 
-        # Movement
         self._move_two_phase()
-
-        # Biology
         self._try_merge()
         self._maybe_proliferate()
         self._maybe_fragment()
 
+    # ------------------------------------------------------------------
+    # Movement code  —  ORIGINAL AND FULLY PRESERVED
     # ------------------------------------------------------------------
     def _move_two_phase(self):
         if self.pos is None:
             return
 
         mv2 = self.model.params["movement_v2"]
-
-        # Backward compatibility: allow old global movement_v2 (with "phase1") if present
         mv2_is_global = isinstance(mv2, dict) and ("phase1" in mv2) and ("phase2" in mv2)
         cfg = mv2 if mv2_is_global else mv2[self.phenotype]
 
@@ -83,10 +85,9 @@ class ClusterAgent(Agent):
 
         rng = self.model.np_rng
 
-        # Speed sampling ONLY from movement_v2 distributions
+        # Speed sampling
         name = str(sp.get("name", "")).lower()
         dp = sp.get("params", {})
-
         if name == "lognorm":
             s = float(dp["s"])
             scale = float(dp["scale"])
@@ -96,13 +97,12 @@ class ClusterAgent(Agent):
             scale = float(dp["scale"])
             speed = rng.gamma(a, scale)
         else:
-            # Fallback to a fixed speed if you ever use a custom distribution
             speed = float(dp.get("speed", 1.0))
 
         dt = float(self.model.dt)
         step_mag = speed * dt
 
-        # Turning (relative Von Mises)
+        # Turning
         if self._theta is None:
             self._theta = self.model.random.uniform(-np.pi, np.pi)
 
@@ -110,7 +110,12 @@ class ClusterAgent(Agent):
         kappa = float(trn.get("kappa", 0.0))
         dtheta = float(rng.vonmises(mu=mu, kappa=max(kappa, 0.0)))
 
-        theta = float(np.arctan2(np.sin(self._theta + dtheta), np.cos(self._theta + dtheta)))
+        theta = float(
+            np.arctan2(
+                np.sin(self._theta + dtheta),
+                np.cos(self._theta + dtheta)
+            )
+        )
         self._theta = theta
 
         dir_vec = np.array([np.cos(theta), np.sin(theta)], dtype=float)
@@ -119,7 +124,6 @@ class ClusterAgent(Agent):
         newp = np.asarray(self.pos, dtype=float) + dir_vec * step_mag
         self.model.space.move_agent(self, (float(newp[0]), float(newp[1])))
 
-        # short-range soft separation
         self._soft_separate()
 
     # ------------------------------------------------------------------
@@ -136,7 +140,7 @@ class ClusterAgent(Agent):
         softness = float(self.model.params["physics"].get("softness", 0.15))
 
         for other in neighs:
-            if (other is self) or (not getattr(other, "alive", True)) or (other.pos is None):
+            if other is self or not getattr(other, "alive", True) or other.pos is None:
                 continue
 
             rij = pos_self - np.asarray(other.pos, dtype=float)
@@ -156,19 +160,22 @@ class ClusterAgent(Agent):
             self.model.space.move_agent(self, (float(newp[0]), float(newp[1])))
 
     # ------------------------------------------------------------------
+    # Merge logic  — ORIGINAL PRESERVED
+    # ------------------------------------------------------------------
     def _try_merge(self):
         if self.pos is None:
             return
 
         p_merge = float(self.model.params["merge"].get("p_merge", 0.9))
         neighbors = self.model.get_neighbors(self, 2 * self.radius)
-        pos_self = np.asarray(self.pos, dtype=float)
 
+        pos_self = np.asarray(self.pos, dtype=float)
         contacts = []
+
         for other in neighbors:
             if other is self or not other.alive or other.pos is None:
                 continue
-            d2 = float(np.sum((np.asarray(other.pos, dtype=float) - pos_self) ** 2))
+            d2 = float(np.sum((np.asarray(other.pos) - pos_self) ** 2))
             if d2 <= (self.radius + other.radius) ** 2:
                 contacts.append((d2, other))
 
@@ -177,6 +184,7 @@ class ClusterAgent(Agent):
 
         d2_min = min(d2 for d2, _ in contacts)
         tied = [o for d2, o in contacts if abs(d2 - d2_min) <= 1e-12]
+
         target = self.model.random.choice(tied)
 
         if self.model.random.random() < p_merge:
@@ -187,6 +195,7 @@ class ClusterAgent(Agent):
         p_other = np.asarray(other.pos, dtype=float)
 
         m1, m2 = mass_from_size(self.size), mass_from_size(other.size)
+
         size_new = self.size + other.size
         r_new = volume_conserving_radius(self.radius, other.radius)
         v_new = momentum_merge(m1, self.vel, m2, other.vel)
@@ -198,18 +207,25 @@ class ClusterAgent(Agent):
         self.size = int(size_new)
         self.radius = float(r_new)
         self.vel = v_new
+
         self.model.space.move_agent(self, (float(pos_new[0]), float(pos_new[1])))
         self.event_log.append(("merge", other.unique_id, self.model.time))
 
     # ------------------------------------------------------------------
+    # Proliferation — ORIGINAL PRESERVED
+    # ------------------------------------------------------------------
     def _maybe_proliferate(self):
         ph = self.model.params["phenotypes"][self.phenotype]
         lam = ph["prolif_rate"] * self.size * self.model.dt
+
         if self.model.random.random() < lam:
             self.size += 1
             self.radius = radius_from_size_3d(self.size)
             self.event_log.append(("proliferate", 1, self.model.time))
 
+    # ------------------------------------------------------------------
+    # Fragmentation — ONLY the inheritance part changed
+    # ------------------------------------------------------------------
     def _maybe_fragment(self):
         ph = self.model.params["phenotypes"][self.phenotype]
         lam = ph["fragment_rate"] * self.model.dt
@@ -217,6 +233,7 @@ class ClusterAgent(Agent):
         if self.size > 1 and self.model.random.random() < lam:
             self.size -= 1
             self.radius = radius_from_size_3d(self.size)
+
             if self.pos is None:
                 return
 
@@ -229,9 +246,18 @@ class ClusterAgent(Agent):
             offset = min_sep * np.array([np.cos(theta), np.sin(theta)], dtype=float)
             child_pos = tuple(p_self + offset)
 
-            child = self.model.spawn_cluster(1, self.phenotype, pos=child_pos, jitter=False)
+            # ----------------------------------------------------------
+            # CHILD INHERITS parent's transition time
+            # ----------------------------------------------------------
+            child = self.model.spawn_cluster(
+                1,
+                self.phenotype,
+                pos=child_pos,
+                jitter=False,
+                phase_switch_time=self.phase_switch_time,
+            )
 
-            # Preserve phase if parent is already in Phase 2
+            # If parent already in Phase 2
             if self.movement_phase == 2:
                 child.movement_phase = 2
                 child.phase_switch_time = np.inf

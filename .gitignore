@@ -9,3 +9,4 @@ abm_two_phase_movement/results/*.db
 ODE_fitting/pipeline_results/
 ODE_fitting/sobol_results/
 ODE_fitting/ABM_sensitivity_results/
+PRO_INV_abm/results/

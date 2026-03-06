@@ -8,12 +8,12 @@ import pandas as pd
 # -------------------------------------------------------------------
 DEFAULTS = {
     "space": {"width": 1344.0, "height": 1025.0, "torus": True},
-    "time": {"dt": 1.0, "steps": 300},
+    "time": {"dt": 1.0, "steps": 145},
     "physics": {
         "cell_volume": 1954.0,
         "density": 1.0,
         "soft_separate": True,
-        "softness": 0.05,
+        "softness": 0.15,
         "fragment_minsep_factor": 1.1,
     },
     "phenotypes": {
@@ -22,22 +22,27 @@ DEFAULTS = {
             # These fields remain for biology or potential future use.
             "speed_base": 1.0,
             "speed_size_exp": 0.0,
-            "prolif_rate": 0.005,
-            "fragment_rate": 0.0005,
+            "prolif_rate": 0.011,
+            "fragment_rate": 0.0008,
             "frag_size_exp": 0.0,
             "color": (186 / 256, 29 / 256, 186 / 256),
         },
         "invasive": {
             # Note: movement is controlled ONLY by movement_v2 now.
-            "speed_base": 3.0,
+            # "speed_base": 3.0,
+            "speed_base": 1.0,
             "speed_size_exp": 0.0,
-            "prolif_rate": 0.002,
-            "fragment_rate": 0.0,
+            # "prolif_rate": 0.002,
+            # "fragment_rate": 0.0,
+            "prolif_rate": 0.011,
+            "fragment_rate": 0.0008,
             "frag_size_exp": 0.0,
             "color": (70 / 256, 158 / 256, 44 / 256),
         },
     },
-
+# S1,1,30,3817,lognormal,"(1.0725282304382302, 0, 6.883996177701719)",-13047.103550855929,26100.207101711858,0.02481977656891987,0.01783702645984655,1,1
+# S2,121,145,7932,lognormal,"(0.780221656064522, 0, 1.9923611753273975)",-14754.16854903801,29514.33709807602,0.03958033505188402,3.1100296573023144e-11,1,1
+# S2,121,145,7932,gamma,"(1.872995576819194, 0, 1.421743119834589)",-14927.611246253198,29861.222492506397,0.04372958325352028,1.282967087670778e-13,2,2
     # -------------------------------------------------------------------
     # Two-phase movement configuration per phenotype
     # movement_v2[phenotype] controls ALL movement:
@@ -45,28 +50,27 @@ DEFAULTS = {
     #   - phase2 speed distribution + turning
     #   - transition distribution (shifted Gompertz CDF tabulated at init)
     # -------------------------------------------------------------------
+    # "params": {"s": 0.9702953903470796, "scale": 4.517258693059166},},
+    # "params": {"a": 2.08195513401392, "scale": 3.548763926965852},},
+
+    # "params": {"s": 1.0725282304382302, "scale": 6.883996177701719},},
+    # "params": {"a": 1.872995576819194, "scale": 1.421743119834589},},
     "movement_v2": {
         "proliferative": {
             "phase1": {
-                "speed_dist": {
-                    "name": "lognorm",
-                    "params": {"s": 0.9702953903470796, "scale": 4.517258693059166},
-                },
-                "turning": {"mu": float(np.pi), "kappa": 0.24187571808790503},
-            },
+                "speed_dist": {"name": "lognorm",
+                    "params": {"s": 1.0725282304382302, "scale": 6.883996177701719},},
+                "turning": {"mu": float(np.pi), "kappa": 0.24187571808790503},},
             "phase2": {
-                "speed_dist": {
-                    "name": "gamma",
-                    "params": {"a": 2.08195513401392, "scale": 3.548763926965852},
-                },
-                "turning": {"mu": 0.0, "kappa": 0.14698710452005212},
-            },
+                "speed_dist": {"name": "gamma",
+                    "params": {"a": 1.872995576819194, "scale": 1.421743119834589},},
+                "turning": {"mu": 0.0, "kappa": 0.14698710452005212},},
             "transition": {
                 "p_max": 0.999999999964594,
                 "shift": 13.182589764562103,
                 "b": 0.027843583207496258,
                 "c": 0.03085478819397927,
-                "t_max": 400.0,
+                "t_max": 145.0, # 145 or 400?
                 "n_points": 3000,
             },
         },
@@ -74,19 +78,13 @@ DEFAULTS = {
         "invasive": {
             # Start identical to proliferative; edit parameters as desired.
             "phase1": {
-                "speed_dist": {
-                    "name": "lognorm",
-                    "params": {"s": 0.9702953903470796, "scale": 4.517258693059166},
-                },
-                "turning": {"mu": float(np.pi), "kappa": 0.24187571808790503},
-            },
+                "speed_dist": {"name": "lognorm",
+                    "params": {"s": 0.9702953903470796, "scale": 4.517258693059166},},
+                "turning": {"mu": float(np.pi), "kappa": 0.24187571808790503},},
             "phase2": {
-                "speed_dist": {
-                    "name": "gamma",
-                    "params": {"a": 2.08195513401392, "scale": 3.548763926965852},
-                },
-                "turning": {"mu": 0.0, "kappa": 0.14698710452005212},
-            },
+                "speed_dist": {"name": "gamma",
+                    "params": {"a": 2.08195513401392, "scale": 3.548763926965852},},
+                "turning": {"mu": 0.0, "kappa": 0.14698710452005212},},
             "transition": {
                 "p_max": 0.999999999964594,
                 "shift": 13.182589764562103,
@@ -99,7 +97,7 @@ DEFAULTS = {
     },
 
     "interactions": {"allow_cross_phase_interactions": True},
-    "merge": {"p_merge": 0.9},
+    "merge": {"p_merge": 0.56},
     "init": {"n_clusters": 800, "size": 1, "phenotype": "proliferative"},
 }
 

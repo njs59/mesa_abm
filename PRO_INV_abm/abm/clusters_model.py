@@ -4,9 +4,8 @@ import numpy as np
 from abm.cluster_agent import ClusterAgent
 from abm.utils import DEFAULTS
 
-
 class ClustersModel(Model):
-    """ABM with two‑phase motility and shifted‑Gompertz transition."""
+    """ABM with phenotype-specific two-phase motility and classical Gompertz (shifted) transition CDF."""
 
     def __init__(self, params=None, seed=42, init_clusters=None):
         super().__init__()
@@ -18,16 +17,17 @@ class ClustersModel(Model):
         W = float(self.params["space"]["width"])
         H = float(self.params["space"]["height"])
         self.space = ContinuousSpace(W, H, torus=bool(self.params["space"]["torus"]))
+
         self.dt = float(self.params["time"]["dt"])
         self.time = 0.0
 
-        # IMPORTANT: Mesa 3.x forbids using model.agents
+        # keep Mesa‑3.x safe agent container
         self.agent_set = set()
 
-        # Build transition table
+        # --- BUILD TRANSITION DISTRIBUTION (UPDATED) ---
         self._build_transition_lookup()
 
-        # Spawn initial agents
+        # Spawn initial clusters
         if init_clusters is None:
             icfg = self.params.get("init", {})
             n0 = int(icfg.get("n_clusters", 1000))
@@ -38,48 +38,137 @@ class ClustersModel(Model):
         for ic in init_clusters:
             self.spawn_cluster(ic["size"], ic["phenotype"])
 
-        # Logs
+        # Logging buffers
         self.size_log, self.speed_log, self.pos_log = [], [], []
         self.radius_log, self.id_log = [], []
         self._log_state()
 
     # ----------------------------------------------------------------------
-    # Transition lookup
+    # UPDATED: Classical shifted Gompertz CDF lookup
     # ----------------------------------------------------------------------
     def _build_transition_lookup(self):
-        trans = self.params["movement_v2"]["transition"]
-        pmax = float(trans["p_max"])
-        shift = float(trans["shift"])
-        b = float(trans["b"])
-        c = float(trans["c"])
-        tmax = float(trans.get("t_max", 400.0))
-        npts = int(trans.get("n_points", 3000))
+        """
+        Replace ABM's original Gompertz-hazard PDF with the classical
+        shifted Gompertz CDF used in the empirical fitting script:
 
-        t = np.linspace(shift, tmax, npts)
-        u = t - shift
-        pdf = pmax * b * c * np.exp(c * u) * np.exp(-b * (np.exp(c * u) - 1))
-        cdf = np.cumsum(pdf) * (t[1] - t[0])
-        if cdf[-1] > 0:
-            cdf /= cdf[-1]
+            F(t) = L * (1 - exp(-(b/a)*(exp(a*(t - t0)) - 1)))
 
-        self.transition_t = t
-        self.transition_cdf = cdf
+        NOTE:
+        - We KEEP PARAMETER NAMES "b" and "c" as requested.
+        - "c" now plays the role of classical "a" (growth rate).
+        - "b" stays "b" (shape).
+        - "shift" remains the time shift (t0).
 
-    def sample_transition_time(self) -> float:
+        All phenotypes use the same interface as before.
+        """
+        self.transition_t = {}
+        self.transition_cdf = {}
+
+        phenos = list(self.params.get("phenotypes", {}).keys())
+        mv2 = self.params.get("movement_v2", {})
+
+        mv2_is_global = (
+            isinstance(mv2, dict)
+            and ("phase1" in mv2)
+            and ("phase2" in mv2)
+            and ("transition" in mv2)
+        )
+
+        for ph in phenos:
+            cfg = mv2 if mv2_is_global else mv2[ph]
+            trans = cfg["transition"]
+
+            # Classical parameters — KEEP "b" and "c"
+            L = float(trans.get("p_max", 1.0))  # use p_max as plateau for backward compatibility
+            t0 = float(trans["shift"])         # same as before
+            b = float(trans["b"])              # stays b
+            a = float(trans["c"])              # "c" now acts as "a" in classical formula
+
+            tmax = float(trans.get("t_max", 400.0))
+            npts = int(trans.get("n_points", 3000))
+
+            # Grid
+            t = np.linspace(t0, tmax, npts)
+            u = np.maximum(t - t0, 0.0)
+
+            # Classical shifted Gompertz CDF
+            term = (b / a) * (np.exp(a * u) - 1.0)
+            cdf = L * (1.0 - np.exp(-term))
+
+            # force exact zero below t0
+            cdf[t < t0] = 0.0
+
+            # normalize to 1
+            if cdf[-1] > 0:
+                cdf = cdf / cdf[-1]
+
+            # store
+            self.transition_t[ph] = t
+            self.transition_cdf[ph] = cdf
+
+    def sample_transition_time(self, phenotype: str) -> float:
+        """Sample a Phase‑1 → Phase‑2 switch time from the stored CDF."""
+        if phenotype not in self.transition_t:
+            phenotype = next(iter(self.transition_t.keys()))
+        t = self.transition_t[phenotype]
+        cdf = self.transition_cdf[phenotype]
+
         U = float(self.np_rng.uniform(0.0, 1.0))
-        idx = int(np.searchsorted(self.transition_cdf, U, side="left"))
-        idx = min(idx, len(self.transition_t) - 1)
-        return float(self.transition_t[idx])
+        idx = int(np.searchsorted(cdf, U, side="left"))
+        idx = min(idx, len(t) - 1)
+        return float(t[idx])
 
     # ----------------------------------------------------------------------
-    # Neighbours / agent lifecycle
+    # SPAWN CLUSTER
+    # ----------------------------------------------------------------------
+    def spawn_cluster(self, size, phenotype, pos=None, jitter=False, phase_switch_time=None):
+        a = ClusterAgent(
+            self,
+            size=size,
+            phenotype=phenotype,
+            phase_switch_time=phase_switch_time,
+        )
+        self.agent_set.add(a)
+
+        if pos is None:
+            pos = np.array(
+                [
+                    self.random.uniform(0, self.params["space"]["width"]),
+                    self.random.uniform(0, self.params["space"]["height"]),
+                ],
+                dtype=float,
+            )
+        else:
+            pos = np.array(pos, dtype=float)
+
+        if jitter:
+            pos += np.array(
+                [
+                    self.random.normalvariate(0, 1),
+                    self.random.normalvariate(0, 1),
+                ]
+            )
+
+        x, y = self.space.torus_adj(tuple(pos))
+        self.space.place_agent(a, (float(x), float(y)))
+        return a
+
+    # ----------------------------------------------------------------------
+    # Neighbours / lifecycle
     # ----------------------------------------------------------------------
     def get_neighbors(self, agent, r):
         if agent.pos is None:
             return []
-        cand = self.space.get_neighbors(pos=agent.pos, radius=float(r), include_center=False)
+        cand = self.space.get_neighbors(
+            pos=agent.pos,
+            radius=float(r),
+            include_center=False
+        )
         alive = [a for a in cand if getattr(a, "alive", True)]
-        allow_cross = bool(self.params.get("interactions", {}).get("allow_cross_phase_interactions", True))
+
+        allow_cross = bool(self.params.get("interactions", {}).get(
+            "allow_cross_phase_interactions", True
+        ))
         if not allow_cross:
             same_phase = []
             am = getattr(agent, "movement_phase", None)
@@ -90,9 +179,8 @@ class ClustersModel(Model):
                 except Exception:
                     pass
             return same_phase
-        return alive
 
-    
+        return alive
 
     def remove_agent(self, agent):
         self.agent_set.discard(agent)
@@ -101,39 +189,15 @@ class ClustersModel(Model):
         except Exception:
             pass
 
-    def spawn_cluster(self, size, phenotype, pos=None, jitter=False):
-        a = ClusterAgent(self, size=size, phenotype=phenotype)
-        self.agent_set.add(a)
-
-        if pos is None:
-            pos = np.array([
-                self.random.uniform(0, self.params["space"]["width"]),
-                self.random.uniform(0, self.params["space"]["height"]),
-            ], dtype=float)
-        else:
-            pos = np.array(pos, dtype=float)
-
-        if jitter:
-            pos += np.array([
-                self.random.normalvariate(0, 1),
-                self.random.normalvariate(0, 1),
-            ])
-
-        x, y = self.space.torus_adj(tuple(pos))
-        self.space.place_agent(a, (float(x), float(y)))
-        return a
-
     # ----------------------------------------------------------------------
     # Step & logging
     # ----------------------------------------------------------------------
     def step(self):
         L = list(self.agent_set)
         self.random.shuffle(L)
-
         for a in L:
             if getattr(a, "alive", True):
                 a.step()
-
         self.time += self.dt
         self._log_append()
 
@@ -153,19 +217,14 @@ class ClustersModel(Model):
         self.size_log.append(sizes)
         self.speed_log.append(speeds)
 
-    # ----------------------------------------------------------------------
-    # Snapshot
-    # ----------------------------------------------------------------------
     def _snapshot_alive(self):
         xs, ys, ids, radii, sizes, speeds = [], [], [], [], [], []
-
         for a in list(self.agent_set):
             if not getattr(a, "alive", True):
                 continue
             p = getattr(a, "pos", None)
             if p is None:
                 continue
-
             try:
                 x, y = float(p[0]), float(p[1])
                 r = float(a.radius)
@@ -175,8 +234,12 @@ class ClustersModel(Model):
             except Exception:
                 continue
 
-            xs.append(x); ys.append(y)
-            radii.append(r); sizes.append(s); speeds.append(v); ids.append(i)
+            xs.append(x)
+            ys.append(y)
+            radii.append(r)
+            sizes.append(s)
+            speeds.append(v)
+            ids.append(i)
 
         if len(xs) == 0:
             import numpy as _np
