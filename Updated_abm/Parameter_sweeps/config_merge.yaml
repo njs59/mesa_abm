@@ -1,0 +1,67 @@
+# =============================================================================
+# ABM Parameter Sweep Configuration
+# =============================================================================
+results_root: "Parameter_sweeps_results"
+
+# -----------------------------------------------------------------------------
+# ABM core settings (global defaults; can be overridden by modes or sweeps)
+# -----------------------------------------------------------------------------
+abm:
+  n_repeats: 50
+  seed: 42
+  steps: 145
+  dt: 1.0
+  width: 1344
+  height: 1025
+  # parallel + I/O controls
+  n_workers: 8         # number of worker processes per scenario
+  save_raw: true       # write one CSV per timestep per repeat (workers do it)
+  save_every: 1        # save every k timesteps (1 = every timestep)
+  task_timeout: null   # e.g., 1800 seconds per repeat; null disables
+
+morisita:
+  grid_x: 20
+  grid_y: 15
+
+# -----------------------------------------------------------------------------
+# Movement “modes”
+# -----------------------------------------------------------------------------
+modes:
+  - name: singletons_phase2_fit_all
+    movement_phase: 2
+    analysis_start_step: 0
+    init:
+      n_clusters: 800
+      size: 1
+      phenotype: proliferative
+
+# -----------------------------------------------------------------------------
+# Parameter Sweep
+# -----------------------------------------------------------------------------
+sweep:
+  # movement_v2.phase2.speed_dist.params.a:
+  #   range: { start: 0.5, stop: 2.5, step: 0.2 }
+  # movement_v2.phase2.speed_dist.params.a:
+  #   range: { start: 1.0, stop: 20.0, step: 1.0 }
+  # Add more keys here if needed, e.g.:
+  merge.p_merge:
+    range: { start: 0.1, stop: 1.0, step: 0.1 }
+
+# -----------------------------------------------------------------------------
+# OPTIONAL: run extra plots and coagulation analysis after the sweep
+# -----------------------------------------------------------------------------
+post:
+  extra_plots:
+    enable: true
+    metrics_per_page: 10
+    params_per_page: 4
+    per_metric_params_per_page: 6
+  coagulation:
+    enable: true
+    smooth_window: 20
+
+# # -----------------------------------------------------------------------------
+# # OPTIONAL: parallelise ACROSS scenarios (in addition to abm.n_workers)
+# # -----------------------------------------------------------------------------
+# parallel:
+#   scenario_workers: 2

@@ -1,0 +1,266 @@
+from mesa import Agent
+import numpy as np
+from abm.utils import (
+    radius_from_size_3d,
+    volume_conserving_radius,
+    mass_from_size,
+    momentum_merge,
+)
+
+
+class ClusterAgent(Agent):
+    """
+    Two-phase motile agent with one-way Phase1→Phase2 transition.
+    Movement is controlled ONLY by movement_v2[phenotype]:
+      - Phase 1 speed distribution + turning
+      - Phase 2 speed distribution + turning
+      - Transition time distribution (sampled once at spawn)
+    """
+
+    def __init__(self, model, size, phenotype, phase_switch_time=None):
+        # Mesa compatibility for unique ID
+        try:
+            uid = getattr(model, "next_id", None)
+            if callable(uid):
+                uid = uid()
+            elif isinstance(uid, int):
+                uid, model.next_id = uid, uid + 1
+            else:
+                if not hasattr(model, "_uid_counter"):
+                    model._uid_counter = 0
+                uid = model._uid_counter
+                model._uid_counter += 1
+            super().__init__(uid, model)
+        except TypeError:
+            super().__init__(model)
+
+        self.size = int(size)
+        self.phenotype = phenotype
+        self.radius = radius_from_size_3d(self.size)
+        self.vel = np.zeros(2, dtype=float)
+        self.alive = True
+        self.event_log = []
+        self.movement_phase = 1
+        self._theta = None
+
+        # Transition-time logic: inherit parent's switch time if provided; otherwise sample from model CDF
+        if phase_switch_time is not None:
+            self.phase_switch_time = float(phase_switch_time)
+        else:
+            self.phase_switch_time = float(self.model.sample_transition_time(self.phenotype))
+
+    # ------------------------------------------------------------------
+    def step(self):
+        # Handle Phase 1 → Phase 2 transition
+        if self.movement_phase == 1 and float(self.model.time) >= self.phase_switch_time:
+            self.movement_phase = 2
+            self.event_log.append(("phase_switch", self.model.time))
+
+        # 1) Move
+        self._move_two_phase()
+        # 2) Merge
+        self._try_merge()
+        # 3) Proliferate
+        self._maybe_proliferate()
+        # 4) Fragment (capture child if produced)
+        child = self._maybe_fragment()
+        # 5) Repulsion (deterministic, replaces soft_separate)
+        self._apply_repulsion()
+        if child is not None:
+            # Ensure the newborn resolves any instant overlaps too
+            child._apply_repulsion()
+
+    # ------------------------------------------------------------------
+    # Movement code — ORIGINAL MOVEMENT, with soft_separate removed
+    # ------------------------------------------------------------------
+    def _move_two_phase(self):
+        if self.pos is None:
+            return
+
+        mv2 = self.model.params["movement_v2"]
+        mv2_is_global = isinstance(mv2, dict) and ("phase1" in mv2) and ("phase2" in mv2)
+        cfg = mv2 if mv2_is_global else mv2[self.phenotype]
+
+        phase_block = cfg["phase1"] if self.movement_phase == 1 else cfg["phase2"]
+        sp = phase_block["speed_dist"]
+        trn = phase_block["turning"]
+        rng = self.model.np_rng
+
+        # Speed sampling
+        name = str(sp.get("name", "")).lower()
+        dp = sp.get("params", {})
+        if name == "lognorm":
+            s = float(dp["s"])
+            scale = float(dp["scale"])
+            speed = scale * np.exp(rng.normal(0.0, s))
+        elif name == "gamma":
+            a = float(dp["a"])
+            scale = float(dp["scale"])
+            speed = rng.gamma(a, scale)
+        else:
+            speed = float(dp.get("speed", 1.0))
+
+        dt = float(self.model.dt)
+        step_mag = speed * dt
+
+        # Turning
+        if self._theta is None:
+            self._theta = self.model.random.uniform(-np.pi, np.pi)
+        mu = float(trn.get("mu", 0.0))
+        kappa = float(trn.get("kappa", 0.0))
+        dtheta = float(rng.vonmises(mu=mu, kappa=max(kappa, 0.0)))
+        theta = float(np.arctan2(np.sin(self._theta + dtheta), np.cos(self._theta + dtheta)))
+        self._theta = theta
+
+        dir_vec = np.array([np.cos(theta), np.sin(theta)], dtype=float)
+        self.vel = speed * dir_vec
+        newp = np.asarray(self.pos, dtype=float) + dir_vec * step_mag
+        self.model.space.move_agent(self, (float(newp[0]), float(newp[1])))
+
+    def _soft_separate(self):
+        """Deprecated: replaced by deterministic repulsion step (no-op)."""
+        return
+
+    # ------------------------------------------------------------------
+    # Repulsion (NEW): deterministic separation to remove full overlap
+    # ------------------------------------------------------------------
+    def _apply_repulsion(self, *, max_iter: int = None):
+        """
+        For each overlapping neighbour, move THIS cluster along the
+        centre-centre axis so that the post-move centre distance equals
+        r_self + r_other (i.e. remove the full overlap). The larger the
+        initial overlap, the larger the displacement. Neighbours are fixed.
+        Iterates up to max_iter to resolve cascades.
+        """
+        if not getattr(self, 'alive', True) or self.pos is None:
+            return
+
+        params = getattr(self.model, 'params', {})
+        phys = params.get('physics', {})
+        if max_iter is None:
+            max_iter = int(phys.get('repulsion_max_iter', 8))
+
+        r_self = float(self.radius)
+        search_r = 4.0 * r_self + 1e-6
+
+        for _ in range(max_iter):
+            moved = False
+            pos_self = np.asarray(self.pos, dtype=float)
+            neighbors = self.model.get_neighbors(self, r=search_r)
+            for other in neighbors:
+                if other is self or not getattr(other, 'alive', True) or other.pos is None:
+                    continue
+                rij = pos_self - np.asarray(other.pos, dtype=float)
+                d = float(np.linalg.norm(rij))
+                r_sum = r_self + float(other.radius)
+
+                # Choose axis if co-located
+                if d < 1e-12:
+                    phi = self.model.random.uniform(-np.pi, np.pi)
+                    u = np.array([np.cos(phi), np.sin(phi)], dtype=float)
+                    d = 0.0
+                else:
+                    u = rij / d
+
+                # If overlapping, move by the overlap amount
+                if d < r_sum:
+                    overlap = (r_sum - d)
+                    pos_self = pos_self + overlap * u
+                    self.model.space.move_agent(self, (float(pos_self[0]), float(pos_self[1])))
+                    moved = True
+            if not moved:
+                break
+
+    # ------------------------------------------------------------------
+    # Merge logic — ORIGINAL PRESERVED
+    # ------------------------------------------------------------------
+    def _try_merge(self):
+        if self.pos is None:
+            return
+        p_merge = float(self.model.params["merge"].get("p_merge", 0.9))
+        neighbors = self.model.get_neighbors(self, 2 * self.radius)
+        pos_self = np.asarray(self.pos, dtype=float)
+        contacts = []
+        for other in neighbors:
+            if other is self or not other.alive or other.pos is None:
+                continue
+            d2 = float(np.sum((np.asarray(other.pos) - pos_self) ** 2))
+            if d2 <= (self.radius + other.radius) ** 2:
+                contacts.append((d2, other))
+        if not contacts:
+            return
+        d2_min = min(d2 for d2, _ in contacts)
+        tied = [o for d2, o in contacts if abs(d2 - d2_min) <= 1e-12]
+        target = self.model.random.choice(tied)
+        if self.model.random.random() < p_merge:
+            self._merge_with(target)
+
+    def _merge_with(self, other):
+        p_self = np.asarray(self.pos, dtype=float)
+        p_other = np.asarray(other.pos, dtype=float)
+        m1, m2 = mass_from_size(self.size), mass_from_size(other.size)
+        size_new = self.size + other.size
+        r_new = volume_conserving_radius(self.radius, other.radius)
+        v_new = momentum_merge(m1, self.vel, m2, other.vel)
+        pos_new = (m1 * p_self + m2 * p_other) / (m1 + m2)
+
+        other.alive = False
+        self.model.remove_agent(other)
+
+        self.size = int(size_new)
+        self.radius = float(r_new)
+        self.vel = v_new
+        self.model.space.move_agent(self, (float(pos_new[0]), float(pos_new[1])))
+        self.event_log.append(("merge", other.unique_id, self.model.time))
+
+    # ------------------------------------------------------------------
+    # Proliferation — ORIGINAL PRESERVED
+    # ------------------------------------------------------------------
+    def _maybe_proliferate(self):
+        ph = self.model.params["phenotypes"][self.phenotype]
+        lam = ph["prolif_rate"] * self.size * self.model.dt
+        if self.model.random.random() < lam:
+            self.size += 1
+            self.radius = radius_from_size_3d(self.size)
+            self.event_log.append(("proliferate", 1, self.model.time))
+
+    # ------------------------------------------------------------------
+    # Fragmentation — only inheritance part specified
+    # ------------------------------------------------------------------
+    def _maybe_fragment(self):
+        ph = self.model.params["phenotypes"][self.phenotype]
+        lam = ph["fragment_rate"] * self.model.dt
+
+        if self.size > 1 and self.model.random.random() < lam:
+            self.size -= 1
+            self.radius = radius_from_size_3d(self.size)
+
+            if self.pos is None:
+                return None
+
+            p_self = np.asarray(self.pos, dtype=float)
+            r_child = float(radius_from_size_3d(1))
+            factor = float(self.model.params["physics"].get("fragment_minsep_factor", 1.1))
+            min_sep = factor * (self.radius + r_child)
+
+            theta = self.model.random.uniform(-np.pi, np.pi)
+            offset = min_sep * np.array([np.cos(theta), np.sin(theta)], dtype=float)
+            child_pos = tuple(p_self + offset)
+
+            # CHILD INHERITS parent's transition time
+            child = self.model.spawn_cluster(
+                1,
+                self.phenotype,
+                pos=child_pos,
+                jitter=False,
+                phase_switch_time=self.phase_switch_time,
+            )
+            # If parent already in Phase 2
+            if self.movement_phase == 2:
+                child.movement_phase = 2
+                child.phase_switch_time = np.inf
+
+            self.event_log.append(("fragment", child.unique_id, self.model.time))
+            return child
+
+        return None

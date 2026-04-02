@@ -1,0 +1,39 @@
+# abcp/priors.yaml
+# Priors for Phase-2-only movement with invasive phenotype singletons.
+
+priors:
+  a_gamma:         # Phase-2 invasive speed ~ Gamma(shape=a_gamma, scale=scale_gamma)
+    type: uniform
+    low: 0.5
+    high: 4.0
+
+  # Optional: include if you want to infer the gamma scale as well (else wrapper uses default 3.55)
+  # scale_gamma:
+  #   type: uniform
+  #   low: 0.5
+  #   high: 6.0
+
+  kappa_turn:      # Von Mises concentration for Phase-2 turning
+    type: uniform
+    low: 0.0
+    high: 2.0
+
+  p_merge:         # Merge probability
+    type: uniform
+    low: 0.0
+    high: 1.0
+
+  prolif_rate:     # Per-step per-cell proliferation rate (dt=1 step ≙ 30 min)
+    type: uniform
+    low: 0.0001
+    high: 0.030
+
+  fragment_rate:   # Per-step fragmentation rate (applies when size > 1)
+    type: uniform
+    low: 0.0000
+    high: 0.0050
+
+  init_n_clusters: # Initial number of invasive singletons
+    type: uniform
+    low: 500
+    high: 2000
