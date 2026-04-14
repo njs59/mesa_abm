@@ -5,7 +5,12 @@
       "**/build/**": true,
       "**/dist/**": true,
       "**/output/**": true,
-      "**/*.log": true
+      "**/*.log": true,
+      "**/.venv/**": true,
+      "**/env/**": true,
+      "**/__pycache__/**": true,
+      "**/.DS_Store": true
     },
     "search.useIgnoreFiles": true
+
   }
