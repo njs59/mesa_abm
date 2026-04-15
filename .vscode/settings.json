@@ -11,6 +11,21 @@
       "**/__pycache__/**": true,
       "**/.DS_Store": true
     },
-    "search.useIgnoreFiles": true
+    "search.useIgnoreFiles": true,
 
+        
+    "search.exclude": {
+      "**/node_modules/**": true,
+      "**/.git/**": true,
+      "**/.venv/**": true,
+      "**/env/**": true,
+      "**/__pycache__/**": true,
+      "**/build/**": true,
+      "**/dist/**": true,
+      "**/output/**": true
+    },
+
+    "git.autorefresh": false,
+    "git.decorations.enabled": false
+    
   }

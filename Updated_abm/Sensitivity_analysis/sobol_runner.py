@@ -120,15 +120,15 @@ DISTS = [
 # uniform(loc=0.009, scale=0.004),  # prolif:    0.009–0.013
 
 
-# # Distributions
-# DISTS = [
-#     uniform(loc=0.10,  scale=0.90),   # p_merge:   0.10–1.00
-#     uniform(loc=0.009, scale=0.004),  # prolif:    0.009–0.013
-#     uniform(loc=0.0000, scale=0.0020),# fragment: 0.0000–0.0020
-#     uniform(loc=0.70,  scale=1.40),   # a (shape): 0.70–2.10
-#     uniform(loc=0.0, scale=0.4),      # kappa:  0.0-0.4
-#     uniform(loc=0.0,   scale=1.0),    # dummy_param: 0–1 (ignored)
-# ]
+# Distributions
+DISTS = [
+    uniform(loc=0.10, scale=0.90),   # p_merge: 0.10–1.00
+    uniform(loc=0.009, scale=0.004),  # prolif:    0.009–0.013
+    uniform(loc=0.0000, scale=0.0020), # fragment: 0.0000–0.0020
+    uniform(loc=0.70, scale=1.40),   # a (shape): 0.70–2.10
+    uniform(loc=0.0, scale=0.40),    # kappa: 0.0–0.4
+    uniform(loc=0.0, scale=1.0),     # dummy_param: 0–1 (ignored)
+]
 
 # ============================================================
 # Utilities

@@ -12,7 +12,8 @@ results_root: "pipeline_results"
 
 abm:
   # How many stochastic ABM replicates to run per scenario (forward simulations)
-  n_runs: 1000
+  # n_runs: 1000
+  n_runs: 100
   n_workers: 8
   seed: 42
 
@@ -27,83 +28,75 @@ abm:
 ## The pipeline will run ABM → fit ALL ODE models listed under `models` →
 ## write outputs under a timestamped run folder.
 
+
+
 abm_sweep:
-  # ----------------------------
-  # Scenario 1: Proliferative
-  # ----------------------------
   - mode: singletons_phase2_fit_all
     abm_params:
-      # Used by the pipeline/mode logic to initialise singleton clusters
+      # Start from singletons
       initial_singleton_count: 800
 
-      # Overrides applied when composing the ABM parameter set for this scenario.
-      # These keys match the dotted-path style used elsewhere in your pipeline.
       overrides:
-        # Which phenotype to spawn initially (single-phenotype run)
+        # Single-phenotype run
         init.phenotype: proliferative
 
-        # -------------------------
-        # EXAMPLES (commented out)
-        # -------------------------
-        # (A) Initial number of clusters
-        # init.n_clusters: 800
-        # init.size: 1
-
-        # (B) Merge probability
+        # You can fix parameters here if you want
         # merge.p_merge: 0.6
-
-        # (C) Proliferation rate
-        # phenotypes.proliferative.prolif_rate: 0.011
-
-        # (D) Fragmentation rate
         # phenotypes.proliferative.fragment_rate: 0.0008
 
-        # (E) Speed distribution parameters
-        # If movement_v2 is GLOBAL (shared across phenotypes):
-        # movement_v2.phase2.speed_dist.params.a: 1.2
-        # movement_v2.phase2.speed_dist.params.scale: 2.5
-        # movement_v2.phase2.turning.kappa: 0.2
-        #
-        # If movement_v2 is PER-PHENOTYPE (movement_v2.<phenotype>.phase2...):
-        # movement_v2.proliferative.phase2.speed_dist.params.a: 1.2
-        # movement_v2.proliferative.phase2.speed_dist.params.scale: 2.5
-        # movement_v2.proliferative.phase2.turning.kappa: 0.2
+## =============================================================================
+## ABM PARAMETER SWEEP
+## =============================================================================
+## This expands the single scenario above into MULTIPLE scenarios
+## =============================================================================
 
-  # ----------------------------
-  # Scenario 2: Invasive
-  # ----------------------------
-  - mode: singletons_phase2_fit_all
-    abm_params:
-      initial_singleton_count: 800
-      overrides:
-        init.phenotype: invasive
+abm_param_sweep:
+  - apply_to_modes: ["singletons_phase2_fit_all"]
+    overrides:
+      # Sweep proliferation rate
+      phenotypes.proliferative.prolif_rate:
+        - 0.004
+        - 0.006
+        - 0.008
+        - 0.010
+        - 0.012
 
-        # -------------------------
-        # EXAMPLES (commented out)
-        # -------------------------
-        # (A) Initial number of clusters
-        # init.n_clusters: 800
-        # init.size: 1
 
-        # (B) Merge probability
-        # merge.p_merge: 0.6
+  # # ----------------------------
+  # # Scenario 2: Invasive
+  # # ----------------------------
+  # - mode: singletons_phase2_fit_all
+  #   abm_params:
+  #     initial_singleton_count: 800
+  #     overrides:
+  #       init.phenotype: invasive
 
-        # (C) Proliferation rate
-        # phenotypes.invasive.prolif_rate: 0.011
+  #       # -------------------------
+  #       # EXAMPLES (commented out)
+  #       # -------------------------
+  #       # (A) Initial number of clusters
+  #       # init.n_clusters: 800
+  #       # init.size: 1
 
-        # (D) Fragmentation rate
-        # phenotypes.invasive.fragment_rate: 0.0008
+  #       # (B) Merge probability
+  #       # merge.p_merge: 0.6
 
-        # (E) Speed distribution parameters
-        # If movement_v2 is GLOBAL:
-        # movement_v2.phase2.speed_dist.params.a: 1.2
-        # movement_v2.phase2.speed_dist.params.scale: 2.5
-        # movement_v2.phase2.turning.kappa: 0.2
-        #
-        # If movement_v2 is PER-PHENOTYPE:
-        # movement_v2.invasive.phase2.speed_dist.params.a: 1.2
-        # movement_v2.invasive.phase2.speed_dist.params.scale: 2.5
-        # movement_v2.invasive.phase2.turning.kappa: 0.2
+  #       # (C) Proliferation rate
+  #       # phenotypes.invasive.prolif_rate: 0.011
+
+  #       # (D) Fragmentation rate
+  #       # phenotypes.invasive.fragment_rate: 0.0008
+
+  #       # (E) Speed distribution parameters
+  #       # If movement_v2 is GLOBAL:
+  #       # movement_v2.phase2.speed_dist.params.a: 1.2
+  #       # movement_v2.phase2.speed_dist.params.scale: 2.5
+  #       # movement_v2.phase2.turning.kappa: 0.2
+  #       #
+  #       # If movement_v2 is PER-PHENOTYPE:
+  #       # movement_v2.invasive.phase2.speed_dist.params.a: 1.2
+  #       # movement_v2.invasive.phase2.speed_dist.params.scale: 2.5
+  #       # movement_v2.invasive.phase2.turning.kappa: 0.2
 
 ## =============================================================================
 ## Optional ABM parameter sweep system (DISABLED)
@@ -125,7 +118,8 @@ mcmc:
   chunk: 10000
   print_every: 2000
   rhat_threshold: 1.05
-  max_total_iters: 200000
+  # max_total_iters: 200000
+  max_total_iters: 80000
   burn_in_fraction: 0.5
   nsamples_ppc: 300
   random_seed: 123
@@ -135,7 +129,7 @@ mcmc:
 ## =============================================================================
 
 models:
-  - no_prolif_no_shed
+  # - no_prolif_no_shed
   ## - no_prolif_cst_shed
   ## - no_prolif_SA_shed
   ## - no_prolif_Cell_num_shed
